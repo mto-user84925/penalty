@@ -1,14 +1,14 @@
 {
   "favs": {
-    "3378817": {
-      "match": "Paide - Harju JK",
-      "league": "Estonie • D1 Estonie",
-      "date_str": "Dim. 13/09 à 13h30",
-      "fav_team": "Paide",
-      "fav_odds": 1.55,
+    "3368583": {
+      "match": "Banik Ostrava - FK Pardubice",
+      "league": "Rep Tcheque • D1 Rep Tcheque",
+      "date_str": "Dim. 13/09 à 13h00",
+      "fav_team": "Banik Ostrava",
+      "fav_odds": 1.84,
       "p2_fav_odds": null,
-      "fav_score": 58,
-      "fav_badge": "🥉 BRONZE"
+      "fav_score": 56,
+      "fav_badge": "⚠️ RISQUÉ"
     },
     "3368782": {
       "match": "FC Heidenheim - Holstein Kiel",
@@ -17,38 +17,8 @@
       "fav_team": "FC Heidenheim",
       "fav_odds": 2.0,
       "p2_fav_odds": null,
-      "fav_score": 68,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3368824": {
-      "match": "Elfsborg - Kalmar FF",
-      "league": "Suede • D1 Suede",
-      "date_str": "Dim. 13/09 à 14h00",
-      "fav_team": "Elfsborg",
-      "fav_odds": 1.74,
-      "p2_fav_odds": null,
-      "fav_score": 57,
+      "fav_score": 55,
       "fav_badge": "⚠️ RISQUÉ"
-    },
-    "3360658": {
-      "match": "Gijon - Club Eldense",
-      "league": "Espagne • Laliga 2",
-      "date_str": "Dim. 13/09 à 14h00",
-      "fav_team": "Gijon",
-      "fav_odds": 1.6,
-      "p2_fav_odds": null,
-      "fav_score": 57,
-      "fav_badge": "⚠️ RISQUÉ"
-    },
-    "3368554": {
-      "match": "Heerenveen - SC Telstar",
-      "league": "Pays Bas • D1 Pays Bas",
-      "date_str": "Dim. 13/09 à 14h30",
-      "fav_team": "Heerenveen",
-      "fav_odds": 1.53,
-      "p2_fav_odds": null,
-      "fav_score": 59,
-      "fav_badge": "🥉 BRONZE"
     },
     "3379293": {
       "match": "KR Reykjavik - IA Akranes",
@@ -57,37 +27,27 @@
       "fav_team": "KR Reykjavik",
       "fav_odds": 1.49,
       "p2_fav_odds": null,
-      "fav_score": 66,
-      "fav_badge": "🥈 ARGENT"
+      "fav_score": 56,
+      "fav_badge": "⚠️ RISQUÉ"
     },
-    "3368827": {
-      "match": "Lucerne - FC Bâle",
-      "league": "Suisse • D1 Suisse",
-      "date_str": "Dim. 13/09 à 16h30",
-      "fav_team": "Lucerne",
-      "fav_odds": 1.99,
+    "3378410": {
+      "match": "Parti.Belgrade - Vojvodina",
+      "league": "Serbie • D1 Serbie",
+      "date_str": "Dim. 13/09 à 17h00",
+      "fav_team": "Parti.Belgrade",
+      "fav_odds": 2.15,
       "p2_fav_odds": null,
       "fav_score": 55,
       "fav_badge": "⚠️ RISQUÉ"
     },
-    "3369060": {
-      "match": "Mantova - Sampdoria",
-      "league": "Italie • Serie B",
-      "date_str": "Dim. 13/09 à 17h15",
-      "fav_team": "Mantova",
-      "fav_odds": 1.95,
+    "3378519": {
+      "match": "Iberia 1999 - FC Spaeri",
+      "league": "Georgie • D1 Georgie",
+      "date_str": "Dim. 13/09 à 18h00",
+      "fav_team": "Iberia 1999",
+      "fav_odds": 1.6,
       "p2_fav_odds": null,
-      "fav_score": 60,
-      "fav_badge": "🥉 BRONZE"
-    },
-    "3372832": {
-      "match": "Legia Varsovie - Widzew Lodz",
-      "league": "Pologne • D1 Pologne",
-      "date_str": "Dim. 13/09 à 17h30",
-      "fav_team": "Legia Varsovie",
-      "fav_odds": 1.72,
-      "p2_fav_odds": null,
-      "fav_score": 56,
+      "fav_score": 55,
       "fav_badge": "⚠️ RISQUÉ"
     },
     "3360638": {
@@ -100,6 +60,16 @@
       "fav_score": 66,
       "fav_badge": "🥈 ARGENT"
     },
+    "3376855": {
+      "match": "Botev Plovdiv - Lokomo.Plovdiv",
+      "league": "Bulgarie • D1 Bulgarie",
+      "date_str": "Dim. 13/09 à 19h30",
+      "fav_team": "Botev Plovdiv",
+      "fav_odds": 1.64,
+      "p2_fav_odds": null,
+      "fav_score": 63,
+      "fav_badge": "🥉 BRONZE"
+    },
     "3374316": {
       "match": "PAOK Salonique - Aris Salonique",
       "league": "Grece • D1 Grece",
@@ -107,37 +77,7 @@
       "fav_team": "PAOK Salonique",
       "fav_odds": 1.41,
       "p2_fav_odds": null,
-      "fav_score": 65,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3377624": {
-      "match": "FC Leones - Tecnico Uni.",
-      "league": "Equateur • D1 Equateur",
-      "date_str": "Dim. 13/09 à 20h00",
-      "fav_team": "FC Leones",
-      "fav_odds": 1.75,
-      "p2_fav_odds": null,
-      "fav_score": 62,
-      "fav_badge": "🥉 BRONZE"
-    },
-    "3371152": {
-      "match": "Olimp.Asuncion - Sp.Luqueno",
-      "league": "Paraguay • D1 Paraguay",
-      "date_str": "Dim. 13/09 à 21h00",
-      "fav_team": "Olimp.Asuncion",
-      "fav_odds": 1.39,
-      "p2_fav_odds": null,
-      "fav_score": 62,
-      "fav_badge": "🥉 BRONZE"
-    },
-    "3367861": {
-      "match": "Argentinos Jrs - Gimnasia LP",
-      "league": "Argentine • D1 Argentine",
-      "date_str": "Dim. 13/09 à 22h00",
-      "fav_team": "Argentinos Jrs",
-      "fav_odds": 1.63,
-      "p2_fav_odds": null,
-      "fav_score": 63,
+      "fav_score": 58,
       "fav_badge": "🥉 BRONZE"
     },
     "3370818": {
@@ -147,45 +87,25 @@
       "fav_team": "CSD Macara",
       "fav_odds": 1.85,
       "p2_fav_odds": null,
-      "fav_score": 59,
+      "fav_score": 57,
+      "fav_badge": "⚠️ RISQUÉ"
+    },
+    "3376868": {
+      "match": "Santos Laguna - FC Juarez",
+      "league": "Mexique • D1 Mexique",
+      "date_str": "Lun. 14/09 à 03h00",
+      "fav_team": "Santos Laguna",
+      "fav_odds": 1.86,
+      "p2_fav_odds": null,
+      "fav_score": 61,
       "fav_badge": "🥉 BRONZE"
     },
-    "3374047": {
-      "match": "Colo Colo - Deportes Conc.",
-      "league": "Chili • D1 Chili",
-      "date_str": "Dim. 13/09 à 22h30",
-      "fav_team": "Colo Colo",
-      "fav_odds": 1.34,
-      "p2_fav_odds": null,
-      "fav_score": 65,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3370813": {
-      "match": "Atl.Nacional - Aguilas",
-      "league": "Colombie • D1 Colombie",
-      "date_str": "Dim. 13/09 à 23h05",
-      "fav_team": "Atl.Nacional",
-      "fav_odds": 1.31,
-      "p2_fav_odds": null,
-      "fav_score": 72,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3378678": {
-      "match": "Barcelona SC - Delfin SC",
-      "league": "Equateur • D1 Equateur",
-      "date_str": "Lun. 14/09 à 01h00",
-      "fav_team": "Barcelona SC",
-      "fav_odds": 1.56,
-      "p2_fav_odds": null,
-      "fav_score": 63,
-      "fav_badge": "🥉 BRONZE"
-    },
-    "3373747": {
-      "match": "Dynamo Kiev - Epitsentr",
-      "league": "Ukraine • D1 Ukraine",
-      "date_str": "Lun. 14/09 à 14h30",
-      "fav_team": "Dynamo Kiev",
-      "fav_odds": 1.45,
+    "3368558": {
+      "match": "Universit Cluj - Otelul Galati",
+      "league": "Roumanie • D1 Roumanie",
+      "date_str": "Lun. 14/09 à 17h00",
+      "fav_team": "Universit Cluj",
+      "fav_odds": 1.64,
       "p2_fav_odds": null,
       "fav_score": 60,
       "fav_badge": "🥉 BRONZE"
