@@ -29392,5 +29392,51 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3376611",
+    "timestamp_utc": "2026-09-13T12:03:44.893764+00:00",
+    "match": "Bahia Salvador vs Remo PA",
+    "league": "Bresil • D1 Bresil",
+    "date_str": "Mar. 15/09 à 01h00",
+    "fav_team": "Bahia Salvador",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 56,
+      "pct_fav_success": 40,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.35,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3370819",
+    "timestamp_utc": "2026-09-13T12:03:44.893764+00:00",
+    "match": "CDUC Ecuador vs Orense SC",
+    "league": "Equateur • D1 Equateur",
+    "date_str": "Mar. 15/09 à 02h00",
+    "fav_team": "CDUC Ecuador",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 64,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.36,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
