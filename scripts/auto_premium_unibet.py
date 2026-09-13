@@ -252,6 +252,60 @@ def evaluate_btts(m):
     """Désactivé : La méthode officielle repose à 100% sur les Favoris 1N2 (+2 Buts d'Avance)."""
     return None
 
+def evaluate_favorite_m2(m):
+    """
+    Méthode 2 — Sélection pure marché bookmaker (sans AdamChoi).
+    Conditions :
+      1. Favori = équipe DOMICILE uniquement (c1 < c2)
+      2. Cote domicile < 2.00  (probabilité implicite de victoire > 50%)
+      3. Over 2.5 < Under 2.5  (marché attend un match offensif)
+    Pari identique à M1 : favori gagne ou mène de 2 buts (Early Payout).
+    """
+    c1 = m.get("c1")
+    c2 = m.get("c2")
+    over25 = m.get("over25")
+    under25 = m.get("under25")
+    p2_c1 = m.get("p2_c1")
+
+    if not c1 or not c2 or c1 <= 1.0 or c2 <= 1.0:
+        return None
+    if not over25 or not under25 or over25 <= 0 or under25 <= 0:
+        return None
+
+    # Favori = domicile uniquement
+    if c1 >= c2:
+        return None
+
+    # Prob implicite > 50% → cote < 2.00
+    if c1 >= 2.00:
+        return None
+
+    # Marché offensif : over25 doit être moins cher que under25
+    if over25 >= under25:
+        return None
+
+    implied_prob_pct = round((1.0 / c1) * 100, 1)
+    odds_for_combo = p2_c1 if (p2_c1 and p2_c1 > 1.0) else c1
+
+    return {
+        "fav_team": m.get("dom", ""),
+        "dog_team": m.get("ext", ""),
+        "fav_side": "dom",
+        "fav_odds": c1,
+        "p2_fav_odds": odds_for_combo,
+        "dog_odds": c2,
+        "over25": over25,
+        "under25": under25,
+        "fav_score": round(implied_prob_pct),
+        "fav_badge": "🎯 M2",
+        "fav_classe": f"Over2.5@{over25:.2f} < Under@{under25:.2f}",
+        "pct_fav_win": round(implied_prob_pct),
+        "pct_fav_success": round(implied_prob_pct),
+        "market": "FAV_1N2",
+        "market_label": "👑 Favori (+2b)",
+    }
+
+
 def render_fav_proof_html(m):
     fi = m.get("fav_info")
     if not fi or fi.get("market") in ["OVER_15", "BTTS"]:
@@ -1164,9 +1218,131 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
 
     return existing_docs, active_combos
 
+def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3.0):
+    """
+    Méthode 2 — Persistance et pairing des combinés (Sweet Spot 2.20-2.85).
+    Réutilise la même mécanique que M1 : stockage dans existing_docs['methode2_combos'],
+    dédup stricte par équipe, même jour sportif uniquement.
+    """
+    m1_used = m1_used_teams or set()
+    existing_m2 = existing_docs.get("methode2_combos", [])
+    combo_stake_m2 = combo_stake
+
+    # Clés des équipes déjà en M2 (combinés actifs existants)
+    used_m2 = set(m1_used)
+    m2_today = []
+
+    for c in existing_m2:
+        if c.get("ticket_status") in ["WON", "LOST"]:
+            m2_today.append(c)
+            for leg in [c.get("m1", {}), c.get("m2", {})]:
+                if leg.get("home"): used_m2.add(_clean_team_key(leg["home"]))
+                if leg.get("away"): used_m2.add(_clean_team_key(leg["away"]))
+            continue
+
+        m1l = c.get("m1", {}); m2l = c.get("m2", {})
+        comb_odds = c.get("odds", 2.0)
+        s1 = m1l.get("selection_status", "PENDING"); s2 = m2l.get("selection_status", "PENDING")
+        is_started = (m1l.get("status") == "LIVE" or m2l.get("status") == "LIVE" or s1 != "PENDING" or s2 != "PENDING")
+
+        # Purge si hors Sweet Spot et non commencé
+        if not is_started and (comb_odds < 2.20 or comb_odds > 2.85):
+            continue
+
+        t1h = _clean_team_key(m1l.get("home", "")); t1a = _clean_team_key(m1l.get("away", ""))
+        t2h = _clean_team_key(m2l.get("home", "")); t2a = _clean_team_key(m2l.get("away", ""))
+        if not is_started and any(t in used_m2 for t in [t1h, t1a, t2h, t2a]):
+            continue
+
+        if s1.startswith("WON") and s2.startswith("WON"):
+            c["ticket_status"] = "WON"
+            c["profit_unit"] = round(comb_odds - 1.0, 2)
+        elif s1 == "LOST" or s2 == "LOST":
+            c["ticket_status"] = "LOST"
+            c["profit_unit"] = -1.0
+        elif m1l.get("status") == "LIVE" or m2l.get("status") == "LIVE":
+            c["ticket_status"] = "LIVE"
+        else:
+            c["ticket_status"] = "PENDING"
+
+        used_m2.update([t1h, t1a, t2h, t2a])
+        m2_today.append(c)
+
+    # Pairing des nouveaux favoris M2 non encore en combiné
+    pool = []
+    for m in retained_m2:
+        kd = _clean_team_key(m.get("dom", "")); ke = _clean_team_key(m.get("ext", ""))
+        if kd not in used_m2 and ke not in used_m2 and not is_night_match(m):
+            pool.append(m)
+
+    c_idx_base = max([c.get("ticket_num", 0) for c in m2_today] or [0])
+    while len(pool) >= 2:
+        best_pair = None; best_score = 999.0
+        for i in range(len(pool)):
+            fi1 = pool[i].get("fav_info_m2", {})
+            c1v = fi1.get("p2_fav_odds") or fi1.get("fav_odds") or 1.50
+            d1 = _get_session_day(pool[i])
+            for j in range(i + 1, len(pool)):
+                d2 = _get_session_day(pool[j])
+                if d1 and d2 and d1 != d2: continue
+                fi2 = pool[j].get("fav_info_m2", {})
+                c2v = fi2.get("p2_fav_odds") or fi2.get("fav_odds") or 1.50
+                comb_odds = round(c1v * c2v, 2)
+                if comb_odds < 2.20 or comb_odds > 2.85: continue
+                dist = abs(comb_odds - 2.25) + (i * 0.02) + (j * 0.03)
+                if dist < best_score: best_score = dist; best_pair = (i, j)
+
+        if not best_pair: break
+        i, j = best_pair
+        m2r = pool.pop(j); m1r = pool.pop(i)
+        fi1 = m1r.get("fav_info_m2", {}); fi2 = m2r.get("fav_info_m2", {})
+        c1v = fi1.get("p2_fav_odds") or fi1.get("fav_odds") or 1.50
+        c2v = fi2.get("p2_fav_odds") or fi2.get("fav_odds") or 1.50
+        comb_odds = round(c1v * c2v, 2)
+        c_idx_base += 1
+        used_m2.update([_clean_team_key(m1r.get("dom","")), _clean_team_key(m1r.get("ext","")),
+                         _clean_team_key(m2r.get("dom","")), _clean_team_key(m2r.get("ext",""))])
+        def _leg(raw, fi):
+            return {
+                "id": str(raw.get("id", "")), "time": raw.get("date_str", ""), "start_iso": raw.get("start_iso"),
+                "league": raw.get("league", ""), "home": raw.get("dom", ""), "away": raw.get("ext", ""),
+                "fav_team": fi.get("fav_team", raw.get("dom", "")), "fav_side": "dom",
+                "market": "FAV_1N2", "market_label": "👑 Favori (+2b)",
+                "odds": fi.get("p2_fav_odds") or fi.get("fav_odds") or 1.50,
+                "domination_score": fi.get("fav_score", 0), "badge_tier": "🎯 M2",
+                "win_pct_historical": fi.get("pct_fav_success", 0),
+                "over25": fi.get("over25"), "under25": fi.get("under25"),
+                "status": "UPCOMING", "selection_status": "PENDING",
+                "score_display": "VS", "home_score": 0, "away_score": 0,
+                "minute": "À venir", "is_live": False, "is_finished": False, "profit": 0.0,
+            }
+        m2_today.append({
+            "id": f"m2_combo_{c_idx_base}", "ticket_num": c_idx_base,
+            "email_ticket_num": None, "odds": comb_odds,
+            "default_stake": combo_stake_m2, "ticket_status": "PENDING",
+            "profit_unit": 0.0, "profit_eur": 0.0,
+            "gain_eur": round(comb_odds * combo_stake_m2, 2),
+            "m1": _leg(m1r, fi1), "m2": _leg(m2r, fi2),
+        })
+
+    active_m2 = [c for c in m2_today if c.get("ticket_status") in ["PENDING", "LIVE"]]
+    for idx, c in enumerate(active_m2, 1):
+        c["email_ticket_num"] = idx
+
+    existing_docs["methode2_combos"] = m2_today
+    existing_docs["methode2_summary"] = {
+        "total": len(m2_today), "active": len(active_m2),
+        "won": sum(1 for c in m2_today if c.get("ticket_status") == "WON"),
+        "lost": sum(1 for c in m2_today if c.get("ticket_status") == "LOST"),
+    }
+    print(f"🎯 M2 data.json : {len(m2_today)} combinés ({len(active_m2)} actifs)")
+    return active_m2
+
+
 def main():
     print("=== AUTOMATISATION UNIBET — MÉTHODE FOOTBALL MULTI-MARCHÉS (3 JOURNÉES + NUITS) ===")
     matches_to_scan = get_unibet_active_games()
+
 
     scanned_all = []
     with ThreadPoolExecutor(max_workers=20) as ex:
@@ -1370,6 +1546,25 @@ def main():
     print(f"⭐ Sélections Retenues (Score >= 55, tri chronologique) : {len(retained_favs)} (💎 Platine: {nb_platine}, 🥇 Or: {nb_or}, 🥈 Argent: {nb_argent}, 🥉 Bronze: {nb_bronze})")
     print(f"⚠️ Sélections Écartées (Score < 55) : {len(rejected_favs)}")
 
+    # ── Méthode 2 : Sélection pure marché bookmaker ───────────────────────────
+    # Exclure les équipes déjà retenues par M1 pour éviter tout doublon
+    m1_used_teams = set()
+    for m in retained_favs:
+        m1_used_teams.add(_clean_team_key(m.get("dom", "")))
+        m1_used_teams.add(_clean_team_key(m.get("ext", "")))
+
+    retained_m2 = []
+    for m in scanned_results:
+        if _clean_team_key(m.get("dom", "")) in m1_used_teams or _clean_team_key(m.get("ext", "")) in m1_used_teams:
+            continue
+        fi2 = evaluate_favorite_m2(m)
+        if fi2:
+            m["fav_info_m2"] = fi2
+            retained_m2.append(m)
+
+    retained_m2.sort(key=lambda x: x.get("dt_obj", now_utc))
+    print(f"🎯 M2 Sélections Retenues (Favori dom < 2.00 + Over2.5 < Under2.5) : {len(retained_m2)}")
+
     # ── Évolutions vs run précédent ──────────────────────────────────────────
     history_file = "previous_odds.json"
     prev_state = {}
@@ -1499,6 +1694,15 @@ def main():
     # ── Construction des Combinés Chronologiques de 2 Matchs (Mise 3€) ──────
     # ponytail: Source Unique de Vérité (docs/data.json). 100% de parité stricte Email & GitHub Pages.
     existing_docs, active_combos = sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=scanned_results)
+
+    # ── Méthode 2 : pairing et persistance ───────────────────────────────────
+    active_m2_combos = sync_m2_combos(existing_docs, retained_m2, m1_used_teams=m1_used_teams)
+    # Réécriture du data.json avec M2 inclus
+    docs_data_path = os.path.join("docs", "data.json")
+    with open(docs_data_path, "w", encoding="utf-8") as _f:
+        import json as _json
+        _json.dump(existing_docs, _f, ensure_ascii=False, indent=2)
+    active_m2_combos = sorted(active_m2_combos, key=lambda c: c.get("m1", {}).get("start_iso") or "")
 
     combos_html = ""
     default_combo_stake = 3.0
@@ -1635,7 +1839,61 @@ def main():
     if not combos_html:
         combos_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Pas assez de favoris retenus pour former un combiné de 2 matchs.</div>'
 
-    # ── Section 2 : Fiches détaillées des matchs par ordre chronologique ─────
+    # ── Section M2 : Combinés Méthode 2 ──────────────────────────────────────
+    m2_combos_html = ""
+    for c in active_m2_combos:
+        c_num = c.get("email_ticket_num", c.get("ticket_num", 1))
+        comb_odds = c.get("odds", 2.0)
+        pot_win = c.get("gain_eur", round(3.0 * comb_odds, 2))
+        net_profit = round(pot_win - 3.0, 2)
+        m1l = c["m1"]; m2l = c["m2"]
+        _ts = c.get("ticket_status", "PENDING")
+        if _ts == "LIVE":
+            m2_live_badge = '<span style="background:#fef3c7; color:#b45309; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fde68a;">🟢 EN DIRECT</span>'
+        elif _ts == "WON":
+            m2_live_badge = '<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #86efac;">✅ GAGNÉ</span>'
+        elif _ts == "LOST":
+            m2_live_badge = '<span style="background:#fee2e2; color:#b91c1c; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fca5a5;">❌ PERDU</span>'
+        else:
+            m2_live_badge = '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 7px; border-radius:5px;">⏳ À venir</span>'
+
+        def _m2_status(leg):
+            ss = leg.get("selection_status", "PENDING")
+            sc = leg.get("score_display", "")
+            if ss == "WON_LEAD2": return f'<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">👑 +2b GAGNÉ ({sc})</span>'
+            if ss == "WON_FINAL": return f'<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">✅ VICTOIRE ({sc})</span>'
+            if ss == "LOST":      return f'<span style="background:#fee2e2; color:#b91c1c; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">❌ PERDU ({sc})</span>'
+            if leg.get("status") == "LIVE": return f'<span style="background:#fef3c7; color:#b45309; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">🟢 {leg.get("minute","?")} ({sc})</span>'
+            return '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 6px; border-radius:4px;">⏳ À venir</span>'
+
+        o25_1 = m1l.get("over25"); u25_1 = m1l.get("under25")
+        o25_2 = m2l.get("over25"); u25_2 = m2l.get("under25")
+        m2_combos_html += f'''
+        <div style="background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid #7c3aed; border-radius:8px; padding:10px 12px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="background:#7c3aed; color:#ffffff; font-weight:800; font-size:11px; padding:3px 8px; border-radius:5px;">🎯 M2 #{c_num}</span>
+              <span style="background:#2563eb; color:#ffffff; font-weight:900; font-size:12px; padding:2px 8px; border-radius:5px;">Cote @{comb_odds:.2f}</span>
+              {m2_live_badge}
+            </div>
+            <div style="font-size:11px; font-weight:800; color:#15803d;">Mise : <b>3,00 €</b> &bull; Gain : <b>{pot_win:.2f} €</b> (+{net_profit:.2f} € net)</div>
+          </div>
+          <div style="font-size:11px; color:#334155; line-height:1.5;">
+            <div style="padding:3px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
+              <span>1️⃣ <b>{m1l.get("time","")}</b> : {m1l.get("home")} vs {m1l.get("away")} &rarr; <span style="color:#1d4ed8; font-weight:700;">👑 {m1l.get("fav_team")}</span> @{m1l.get("odds",1.5):.2f}{f' | Over2.5@{o25_1:.2f}/Under@{u25_1:.2f}' if o25_1 and u25_1 else ''}</span>
+              {_m2_status(m1l)}
+            </div>
+            <div style="padding:3px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
+              <span>2️⃣ <b>{m2l.get("time","")}</b> : {m2l.get("home")} vs {m2l.get("away")} &rarr; <span style="color:#1d4ed8; font-weight:700;">👑 {m2l.get("fav_team")}</span> @{m2l.get("odds",1.5):.2f}{f' | Over2.5@{o25_2:.2f}/Under@{u25_2:.2f}' if o25_2 and u25_2 else ''}</span>
+              {_m2_status(m2l)}
+            </div>
+          </div>
+        </div>
+        '''
+    if not m2_combos_html:
+        m2_combos_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Aucun combiné M2 disponible pour ce créneau.</div>'
+
+
     fav_cards_html = ""
     if retained_favs:
         for m in retained_favs:
@@ -1810,13 +2068,25 @@ def main():
           <!-- SECTION COMBINÉS DE 2 MATCHS (CHRONOLOGIQUE · MISE 3€) -->
           <div style="padding:14px 16px 8px 16px; background:#f1f5f9; border-top:2px solid #e2e8f0;">
             <div style="font-size:14px; font-weight:900; color:#0f172a; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-              <span>🎟️ VOS COMBINÉS DE 2 MATCHS (CHRONOLOGIQUE)</span>
+              <span>🎟️ VOS COMBINÉS M1 — 2 MATCHS (CHRONOLOGIQUE)</span>
               <span style="font-size:11px; background:#2563eb; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mise : 3,00 € par ticket</span>
             </div>
             <div style="font-size:11px; color:#64748b; margin-bottom:10px;">
               Paires chronologiques consécutives selon l'ordre officiel de coup d'envoi. Dès qu'une équipe mène de 2 buts, sa sélection est payée immédiatement.
             </div>
             {combos_html}
+          </div>
+
+          <!-- SECTION COMBINÉS M2 (FAVORI DOM < 2.00 + OVER2.5) -->
+          <div style="padding:14px 16px 8px 16px; background:#faf5ff; border-top:2px solid #e9d5ff;">
+            <div style="font-size:14px; font-weight:900; color:#0f172a; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+              <span>🎯 COMBINÉS M2 — MÉTHODE MARCHÉ BOOKMAKER</span>
+              <span style="font-size:11px; background:#7c3aed; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mise : 3,00 € par ticket</span>
+            </div>
+            <div style="font-size:11px; color:#64748b; margin-bottom:10px;">
+              Favori domicile (cote &lt; 2.00 = prob. victoire &gt; 50%) <b>&amp;</b> marché Over 2.5 &lt; Under 2.5 (match offensif attendu).
+            </div>
+            {m2_combos_html}
           </div>
 
           <!-- SECTION 2 : FICHES D'ANALYSE DÉTAILLÉES -->
