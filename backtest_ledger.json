@@ -29369,5 +29369,28 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3378814",
+    "timestamp_utc": "2026-09-13T08:16:05.272425+00:00",
+    "match": "Braga vs Estoril Praia",
+    "league": "Portugal • Liga Portugal",
+    "date_str": "Lun. 14/09 à 21h45",
+    "fav_team": "Braga",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 59,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 20
+    },
+    "odds": {
+      "fav_odds": 1.39,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
