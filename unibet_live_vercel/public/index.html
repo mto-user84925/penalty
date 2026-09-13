@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>⚡ Flashscore Live — Suivi Exclusif Méthode 1</title>
+    <title>⚡ Flashscore Live — Suivi Méthode 1 & Méthode 2</title>
     <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/football2--v1.png">
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0b0f19">
@@ -867,6 +867,24 @@
                 });
             });
 
+            const m2List = globalCombosData.methode2_combos || [];
+            m2List.forEach(c => {
+                [c.m1, c.m2].forEach(leg => {
+                    if (leg && leg.home && leg.away) {
+                        legs.push({
+                            leg: leg,
+                            ticket: c,
+                            method: 'm2',
+                            num: c.email_ticket_num || c.ticket_num,
+                            tHome: getTokens(leg.home),
+                            tAway: getTokens(leg.away),
+                            isYouth: isYouthOrWomen((leg.home || '') + ' ' + (leg.away || '')),
+                            label: `🎯 M2 #${c.email_ticket_num || c.ticket_num}`
+                        });
+                    }
+                });
+            });
+
             cachedComboLegs = legs;
         }
 
@@ -1313,7 +1331,10 @@
                 return;
             }
 
-            const activeList = globalCombosData.combos_today || [];
+            const m1List = globalCombosData.combos_today || [];
+            const m2List = globalCombosData.methode2_combos || [];
+            const isM2 = (currentMethod === 'm2');
+            const activeList = isM2 ? m2List : m1List;
 
             const evaluatedList = activeList.map(c => {
                 const evalRes = evalTicketLive(c);
@@ -1355,10 +1376,20 @@
             let html = `
             <div class="combos-container-view">
 
+                <!-- 🔄 SÉLECTEUR DE MÉTHODE M1 / M2 -->
+                <div style="display:flex; gap:6px; margin-bottom:10px;">
+                    <button class="cfilter-btn ${!isM2 ? 'active' : ''}" style="${!isM2 ? 'background:#1e3a8a; border-color:#3b82f6; color:#ffffff; font-weight:900;' : 'background:#131b2e; color:#94a3b8;'}" onclick="setCombosMethod('m1')">
+                        🎟️ Méthode 1 (${m1List.length})
+                    </button>
+                    <button class="cfilter-btn ${isM2 ? 'active' : ''}" style="${isM2 ? 'background:#4c1d95; border-color:#8b5cf6; color:#ffffff; font-weight:900;' : 'background:#131b2e; color:#94a3b8;'}" onclick="setCombosMethod('m2')">
+                        🎯 Méthode 2 (${m2List.length})
+                    </button>
+                </div>
+
                 <div class="combos-kpi-grid">
                     <div class="combos-kpi-card">
                         <div class="combos-kpi-val" style="color:#10b981;">${won}/${decided}</div>
-                        <div class="combos-kpi-sub">Gagnés</div>
+                        <div class="combos-kpi-sub">Gagnés ${isM2 ? 'M2' : 'M1'}</div>
                     </div>
                     <div class="combos-kpi-card">
                         <div class="combos-kpi-val" style="color:#f59e0b;">${winRate}%</div>
@@ -1393,7 +1424,7 @@
             `;
 
             if (filtered.length === 0) {
-                html += '<div class="empty-state">Aucun combiné dans ce filtre.</div></div>';
+                html += '<div class="empty-state">Aucun combiné dans ce filtre pour cette méthode.</div></div>';
                 combosContainer.innerHTML = html;
                 return;
             }
@@ -1428,9 +1459,9 @@
                     gainColor = '#d97706';
                 }
 
-                const title = c.email_ticket_num 
-                    ? `TICKET #${c.email_ticket_num} DU MAIL` 
-                    : `COMBINÉ #${c.ticket_num}`;
+                const title = isM2
+                    ? (c.email_ticket_num ? `🎯 TICKET M2 #${c.email_ticket_num} DU MAIL` : `🎯 COMBINÉ M2 #${c.ticket_num}`)
+                    : (c.email_ticket_num ? `🎟️ TICKET M1 #${c.email_ticket_num} DU MAIL` : `🎟️ COMBINÉ M1 #${c.ticket_num}`);
 
                 function renderLegHtml(m, legEval) {
                     if (!m) return '';
@@ -1453,6 +1484,9 @@
                     }
 
                     const favLabel = m.fav_team ? `👑 ${m.fav_team}` : (m.home || '');
+                    const o25Info = (m.over25 && m.under25)
+                        ? `<span style="color:#c084fc; font-size:9px; font-weight:800; margin-left:4px;">(Over 2.5 @${m.over25.toFixed(2)} &lt; Under @${m.under25.toFixed(2)})</span>`
+                        : '';
 
                     return `
                     <div class="ticket-leg ${isGoalNow ? 'goal-flash' : ''}">
@@ -1461,10 +1495,11 @@
                             <div class="ticket-leg-sub">
                                 <span>🕒 ${m.time ? m.time.replace(' à ', ' ') : ''}</span>
                                 <span class="ticket-leg-fav">${favLabel} @${(m.odds || 0).toFixed(2)}</span>
+                                ${o25Info}
                             </div>
                         </div>
                         <div class="ticket-leg-right">
-                            <div class="ticket-leg-score ${currentMethod === 'm2' ? 'm2' : 'm1'}">${legEval.score}</div>
+                            <div class="ticket-leg-score ${isM2 ? 'm2' : 'm1'}">${legEval.score}</div>
                             ${legBadge}
                         </div>
                     </div>`;
@@ -1565,11 +1600,12 @@
                     const res = await fetch(url);
                     if (res.ok) {
                         const data = await res.json();
-                        if (data && data.combos_today) {
+                        if (data && (data.combos_today || data.methode2_combos)) {
                             globalCombosData = data;
                             precompileComboLegs();
                             const m1Count = (globalCombosData.combos_today || []).length;
-                            if (countCombosEl) countCombosEl.textContent = m1Count;
+                            const m2Count = (globalCombosData.methode2_combos || []).length;
+                            if (countCombosEl) countCombosEl.textContent = `${m1Count + m2Count}`;
                             if (activeTab === 'combos') renderCombosView();
                             else renderFlashscore();
                             return;

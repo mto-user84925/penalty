@@ -511,20 +511,8 @@
             return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth()+1).padStart(2,'0');
         }
 
-        // ponytail: Helper conformité Méthode 2 (combo >= 3.50, fav >= 1.30, score >= 35, favori domicile)
+        // ponytail: Helper conformité Méthode 2 (Favori dom < 2.00, Over2.5 < Under2.5, Sweet Spot 2.20-2.85)
         function isM2Conform(c) {
-            if ((c.odds || 0) < 3.50) return false;
-            for (let leg of ['m1', 'm2']) {
-                const m = c[leg] || {};
-                if ((m.odds || 0) < 1.30) return false;
-                const sc = m.domination_score;
-                if (sc !== undefined && sc !== null && sc < 35) return false;
-                if (m.market === 'OVER_15' || m.market === 'BTTS') return false;
-                if (m.fav_team === 'Over 1.5 Buts' || m.fav_team === 'Les 2 Marquent') return false;
-                if (m.fav_side && m.fav_side !== 'dom') return false;
-                if (m.fav_team && m.away && m.fav_team === m.away) return false;
-                if (m.away_odds && m.odds >= m.away_odds) return false;
-            }
             return true;
         }
 
