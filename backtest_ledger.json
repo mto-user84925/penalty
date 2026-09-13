@@ -29438,5 +29438,95 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3376214",
+    "timestamp_utc": "2026-09-13T14:03:34.993806+00:00",
+    "match": "Leeds Utd vs Newcastle",
+    "league": "Angleterre • Premier League",
+    "date_str": "Lun. 14/09 à 21h00",
+    "fav_team": "Leeds Utd",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 48,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 2.2,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3367848",
+    "timestamp_utc": "2026-09-13T14:03:34.993806+00:00",
+    "match": "Instituto Atl. vs Estudiantes Rí",
+    "league": "Argentine • D1 Argentine",
+    "date_str": "Mar. 15/09 à 02h15",
+    "fav_team": "Instituto Atl.",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 71,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 20
+    },
+    "odds": {
+      "fav_odds": 1.34,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3370811",
+    "timestamp_utc": "2026-09-13T14:03:34.993806+00:00",
+    "match": "America vs Depor.Pasto",
+    "league": "Colombie • D1 Colombie",
+    "date_str": "Mar. 15/09 à 03h00",
+    "fav_team": "America",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 68,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 50
+    },
+    "odds": {
+      "fav_odds": 1.32,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3378998",
+    "timestamp_utc": "2026-09-13T14:03:34.993806+00:00",
+    "match": "FC Leon vs Atl. San Luis",
+    "league": "Mexique • D1 Mexique",
+    "date_str": "Mar. 15/09 à 03h00",
+    "fav_team": "FC Leon",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 56,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.79,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
