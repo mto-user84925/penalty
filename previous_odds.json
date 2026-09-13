@@ -20,22 +20,22 @@
       "fav_score": 68,
       "fav_badge": "🥈 ARGENT"
     },
-    "3368824": {
-      "match": "Elfsborg - Kalmar FF",
-      "league": "Suede • D1 Suede",
-      "date_str": "Dim. 13/09 à 14h00",
-      "fav_team": "Elfsborg",
-      "fav_odds": 1.74,
-      "p2_fav_odds": null,
-      "fav_score": 57,
-      "fav_badge": "⚠️ RISQUÉ"
-    },
     "3360658": {
       "match": "Gijon - Club Eldense",
       "league": "Espagne • Laliga 2",
       "date_str": "Dim. 13/09 à 14h00",
       "fav_team": "Gijon",
       "fav_odds": 1.57,
+      "p2_fav_odds": null,
+      "fav_score": 57,
+      "fav_badge": "⚠️ RISQUÉ"
+    },
+    "3368824": {
+      "match": "Elfsborg - Kalmar FF",
+      "league": "Suede • D1 Suede",
+      "date_str": "Dim. 13/09 à 14h00",
+      "fav_team": "Elfsborg",
+      "fav_odds": 1.74,
       "p2_fav_odds": null,
       "fav_score": 57,
       "fav_badge": "⚠️ RISQUÉ"
