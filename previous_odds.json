@@ -110,16 +110,6 @@
       "fav_score": 65,
       "fav_badge": "🥈 ARGENT"
     },
-    "3377624": {
-      "match": "FC Leones - Tecnico Uni.",
-      "league": "Equateur • D1 Equateur",
-      "date_str": "Dim. 13/09 à 20h00",
-      "fav_team": "FC Leones",
-      "fav_odds": 1.75,
-      "p2_fav_odds": null,
-      "fav_score": 62,
-      "fav_badge": "🥉 BRONZE"
-    },
     "3374316": {
       "match": "PAOK Salonique - Aris Salonique",
       "league": "Grece • D1 Grece",
@@ -128,6 +118,16 @@
       "fav_odds": 1.5,
       "p2_fav_odds": null,
       "fav_score": 64,
+      "fav_badge": "🥉 BRONZE"
+    },
+    "3377624": {
+      "match": "FC Leones - Tecnico Uni.",
+      "league": "Equateur • D1 Equateur",
+      "date_str": "Dim. 13/09 à 20h00",
+      "fav_team": "FC Leones",
+      "fav_odds": 1.75,
+      "p2_fav_odds": null,
+      "fav_score": 62,
       "fav_badge": "🥉 BRONZE"
     },
     "3371152": {
@@ -210,16 +210,6 @@
       "fav_score": 66,
       "fav_badge": "🥈 ARGENT"
     },
-    "3368971": {
-      "match": "Djurgårdens - GAIS Göteborg",
-      "league": "Suede • D1 Suede",
-      "date_str": "Lun. 14/09 à 19h00",
-      "fav_team": "Djurgårdens",
-      "fav_odds": 1.47,
-      "p2_fav_odds": null,
-      "fav_score": 59,
-      "fav_badge": "🥉 BRONZE"
-    },
     "3368972": {
       "match": "IK Sirius FK - Degerfors IF",
       "league": "Suede • D1 Suede",
@@ -229,6 +219,16 @@
       "p2_fav_odds": null,
       "fav_score": 66,
       "fav_badge": "🥈 ARGENT"
+    },
+    "3368971": {
+      "match": "Djurgårdens - GAIS Göteborg",
+      "league": "Suede • D1 Suede",
+      "date_str": "Lun. 14/09 à 19h00",
+      "fav_team": "Djurgårdens",
+      "fav_odds": 1.47,
+      "p2_fav_odds": null,
+      "fav_score": 59,
+      "fav_badge": "🥉 BRONZE"
     },
     "3368555": {
       "match": "FCSB - Pet.Ploiesti",
