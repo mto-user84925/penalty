@@ -16,7 +16,7 @@ except Exception:
 # ── Seuils Stratégie Favoris Win & 2 Buts d'Avance (Early Payout) ───────────
 MAX_COTE_FAV           = 2.20  # Cote maximale du favori Unibet 1N2
 MIN_COTE_FAV           = 1.30  # Plancher optimisé : accepte les favoris solides dès 1.30
-MIN_SCORE_FAV_RETAINED = 55    # Score Domination minimal (tranche Bronze haute 55-57 réintégrée)
+MIN_SCORE_FAV_RETAINED = 50    # Score Domination minimal (Option A : tous les favoris dès 50/100)
 MIN_SCORE_FAV_SOLID    = 75    # Score AdamChoi pour être qualifié Favori Solide (Or / Platine)
 
 H = {
@@ -209,7 +209,7 @@ def evaluate_favorite_domination(m):
     elif total_score >= 65:
         badge = "🥈 ARGENT"
         classe = "Supérieur (Avantage net)"
-    elif total_score >= 58:
+    elif total_score >= 50:
         badge = "🥉 BRONZE"
         classe = "Favorable (Bonne rentabilité)"
     else:
@@ -1539,12 +1539,12 @@ def main():
     nb_platine = sum(1 for m in retained_favs if m["fav_info"]["fav_score"] >= 85)
     nb_or = sum(1 for m in retained_favs if 75 <= m["fav_info"]["fav_score"] < 85)
     nb_argent = sum(1 for m in retained_favs if 65 <= m["fav_info"]["fav_score"] < 75)
-    nb_bronze = sum(1 for m in retained_favs if 55 <= m["fav_info"]["fav_score"] < 65)
+    nb_bronze = sum(1 for m in retained_favs if 50 <= m["fav_info"]["fav_score"] < 65)
     nb_risqued = len(rejected_favs)
 
     print(f"🏆 Matchs analysés (Cote <= 2.20) : {len(retained_favs) + len(rejected_favs)} / {len(scanned_results)}")
-    print(f"⭐ Sélections Retenues (Score >= 55, tri chronologique) : {len(retained_favs)} (💎 Platine: {nb_platine}, 🥇 Or: {nb_or}, 🥈 Argent: {nb_argent}, 🥉 Bronze: {nb_bronze})")
-    print(f"⚠️ Sélections Écartées (Score < 55) : {len(rejected_favs)}")
+    print(f"⭐ Sélections Retenues (Score >= 50, tri chronologique) : {len(retained_favs)} (💎 Platine: {nb_platine}, 🥇 Or: {nb_or}, 🥈 Argent: {nb_argent}, 🥉 Bronze: {nb_bronze})")
+    print(f"⚠️ Sélections Écartées (Score < 50) : {len(rejected_favs)}")
 
     # ── Méthode 2 : Sélection pure marché bookmaker ───────────────────────────
     # M1 et M2 sont indépendantes : un même match peut figurer dans les deux méthodes.
@@ -2034,7 +2034,7 @@ def main():
           <div style="background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:14px 16px;">
             <table style="width:100%; border-collapse:collapse; text-align:center;">
               <tr>
-                <td style="padding:0 4px;"><div style="background:#dbeafe; border-radius:8px; padding:10px;"><div style="font-size:24px; font-weight:900; color:#1d4ed8;">{nb_retained}</div><div style="font-size:10px; font-weight:700; color:#1d4ed8;">FAVORIS RETENUS</div><div style="font-size:10px; color:#3b82f6;">Score Domination ≥ 55/100</div></div></td>
+                <td style="padding:0 4px;"><div style="background:#dbeafe; border-radius:8px; padding:10px;"><div style="font-size:24px; font-weight:900; color:#1d4ed8;">{nb_retained}</div><div style="font-size:10px; font-weight:700; color:#1d4ed8;">FAVORIS RETENUS</div><div style="font-size:10px; color:#3b82f6;">Score Domination ≥ 50/100</div></div></td>
                 <td style="padding:0 4px;"><div style="background:#fef3c7; border-radius:8px; padding:10px;"><div style="font-size:24px; font-weight:900; color:#b45309;">{nb_all_favs}</div><div style="font-size:10px; font-weight:700; color:#b45309;">FAVORIS ÉTUDIÉS</div><div style="font-size:10px; color:#d97706;">Cote 1N2 ≤ 2.20</div></div></td>
                 <td style="padding:0 4px;"><div style="background:#f0fdf4; border-radius:8px; padding:10px;"><div style="font-size:24px; font-weight:900; color:#15803d;">{nb_scanned}</div><div style="font-size:10px; font-weight:700; color:#15803d;">MATCHS SCANNÉS</div><div style="font-size:10px; color:#16a34a;">Unibet France</div></div></td>
               </tr>
