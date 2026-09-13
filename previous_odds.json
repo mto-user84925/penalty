@@ -35,17 +35,17 @@
       "league": "Espagne • Laliga 2",
       "date_str": "Dim. 13/09 à 14h00",
       "fav_team": "Gijon",
-      "fav_odds": 1.57,
+      "fav_odds": 1.55,
       "p2_fav_odds": null,
-      "fav_score": 57,
-      "fav_badge": "⚠️ RISQUÉ"
+      "fav_score": 58,
+      "fav_badge": "🥉 BRONZE"
     },
     "3368554": {
       "match": "Heerenveen - SC Telstar",
       "league": "Pays Bas • D1 Pays Bas",
       "date_str": "Dim. 13/09 à 14h30",
       "fav_team": "Heerenveen",
-      "fav_odds": 1.5,
+      "fav_odds": 1.47,
       "p2_fav_odds": null,
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE"
@@ -55,7 +55,7 @@
       "league": "Islande • D1 Islande",
       "date_str": "Dim. 13/09 à 16h00",
       "fav_team": "KR Reykjavik",
-      "fav_odds": 1.48,
+      "fav_odds": 1.46,
       "p2_fav_odds": null,
       "fav_score": 66,
       "fav_badge": "🥈 ARGENT"
@@ -75,7 +75,7 @@
       "league": "Italie • Serie B",
       "date_str": "Dim. 13/09 à 17h15",
       "fav_team": "Mantova",
-      "fav_odds": 2.05,
+      "fav_odds": 2.1,
       "p2_fav_odds": null,
       "fav_score": 60,
       "fav_badge": "🥉 BRONZE"
@@ -125,9 +125,9 @@
       "league": "Equateur • D1 Equateur",
       "date_str": "Dim. 13/09 à 20h00",
       "fav_team": "FC Leones",
-      "fav_odds": 1.75,
+      "fav_odds": 1.92,
       "p2_fav_odds": null,
-      "fav_score": 62,
+      "fav_score": 61,
       "fav_badge": "🥉 BRONZE"
     },
     "3371152": {
@@ -135,9 +135,9 @@
       "league": "Paraguay • D1 Paraguay",
       "date_str": "Dim. 13/09 à 21h00",
       "fav_team": "Olimp.Asuncion",
-      "fav_odds": 1.37,
+      "fav_odds": 1.44,
       "p2_fav_odds": null,
-      "fav_score": 62,
+      "fav_score": 61,
       "fav_badge": "🥉 BRONZE"
     },
     "3367861": {
@@ -185,7 +185,7 @@
       "league": "Equateur • D1 Equateur",
       "date_str": "Lun. 14/09 à 01h00",
       "fav_team": "Barcelona SC",
-      "fav_odds": 1.52,
+      "fav_odds": 1.5,
       "p2_fav_odds": null,
       "fav_score": 63,
       "fav_badge": "🥉 BRONZE"
@@ -210,16 +210,6 @@
       "fav_score": 66,
       "fav_badge": "🥈 ARGENT"
     },
-    "3368972": {
-      "match": "IK Sirius FK - Degerfors IF",
-      "league": "Suede • D1 Suede",
-      "date_str": "Lun. 14/09 à 19h00",
-      "fav_team": "IK Sirius FK",
-      "fav_odds": 1.33,
-      "p2_fav_odds": null,
-      "fav_score": 66,
-      "fav_badge": "🥈 ARGENT"
-    },
     "3368971": {
       "match": "Djurgårdens - GAIS Göteborg",
       "league": "Suede • D1 Suede",
@@ -229,6 +219,16 @@
       "p2_fav_odds": null,
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE"
+    },
+    "3368972": {
+      "match": "IK Sirius FK - Degerfors IF",
+      "league": "Suede • D1 Suede",
+      "date_str": "Lun. 14/09 à 19h00",
+      "fav_team": "IK Sirius FK",
+      "fav_odds": 1.33,
+      "p2_fav_odds": null,
+      "fav_score": 66,
+      "fav_badge": "🥈 ARGENT"
     },
     "3368555": {
       "match": "FCSB - Pet.Ploiesti",
