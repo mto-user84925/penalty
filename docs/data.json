@@ -9,7 +9,7 @@
     "win_rate": 59.1,
     "profit_units": -4.67,
     "roi_pct": -1.8,
-    "last_updated": "2026-09-13T08:23:25.875920+00:00"
+    "last_updated": "2026-09-13T08:27:54.396925+00:00"
   },
   "matches_today": [
     {
@@ -4779,7 +4779,7 @@
       "fav_side": "ext",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.92,
+      "odds": 1.95,
       "domination_score": 53,
       "badge_tier": "🥉 BRONZE",
       "win_pct_historical": 50,
@@ -4792,7 +4792,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 3.4
+      "away_odds": 3.3
     },
     {
       "id": "3373751",
@@ -4867,7 +4867,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 7.0
+      "away_odds": 6.8
     },
     {
       "id": "3368781",
@@ -12438,6 +12438,16 @@
       "status": "ÉCARTÉ"
     },
     {
+      "time": "Dim. 13/09 à 19h30",
+      "league": "Bulgarie • D1 Bulgarie",
+      "match": "Botev Plovdiv vs Lokomo.Plovdiv",
+      "fav_team": "Botev Plovdiv",
+      "odds": "@1.65",
+      "domination_score": "54/100",
+      "reussite": "40%",
+      "status": "ÉCARTÉ"
+    },
+    {
       "time": "Dim. 13/09 à 23h30",
       "league": "Etats Unis • Mls",
       "match": "Chicago Fire vs New England",
@@ -12479,11 +12489,11 @@
     },
     {
       "time": "Lun. 14/09 à 19h00",
-      "league": "Georgie • D1 Georgie",
-      "match": "Dinamo Tbilisi vs FC Gagra",
-      "fav_team": "Dinamo Tbilisi",
-      "odds": "@1.44",
-      "domination_score": "44/100",
+      "league": "Danemark • D1 Danemark",
+      "match": "Midtjylland vs Brøndby",
+      "fav_team": "Midtjylland",
+      "odds": "@1.74",
+      "domination_score": "48/100",
       "reussite": "50%",
       "status": "ÉCARTÉ"
     },
@@ -12499,11 +12509,11 @@
     },
     {
       "time": "Lun. 14/09 à 19h00",
-      "league": "Danemark • D1 Danemark",
-      "match": "Midtjylland vs Brøndby",
-      "fav_team": "Midtjylland",
-      "odds": "@1.74",
-      "domination_score": "48/100",
+      "league": "Georgie • D1 Georgie",
+      "match": "Dinamo Tbilisi vs FC Gagra",
+      "fav_team": "Dinamo Tbilisi",
+      "odds": "@1.44",
+      "domination_score": "44/100",
       "reussite": "50%",
       "status": "ÉCARTÉ"
     },

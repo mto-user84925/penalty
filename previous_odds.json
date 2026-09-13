@@ -1,15 +1,5 @@
 {
   "favs": {
-    "3378817": {
-      "match": "Paide - Harju JK",
-      "league": "Estonie • D1 Estonie",
-      "date_str": "Dim. 13/09 à 13h30",
-      "fav_team": "Paide",
-      "fav_odds": 1.55,
-      "p2_fav_odds": null,
-      "fav_score": 58,
-      "fav_badge": "🥉 BRONZE"
-    },
     "3368782": {
       "match": "FC Heidenheim - Holstein Kiel",
       "league": "Allemagne • Bundesliga 2",
@@ -20,15 +10,15 @@
       "fav_score": 68,
       "fav_badge": "🥈 ARGENT"
     },
-    "3360658": {
-      "match": "Gijon - Club Eldense",
-      "league": "Espagne • Laliga 2",
-      "date_str": "Dim. 13/09 à 14h00",
-      "fav_team": "Gijon",
-      "fav_odds": 1.57,
+    "3378817": {
+      "match": "Paide - Harju JK",
+      "league": "Estonie • D1 Estonie",
+      "date_str": "Dim. 13/09 à 13h30",
+      "fav_team": "Paide",
+      "fav_odds": 1.55,
       "p2_fav_odds": null,
-      "fav_score": 57,
-      "fav_badge": "⚠️ RISQUÉ"
+      "fav_score": 58,
+      "fav_badge": "🥉 BRONZE"
     },
     "3368824": {
       "match": "Elfsborg - Kalmar FF",
@@ -36,6 +26,16 @@
       "date_str": "Dim. 13/09 à 14h00",
       "fav_team": "Elfsborg",
       "fav_odds": 1.74,
+      "p2_fav_odds": null,
+      "fav_score": 57,
+      "fav_badge": "⚠️ RISQUÉ"
+    },
+    "3360658": {
+      "match": "Gijon - Club Eldense",
+      "league": "Espagne • Laliga 2",
+      "date_str": "Dim. 13/09 à 14h00",
+      "fav_team": "Gijon",
+      "fav_odds": 1.57,
       "p2_fav_odds": null,
       "fav_score": 57,
       "fav_badge": "⚠️ RISQUÉ"
@@ -110,16 +110,6 @@
       "fav_score": 65,
       "fav_badge": "🥈 ARGENT"
     },
-    "3374316": {
-      "match": "PAOK Salonique - Aris Salonique",
-      "league": "Grece • D1 Grece",
-      "date_str": "Dim. 13/09 à 20h00",
-      "fav_team": "PAOK Salonique",
-      "fav_odds": 1.5,
-      "p2_fav_odds": null,
-      "fav_score": 64,
-      "fav_badge": "🥉 BRONZE"
-    },
     "3377624": {
       "match": "FC Leones - Tecnico Uni.",
       "league": "Equateur • D1 Equateur",
@@ -128,6 +118,16 @@
       "fav_odds": 1.75,
       "p2_fav_odds": null,
       "fav_score": 62,
+      "fav_badge": "🥉 BRONZE"
+    },
+    "3374316": {
+      "match": "PAOK Salonique - Aris Salonique",
+      "league": "Grece • D1 Grece",
+      "date_str": "Dim. 13/09 à 20h00",
+      "fav_team": "PAOK Salonique",
+      "fav_odds": 1.5,
+      "p2_fav_odds": null,
+      "fav_score": 64,
       "fav_badge": "🥉 BRONZE"
     },
     "3371152": {
@@ -150,16 +150,6 @@
       "fav_score": 63,
       "fav_badge": "🥉 BRONZE"
     },
-    "3374047": {
-      "match": "Colo Colo - Deportes Conc.",
-      "league": "Chili • D1 Chili",
-      "date_str": "Dim. 13/09 à 22h30",
-      "fav_team": "Colo Colo",
-      "fav_odds": 1.37,
-      "p2_fav_odds": null,
-      "fav_score": 65,
-      "fav_badge": "🥈 ARGENT"
-    },
     "3370818": {
       "match": "CSD Macara - Emelec",
       "league": "Equateur • D1 Equateur",
@@ -169,6 +159,16 @@
       "p2_fav_odds": null,
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE"
+    },
+    "3374047": {
+      "match": "Colo Colo - Deportes Conc.",
+      "league": "Chili • D1 Chili",
+      "date_str": "Dim. 13/09 à 22h30",
+      "fav_team": "Colo Colo",
+      "fav_odds": 1.37,
+      "p2_fav_odds": null,
+      "fav_score": 65,
+      "fav_badge": "🥈 ARGENT"
     },
     "3370813": {
       "match": "Atl.Nacional - Aguilas",
