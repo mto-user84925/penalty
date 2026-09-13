@@ -1696,7 +1696,7 @@ def main():
     existing_docs, active_combos = sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=scanned_results)
 
     # ── Méthode 2 : pairing et persistance ───────────────────────────────────
-    active_m2_combos = sync_m2_combos(existing_docs, retained_m2, m1_used_teams=m1_used_teams)
+    active_m2_combos = sync_m2_combos(existing_docs, retained_m2)
     # Réécriture du data.json avec M2 inclus
     docs_data_path = os.path.join("docs", "data.json")
     with open(docs_data_path, "w", encoding="utf-8") as _f:
