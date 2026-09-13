@@ -1,51 +1,11 @@
 {
   "favs": {
-    "3379293": {
-      "match": "KR Reykjavik - IA Akranes",
-      "league": "Islande • D1 Islande",
-      "date_str": "Dim. 13/09 à 16h00",
-      "fav_team": "KR Reykjavik",
-      "fav_odds": 1.43,
-      "p2_fav_odds": null,
-      "fav_score": 67,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3368827": {
-      "match": "Lucerne - FC Bâle",
-      "league": "Suisse • D1 Suisse",
-      "date_str": "Dim. 13/09 à 16h30",
-      "fav_team": "Lucerne",
-      "fav_odds": 1.97,
-      "p2_fav_odds": null,
-      "fav_score": 55,
-      "fav_badge": "⚠️ RISQUÉ"
-    },
-    "3369060": {
-      "match": "Mantova - Sampdoria",
-      "league": "Italie • Serie B",
-      "date_str": "Dim. 13/09 à 17h15",
-      "fav_team": "Mantova",
-      "fav_odds": 2.1,
-      "p2_fav_odds": null,
-      "fav_score": 60,
-      "fav_badge": "🥉 BRONZE"
-    },
-    "3372832": {
-      "match": "Legia Varsovie - Widzew Lodz",
-      "league": "Pologne • D1 Pologne",
-      "date_str": "Dim. 13/09 à 17h30",
-      "fav_team": "Legia Varsovie",
-      "fav_odds": 1.72,
-      "p2_fav_odds": null,
-      "fav_score": 56,
-      "fav_badge": "⚠️ RISQUÉ"
-    },
     "3376426": {
       "match": "Neom SC - Al Fateh",
       "league": "Arabie Saoudite • D1 Arabie Saoudite",
       "date_str": "Dim. 13/09 à 18h20",
       "fav_team": "Neom SC",
-      "fav_odds": 1.55,
+      "fav_odds": 1.52,
       "p2_fav_odds": null,
       "fav_score": 55,
       "fav_badge": "⚠️ RISQUÉ"
@@ -60,24 +20,24 @@
       "fav_score": 65,
       "fav_badge": "🥈 ARGENT"
     },
-    "3374316": {
-      "match": "PAOK Salonique - Aris Salonique",
-      "league": "Grece • D1 Grece",
-      "date_str": "Dim. 13/09 à 20h00",
-      "fav_team": "PAOK Salonique",
-      "fav_odds": 1.5,
-      "p2_fav_odds": null,
-      "fav_score": 64,
-      "fav_badge": "🥉 BRONZE"
-    },
     "3377624": {
       "match": "FC Leones - Tecnico Uni.",
       "league": "Equateur • D1 Equateur",
       "date_str": "Dim. 13/09 à 20h00",
       "fav_team": "FC Leones",
-      "fav_odds": 1.92,
+      "fav_odds": 1.89,
       "p2_fav_odds": null,
-      "fav_score": 61,
+      "fav_score": 62,
+      "fav_badge": "🥉 BRONZE"
+    },
+    "3374316": {
+      "match": "PAOK Salonique - Aris Salonique",
+      "league": "Grece • D1 Grece",
+      "date_str": "Dim. 13/09 à 20h00",
+      "fav_team": "PAOK Salonique",
+      "fav_odds": 1.51,
+      "p2_fav_odds": null,
+      "fav_score": 64,
       "fav_badge": "🥉 BRONZE"
     },
     "3371152": {
@@ -115,9 +75,9 @@
       "league": "Equateur • D1 Equateur",
       "date_str": "Dim. 13/09 à 22h30",
       "fav_team": "CSD Macara",
-      "fav_odds": 1.85,
+      "fav_odds": 1.7,
       "p2_fav_odds": null,
-      "fav_score": 59,
+      "fav_score": 60,
       "fav_badge": "🥉 BRONZE"
     },
     "3370813": {
@@ -155,7 +115,7 @@
       "league": "Roumanie • D1 Roumanie",
       "date_str": "Lun. 14/09 à 17h00",
       "fav_team": "Universit Cluj",
-      "fav_odds": 1.64,
+      "fav_odds": 1.66,
       "p2_fav_odds": null,
       "fav_score": 66,
       "fav_badge": "🥈 ARGENT"
