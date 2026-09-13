@@ -29323,5 +29323,51 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3379317",
+    "timestamp_utc": "2026-09-13T08:06:31.045431+00:00",
+    "match": "Hapoel Haifa vs Bnei Sakhnin",
+    "league": "Israel • D1 Israel",
+    "date_str": "Lun. 14/09 à 18h30",
+    "fav_team": "Hapoel Haifa",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 64,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.7,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3360722",
+    "timestamp_utc": "2026-09-13T08:06:31.045431+00:00",
+    "match": "Villarreal vs Betis Séville",
+    "league": "Espagne • Laliga",
+    "date_str": "Lun. 14/09 à 21h00",
+    "fav_team": "Villarreal",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 57,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.83,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
