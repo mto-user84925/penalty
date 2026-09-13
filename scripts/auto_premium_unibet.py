@@ -1229,7 +1229,7 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
     combo_stake_m2 = combo_stake
 
     # Clés des équipes déjà en M2 (combinés actifs existants)
-    used_m2 = set(m1_used)
+    used_m2 = set()  # dédup intra-M2 uniquement (M1 et M2 sont indépendantes)
     m2_today = []
 
     for c in existing_m2:
@@ -1547,23 +1547,23 @@ def main():
     print(f"⚠️ Sélections Écartées (Score < 55) : {len(rejected_favs)}")
 
     # ── Méthode 2 : Sélection pure marché bookmaker ───────────────────────────
-    # Exclure les équipes déjà retenues par M1 pour éviter tout doublon
-    m1_used_teams = set()
-    for m in retained_favs:
-        m1_used_teams.add(_clean_team_key(m.get("dom", "")))
-        m1_used_teams.add(_clean_team_key(m.get("ext", "")))
-
+    # M1 et M2 sont indépendantes : un même match peut figurer dans les deux méthodes.
+    # La dédup se fait uniquement INTRA-méthode (pas de même match 2x dans M2).
     retained_m2 = []
+    seen_m2_matches = set()
     for m in scanned_results:
-        if _clean_team_key(m.get("dom", "")) in m1_used_teams or _clean_team_key(m.get("ext", "")) in m1_used_teams:
+        match_key = (_clean_team_key(m.get("dom", "")), _clean_team_key(m.get("ext", "")))
+        if match_key in seen_m2_matches:
             continue
         fi2 = evaluate_favorite_m2(m)
         if fi2:
             m["fav_info_m2"] = fi2
             retained_m2.append(m)
+            seen_m2_matches.add(match_key)
 
     retained_m2.sort(key=lambda x: x.get("dt_obj", now_utc))
     print(f"🎯 M2 Sélections Retenues (Favori dom < 2.00 + Over2.5 < Under2.5) : {len(retained_m2)}")
+
 
     # ── Évolutions vs run précédent ──────────────────────────────────────────
     history_file = "previous_odds.json"
