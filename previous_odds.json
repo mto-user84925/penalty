@@ -50,6 +50,16 @@
       "fav_score": 72,
       "fav_badge": "🥈 ARGENT"
     },
+    "3358534": {
+      "match": "Chicago Fire - New England",
+      "league": "Etats Unis • Mls",
+      "date_str": "Dim. 13/09 à 23h30",
+      "fav_team": "Chicago Fire",
+      "fav_odds": 1.86,
+      "p2_fav_odds": null,
+      "fav_score": 51,
+      "fav_badge": "🥉 BRONZE"
+    },
     "3378678": {
       "match": "Barcelona SC - Delfin SC",
       "league": "Equateur • D1 Equateur",
@@ -58,6 +68,16 @@
       "fav_odds": 1.47,
       "p2_fav_odds": null,
       "fav_score": 63,
+      "fav_badge": "🥉 BRONZE"
+    },
+    "3376867": {
+      "match": "Chivas - UNAM Pumas",
+      "league": "Mexique • D1 Mexique",
+      "date_str": "Lun. 14/09 à 03h07",
+      "fav_team": "Chivas",
+      "fav_odds": 1.42,
+      "p2_fav_odds": null,
+      "fav_score": 54,
       "fav_badge": "🥉 BRONZE"
     },
     "3373747": {
@@ -80,6 +100,16 @@
       "fav_score": 66,
       "fav_badge": "🥈 ARGENT"
     },
+    "3368972": {
+      "match": "IK Sirius FK - Degerfors IF",
+      "league": "Suede • D1 Suede",
+      "date_str": "Lun. 14/09 à 19h00",
+      "fav_team": "IK Sirius FK",
+      "fav_odds": 1.34,
+      "p2_fav_odds": null,
+      "fav_score": 65,
+      "fav_badge": "🥈 ARGENT"
+    },
     "3368971": {
       "match": "Djurgårdens - GAIS Göteborg",
       "league": "Suede • D1 Suede",
@@ -90,15 +120,15 @@
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE"
     },
-    "3368972": {
-      "match": "IK Sirius FK - Degerfors IF",
-      "league": "Suede • D1 Suede",
-      "date_str": "Lun. 14/09 à 19h00",
-      "fav_team": "IK Sirius FK",
-      "fav_odds": 1.34,
+    "3379321": {
+      "match": "Mac.Tel Aviv - Hap.Tel Aviv",
+      "league": "Israel • D1 Israel",
+      "date_str": "Lun. 14/09 à 19h30",
+      "fav_team": "Mac.Tel Aviv",
+      "fav_odds": 2.0,
       "p2_fav_odds": null,
-      "fav_score": 65,
-      "fav_badge": "🥈 ARGENT"
+      "fav_score": 51,
+      "fav_badge": "🥉 BRONZE"
     },
     "3368555": {
       "match": "FCSB - Pet.Ploiesti",
@@ -138,7 +168,7 @@
       "fav_odds": 1.35,
       "p2_fav_odds": null,
       "fav_score": 56,
-      "fav_badge": "⚠️ RISQUÉ"
+      "fav_badge": "🥉 BRONZE"
     },
     "3370819": {
       "match": "CDUC Ecuador - Orense SC",
@@ -178,7 +208,7 @@
       "fav_odds": 1.79,
       "p2_fav_odds": null,
       "fav_score": 56,
-      "fav_badge": "⚠️ RISQUÉ"
+      "fav_badge": "🥉 BRONZE"
     }
   }
 }

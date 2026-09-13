@@ -29528,5 +29528,26 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3375306",
+    "timestamp_utc": "2026-09-13T18:39:03.848462+00:00",
+    "match": "Zabbar SP FC vs Gzira United",
+    "league": "Malte • D1 Malte",
+    "date_str": "Lun. 14/09 à 18h00",
+    "fav_team": "Zabbar SP FC",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 49,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 60
+    },
+    "odds": {
+      "fav_odds": 1.97,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
   }
 ]
