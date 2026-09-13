@@ -29170,5 +29170,158 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3368971",
+    "timestamp_utc": "2026-09-13T06:04:15.370088+00:00",
+    "match": "Djurgårdens vs GAIS Göteborg",
+    "league": "Suede • D1 Suede",
+    "date_str": "Lun. 14/09 à 19h00",
+    "fav_team": "Djurgårdens",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 59,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.47,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3368972",
+    "timestamp_utc": "2026-09-13T06:04:15.370088+00:00",
+    "match": "IK Sirius FK vs Degerfors IF",
+    "league": "Suede • D1 Suede",
+    "date_str": "Lun. 14/09 à 19h00",
+    "fav_team": "IK Sirius FK",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 65,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.35,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3374314",
+    "timestamp_utc": "2026-09-13T06:04:15.370088+00:00",
+    "match": "Radomiak Radom vs Piast Gliwice",
+    "league": "Pologne • D1 Pologne",
+    "date_str": "Lun. 14/09 à 19h00",
+    "fav_team": "Radomiak Radom",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 45,
+      "pct_fav_success": 40,
+      "pct_fav_lead2": 10
+    },
+    "odds": {
+      "fav_odds": 2.15,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3378520",
+    "timestamp_utc": "2026-09-13T06:04:15.370088+00:00",
+    "match": "Dinamo Tbilisi vs FC Gagra",
+    "league": "Georgie • D1 Georgie",
+    "date_str": "Lun. 14/09 à 19h00",
+    "fav_team": "Dinamo Tbilisi",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 45,
+      "pct_fav_success": 40,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.44,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3372615",
+    "timestamp_utc": "2026-09-13T06:04:15.370088+00:00",
+    "match": "Midtjylland vs Brøndby",
+    "league": "Danemark • D1 Danemark",
+    "date_str": "Lun. 14/09 à 19h00",
+    "fav_team": "Midtjylland",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 48,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 20
+    },
+    "odds": {
+      "fav_odds": 1.74,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3379321",
+    "timestamp_utc": "2026-09-13T06:04:15.370088+00:00",
+    "match": "Mac.Tel Aviv vs Hap.Tel Aviv",
+    "league": "Israel • D1 Israel",
+    "date_str": "Lun. 14/09 à 19h30",
+    "fav_team": "Mac.Tel Aviv",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 51,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.98,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3368555",
+    "timestamp_utc": "2026-09-13T06:04:15.370088+00:00",
+    "match": "FCSB vs Pet.Ploiesti",
+    "league": "Roumanie • D1 Roumanie",
+    "date_str": "Lun. 14/09 à 20h00",
+    "fav_team": "FCSB",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 59,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.32,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
