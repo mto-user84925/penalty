@@ -5,9 +5,9 @@
       "league": "Ukraine • D1 Ukraine",
       "date_str": "Lun. 14/09 à 14h30",
       "fav_team": "Dynamo Kiev",
-      "fav_odds": 1.46,
+      "fav_odds": 1.44,
       "p2_fav_odds": null,
-      "fav_score": 61,
+      "fav_score": 56,
       "fav_badge": "🥉 BRONZE+"
     },
     "3368558": {
@@ -15,10 +15,10 @@
       "league": "Roumanie • D1 Roumanie",
       "date_str": "Lun. 14/09 à 17h00",
       "fav_team": "Universit Cluj",
-      "fav_odds": 1.61,
+      "fav_odds": 1.52,
       "p2_fav_odds": null,
-      "fav_score": 67,
-      "fav_badge": "🥈 ARGENT"
+      "fav_score": 60,
+      "fav_badge": "🥉 BRONZE+"
     },
     "3379317": {
       "match": "Hapoel Haifa - Bnei Sakhnin",
@@ -37,17 +37,7 @@
       "fav_team": "IK Sirius FK",
       "fav_odds": 1.35,
       "p2_fav_odds": null,
-      "fav_score": 65,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3368971": {
-      "match": "Djurgårdens - GAIS Göteborg",
-      "league": "Suede • D1 Suede",
-      "date_str": "Lun. 14/09 à 19h00",
-      "fav_team": "Djurgårdens",
-      "fav_odds": 1.43,
-      "p2_fav_odds": null,
-      "fav_score": 58,
+      "fav_score": 63,
       "fav_badge": "🥉 BRONZE+"
     },
     "3368555": {
@@ -57,7 +47,7 @@
       "fav_team": "FCSB",
       "fav_odds": 1.33,
       "p2_fav_odds": null,
-      "fav_score": 57,
+      "fav_score": 55,
       "fav_badge": "🥉 BRONZE+"
     },
     "3360722": {
@@ -65,19 +55,19 @@
       "league": "Espagne • Laliga",
       "date_str": "Lun. 14/09 à 21h00",
       "fav_team": "Villarreal",
-      "fav_odds": 1.9,
+      "fav_odds": 1.88,
       "p2_fav_odds": null,
       "fav_score": 61,
       "fav_badge": "🥉 BRONZE+"
     },
-    "3378814": {
-      "match": "Braga - Estoril Praia",
-      "league": "Portugal • Liga Portugal",
-      "date_str": "Lun. 14/09 à 21h45",
-      "fav_team": "Braga",
-      "fav_odds": 1.32,
+    "3376611": {
+      "match": "Bahia Salvador - Remo PA",
+      "league": "Bresil • D1 Bresil",
+      "date_str": "Mar. 15/09 à 01h00",
+      "fav_team": "Bahia Salvador",
+      "fav_odds": 1.36,
       "p2_fav_odds": null,
-      "fav_score": 58,
+      "fav_score": 62,
       "fav_badge": "🥉 BRONZE+"
     },
     "3370819": {
@@ -85,29 +75,9 @@
       "league": "Equateur • D1 Equateur",
       "date_str": "Mar. 15/09 à 02h00",
       "fav_team": "CDUC Ecuador",
-      "fav_odds": 1.32,
+      "fav_odds": 1.41,
       "p2_fav_odds": null,
-      "fav_score": 64,
-      "fav_badge": "🥉 BRONZE+"
-    },
-    "3367848": {
-      "match": "Instituto Atl. - Estudiantes Rí",
-      "league": "Argentine • D1 Argentine",
-      "date_str": "Mar. 15/09 à 02h15",
-      "fav_team": "Instituto Atl.",
-      "fav_odds": 1.35,
-      "p2_fav_odds": null,
-      "fav_score": 72,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3378998": {
-      "match": "FC Leon - Atl. San Luis",
-      "league": "Mexique • D1 Mexique",
-      "date_str": "Mar. 15/09 à 03h00",
-      "fav_team": "FC Leon",
-      "fav_odds": 1.8,
-      "p2_fav_odds": null,
-      "fav_score": 57,
+      "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"
     },
     "3370811": {
@@ -115,9 +85,9 @@
       "league": "Colombie • D1 Colombie",
       "date_str": "Mar. 15/09 à 03h00",
       "fav_team": "America",
-      "fav_odds": 1.3,
+      "fav_odds": 1.35,
       "p2_fav_odds": null,
-      "fav_score": 67,
+      "fav_score": 70,
       "fav_badge": "🥈 ARGENT"
     }
   }
