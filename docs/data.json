@@ -9,7 +9,7 @@
     "win_rate": 57.0,
     "profit_units": -12.19,
     "roi_pct": -3.64,
-    "last_updated": "2026-09-14T10:04:57.642560+00:00"
+    "last_updated": "2026-09-14T10:29:15.159984+00:00"
   },
   "matches_today": [
     {
@@ -8080,7 +8080,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.52,
+      "odds": 1.48,
       "domination_score": 60,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 80,
@@ -8093,7 +8093,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.8
+      "away_odds": 5.1
     },
     {
       "id": "3368971",
@@ -8130,8 +8130,8 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.35,
-      "domination_score": 63,
+      "odds": 1.37,
+      "domination_score": 62,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 60,
       "status": "UPCOMING",
@@ -8143,7 +8143,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 6.0
+      "away_odds": 5.9
     },
     {
       "id": "3368555",
@@ -8205,7 +8205,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.88,
+      "odds": 1.87,
       "domination_score": 61,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 50,
@@ -8218,7 +8218,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 3.3
+      "away_odds": 3.4
     },
     {
       "id": "3378814",
@@ -8280,7 +8280,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.41,
+      "odds": 1.45,
       "domination_score": 59,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 60,
@@ -8293,7 +8293,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.6
+      "away_odds": 5.3
     },
     {
       "id": "3367848",
@@ -8330,7 +8330,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.35,
+      "odds": 1.34,
       "domination_score": 70,
       "badge_tier": "🥈 ARGENT",
       "win_pct_historical": 70,
