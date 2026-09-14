@@ -1,15 +1,5 @@
 {
   "favs": {
-    "3379317": {
-      "match": "Hapoel Haifa - Bnei Sakhnin",
-      "league": "Israel • D1 Israel",
-      "date_str": "Lun. 14/09 à 18h30",
-      "fav_team": "Hapoel Haifa",
-      "fav_odds": 1.69,
-      "p2_fav_odds": null,
-      "fav_score": 62,
-      "fav_badge": "🥉 BRONZE+"
-    },
     "3360722": {
       "match": "Villarreal - Betis Séville",
       "league": "Espagne • Laliga",
@@ -30,12 +20,22 @@
       "fav_score": 55,
       "fav_badge": "🥉 BRONZE+"
     },
+    "3379727": {
+      "match": "FC Larne - Cliftonville",
+      "league": "Irlande Du Nord • D1 Irlande Nord",
+      "date_str": "Mar. 15/09 à 20h45",
+      "fav_team": "FC Larne",
+      "fav_odds": 1.56,
+      "p2_fav_odds": null,
+      "fav_score": 59,
+      "fav_badge": "🥉 BRONZE+"
+    },
     "3379161": {
       "match": "Middlesbrough - Millwall",
       "league": "Angleterre • Championship",
       "date_str": "Mar. 15/09 à 20h45",
       "fav_team": "Middlesbrough",
-      "fav_odds": 1.49,
+      "fav_odds": 1.47,
       "p2_fav_odds": null,
       "fav_score": 57,
       "fav_badge": "🥉 BRONZE+"
@@ -45,7 +45,7 @@
       "league": "Amerique • Copa Sudamericana",
       "date_str": "Mer. 16/09 à 02h30",
       "fav_team": "Sao Paulo",
-      "fav_odds": 2.0,
+      "fav_odds": 2.05,
       "p2_fav_odds": null,
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"

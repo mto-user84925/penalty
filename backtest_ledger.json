@@ -29750,5 +29750,30 @@
     "result": null,
     "won_p2": null,
     "m3": null
+  },
+  {
+    "match_id": "3379727",
+    "timestamp_utc": "2026-09-14T18:03:37.935940+00:00",
+    "match": "FC Larne vs Cliftonville",
+    "league": "Irlande Du Nord • D1 Irlande Nord",
+    "date_str": "Mar. 15/09 à 20h45",
+    "fav_team": "FC Larne",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 59,
+      "pct_fav_success": 65,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.56,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null,
+    "m3": null
   }
 ]
