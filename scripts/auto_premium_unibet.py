@@ -953,6 +953,7 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
         for m in all_today_matches
     }
 
+    now_utc_purge = datetime.now(timezone.utc)
     used_teams = set()
     combos_today = []
     for c in existing_combos:
@@ -967,6 +968,25 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
 
         m1 = c.get("m1", {})
         m2 = c.get("m2", {})
+
+        # ponytail: Purge automatique des combinés PENDING dont les matchs sont terminés.
+        # Si start_iso du premier leg est > 2h dans le passé et pas en LIVE → LOST (pas joué = perdu).
+        _m1_iso = m1.get("start_iso", "")
+        if _m1_iso and c.get("ticket_status") == "PENDING":
+            try:
+                _m1_dt = datetime.fromisoformat(_m1_iso.replace("Z", "+00:00"))
+                if (now_utc_purge - _m1_dt).total_seconds() > 7200:  # > 2h passées
+                    c["ticket_status"] = "LOST"
+                    c["profit_unit"] = -1.0
+                    c["profit_eur"] = -(c.get("default_stake") or 3.0)
+                    combos_today.append(c)
+                    for _leg in [m1, m2]:
+                        if _leg.get("home"): used_teams.add(_clean_team_key(_leg["home"]))
+                        if _leg.get("away"): used_teams.add(_clean_team_key(_leg["away"]))
+                    continue
+            except Exception:
+                pass
+
         k1 = (_clean_team_key(m1.get("home", "")), _clean_team_key(m1.get("away", "")))
         k2 = (_clean_team_key(m2.get("home", "")), _clean_team_key(m2.get("away", "")))
 
@@ -1244,6 +1264,23 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
         comb_odds = c.get("odds", 2.0)
         s1 = m1l.get("selection_status", "PENDING"); s2 = m2l.get("selection_status", "PENDING")
         is_started = (m1l.get("status") == "LIVE" or m2l.get("status") == "LIVE" or s1 != "PENDING" or s2 != "PENDING")
+
+        # Purge si match passé > 2h (même logique que M1)
+        _m1_iso_m2 = m1l.get("start_iso", "")
+        if _m1_iso_m2 and not is_started:
+            try:
+                _m1_dt_m2 = datetime.fromisoformat(_m1_iso_m2.replace("Z", "+00:00"))
+                if (datetime.now(timezone.utc) - _m1_dt_m2).total_seconds() > 7200:
+                    c["ticket_status"] = "LOST"
+                    c["profit_unit"] = -1.0
+                    c["profit_eur"] = -(c.get("default_stake") or 3.0)
+                    m2_today.append(c)
+                    for leg in [m1l, m2l]:
+                        if leg.get("home"): used_m2.add(_clean_team_key(leg["home"]))
+                        if leg.get("away"): used_m2.add(_clean_team_key(leg["away"]))
+                    continue
+            except Exception:
+                pass
 
         # Purge si hors Sweet Spot et non commencé
         if not is_started and (comb_odds < 2.20 or comb_odds > 2.85):
@@ -1983,12 +2020,35 @@ def main():
         fi = m["fav_info"]
         retained = (fi["fav_score"] >= MIN_SCORE_FAV_RETAINED)
         bg_row = "#f0fdf4" if retained else "#ffffff"
-        badge_cell = f'<span style="color:#15803d; font-weight:700;">✅ RETENU ({fi["fav_badge"]})</span>' if retained else '<span style="color:#94a3b8;">⚠️ ÉCARTÉ</span>'
         sc = fi["fav_score"]
         sc_bg = "#dcfce7" if sc >= 75 else ("#fef3c7" if sc >= 65 else "#fee2e2")
         sc_cl = "#15803d" if sc >= 75 else ("#92400e" if sc >= 65 else "#dc2626")
         score_badge = f'<span style="background:{sc_bg}; color:{sc_cl}; font-weight:800; font-size:11px; padding:2px 7px; border-radius:5px;">{sc}/100</span>'
         c_val = f"@{fi['p2_fav_odds']:.2f}" if fi.get("p2_fav_odds") else f"@{fi['fav_odds']:.2f}"
+
+        # Détail des composantes du score
+        pts_fav = fi.get("pts_fav", 0)
+        pts_dog = fi.get("pts_dog", 0)
+        pts_goals = fi.get("pts_goals", 0)
+        pts_odds = fi.get("pts_odds", 0)
+        avg_gf = fi.get("avg_fav_gf", 0)
+        pct_win = fi.get("pct_fav_win", 0)
+        n_fav = fi.get("n_fav", 0)
+        detail_html = (
+            f'<span style="font-size:9px; color:#475569; line-height:1.6;">'
+            f'Dom: <b>{pts_fav}/40</b> · Adv: <b>{pts_dog}/25</b> · Buts: <b>{pts_goals}/20</b> · Cote: <b>{pts_odds}/15</b>'
+            f'<br>GF moy: {avg_gf:.2f}/m · Win%: {pct_win}% · ({n_fav} matchs)'
+            f'</span>'
+        )
+
+        if retained:
+            badge_cell = f'<span style="color:#15803d; font-weight:700; font-size:11px;">✅ RETENU<br><span style="font-weight:400; color:#166534;">{fi["fav_badge"]}</span></span>'
+        else:
+            # Explication du rejet : quel critère manque ?
+            reasons = []
+            if sc < MIN_SCORE_FAV_RETAINED:
+                reasons.append(f"Score {sc} &lt; {MIN_SCORE_FAV_RETAINED}")
+            badge_cell = f'<span style="color:#dc2626; font-weight:700; font-size:11px;">⚠️ ÉCARTÉ<br><span style="font-weight:400; color:#b91c1c; font-size:9px;">{" · ".join(reasons)}</span></span>'
 
         scan_rows_html += (
             f'<tr style="background:{bg_row};">'
@@ -1997,7 +2057,7 @@ def main():
             f'<br><span style="font-size:10px; color:#94a3b8; font-weight:400;">{m.get("league", "")}</span></td>'
             f'<td style="padding:7px 6px; text-align:center; font-weight:700; font-size:11px; border-bottom:1px solid #f1f5f9;">{fi["fav_team"]}</td>'
             f'<td style="padding:7px 6px; text-align:center; font-weight:800; font-size:12px; border-bottom:1px solid #f1f5f9;">{c_val}</td>'
-            f'<td style="padding:7px 6px; text-align:center; border-bottom:1px solid #f1f5f9;">{score_badge}</td>'
+            f'<td style="padding:7px 6px; text-align:center; border-bottom:1px solid #f1f5f9;">{score_badge}<br>{detail_html}</td>'
             f'<td style="padding:7px 6px; text-align:center; font-weight:700; font-size:11px; color:#15803d; border-bottom:1px solid #f1f5f9;">{fi["pct_fav_success"]}%</td>'
             f'<td style="padding:7px 6px; text-align:center; font-size:11px; border-bottom:1px solid #f1f5f9;">{badge_cell}</td>'
             f'</tr>'
