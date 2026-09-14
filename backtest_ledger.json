@@ -29700,5 +29700,30 @@
     "selected_markets": [],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3373031",
+    "timestamp_utc": "2026-09-14T14:04:10.699707+00:00",
+    "match": "Sao Paulo vs Boca Juniors",
+    "league": "Amerique • Copa Sudamericana",
+    "date_str": "Mer. 16/09 à 02h30",
+    "fav_team": "Sao Paulo",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 59,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 2.0,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null,
+    "m3": null
   }
 ]
