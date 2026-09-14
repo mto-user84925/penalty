@@ -71,8 +71,12 @@ def sync():
                         eps = str(m_ev.get("Eps", ""))
                         tr1 = m_ev.get("Tr1")
                         tr2 = m_ev.get("Tr2")
+                        trh1 = m_ev.get("Trh1")
+                        trh2 = m_ev.get("Trh2")
                         h_sc = int(tr1) if tr1 is not None and str(tr1).isdigit() else None
                         a_sc = int(tr2) if tr2 is not None and str(tr2).isdigit() else None
+                        h_ht_sc = int(trh1) if trh1 is not None and str(trh1).isdigit() else None
+                        a_ht_sc = int(trh2) if trh2 is not None and str(trh2).isdigit() else None
                         t1 = m_ev.get("T1", [{}])[0].get("Nm", "")
                         t2 = m_ev.get("T2", [{}])[0].get("Nm", "")
                         events.append({
@@ -80,7 +84,9 @@ def sync():
                             "away": t2,
                             "eps": eps,
                             "h_sc": h_sc,
-                            "a_sc": a_sc
+                            "a_sc": a_sc,
+                            "h_ht_sc": h_ht_sc,
+                            "a_ht_sc": a_ht_sc,
                         })
         except Exception as e:
             print(f"Error fetching LiveScore {d_str}: {e}")
@@ -145,6 +151,20 @@ def sync():
                     is_won = (h_sc >= 1 and a_sc >= 1)
                     m["selection_status"] = "WON_FINAL" if is_won else "LOST"
                     m["profit"] = round(odds_val - 1.0, 2) if is_won else -1.0
+                elif market == "HALF_MT2":
+                    h_ht = best_ev.get("h_ht_sc")
+                    a_ht = best_ev.get("a_ht_sc")
+                    if h_ht is not None and a_ht is not None:
+                        g_mt1 = h_ht + a_ht
+                        g_mt2 = (h_sc - h_ht) + (a_sc - a_ht)
+                        is_won = (g_mt2 > g_mt1)
+                        m["selection_status"] = "WON_FINAL" if is_won else "LOST"
+                        m["profit"] = round(odds_val - 1.0, 2) if is_won else -1.0
+                        m["score_display"] = f"{h_sc} - {a_sc} (MT: {h_ht}-{a_ht})"
+                    else:
+                        is_won = (h_sc + a_sc >= 2)
+                        m["selection_status"] = "WON_FINAL" if is_won else "LOST"
+                        m["profit"] = round(odds_val - 1.0, 2) if is_won else -1.0
                 else:
                     fav_goals = h_sc if is_fav_home else a_sc
                     dog_goals = a_sc if is_fav_home else h_sc
@@ -182,6 +202,13 @@ def sync():
                     else:
                         m["selection_status"] = "IN_PROGRESS"
                         m["profit"] = 0.0
+                elif market == "HALF_MT2":
+                    h_ht = best_ev.get("h_ht_sc")
+                    a_ht = best_ev.get("a_ht_sc")
+                    if h_ht is not None and a_ht is not None:
+                        m["score_display"] = f"{h_sc} - {a_sc} (MT: {h_ht}-{a_ht})"
+                    m["selection_status"] = "IN_PROGRESS"
+                    m["profit"] = 0.0
                 else:
                     fav_goals = h_sc if is_fav_home else a_sc
                     dog_goals = a_sc if is_fav_home else h_sc
@@ -202,88 +229,96 @@ def sync():
     for m in matches:
         match_lookup[(clean_name(m.get("home", "")), clean_name(m.get("away", "")))] = m
 
-    combos = data.get("combos_today", [])
-    for c in combos:
-        # ponytail: Règle d'or — Un ticket déjà DÉCIDÉ (WON ou LOST) est figé à jamais dans l'historique !
-        if c.get("ticket_status") in ["WON", "LOST"]:
-            continue
+    def _update_combos(combo_list, default_stake=3.0):
+        for c in combo_list:
+            if c.get("ticket_status") in ["WON", "LOST"]:
+                continue
+            m1 = c.get("m1", {})
+            m2 = c.get("m2", {})
+            k1 = (clean_name(m1.get("home", "")), clean_name(m1.get("away", "")))
+            k2 = (clean_name(m2.get("home", "")), clean_name(m2.get("away", "")))
 
-        m1 = c.get("m1", {})
-        m2 = c.get("m2", {})
+            if k1 in match_lookup:
+                src = match_lookup[k1]
+                m1["score_display"] = src.get("score_display", m1.get("score_display"))
+                m1["minute"] = src.get("minute", m1.get("minute"))
+                m1["status"] = src.get("status", m1.get("status"))
+                m1["selection_status"] = src.get("selection_status", m1.get("selection_status"))
 
-        k1 = (clean_name(m1.get("home", "")), clean_name(m1.get("away", "")))
-        k2 = (clean_name(m2.get("home", "")), clean_name(m2.get("away", "")))
+            if k2 in match_lookup:
+                src = match_lookup[k2]
+                m2["score_display"] = src.get("score_display", m2.get("score_display"))
+                m2["minute"] = src.get("minute", m2.get("minute"))
+                m2["status"] = src.get("status", m2.get("status"))
+                m2["selection_status"] = src.get("selection_status", m2.get("selection_status"))
 
-        if k1 in match_lookup:
-            m_src = match_lookup[k1]
-            m1["score_display"] = m_src.get("score_display", m1.get("score_display"))
-            m1["minute"] = m_src.get("minute", m1.get("minute"))
-            m1["status"] = m_src.get("status", m1.get("status"))
-            m1["selection_status"] = m_src.get("selection_status", m1.get("selection_status"))
+            s1 = m1.get("selection_status", "PENDING")
+            s2 = m2.get("selection_status", "PENDING")
+            w1 = s1.startswith("WON")
+            w2 = s2.startswith("WON")
+            l1 = (s1 == "LOST")
+            l2 = (s2 == "LOST")
+            st1 = m1.get("status")
+            st2 = m2.get("status")
 
-        if k2 in match_lookup:
-            m_src = match_lookup[k2]
-            m2["score_display"] = m_src.get("score_display", m2.get("score_display"))
-            m2["minute"] = m_src.get("minute", m2.get("minute"))
-            m2["status"] = m_src.get("status", m2.get("status"))
-            m2["selection_status"] = m_src.get("selection_status", m2.get("selection_status"))
+            comb_odds = c.get("odds", 2.0)
+            c_stake = c.get("default_stake", default_stake)
 
-        s1 = m1.get("selection_status", "PENDING")
-        s2 = m2.get("selection_status", "PENDING")
-        w1 = s1.startswith("WON")
-        w2 = s2.startswith("WON")
-        l1 = (s1 == "LOST")
-        l2 = (s2 == "LOST")
-        st1 = m1.get("status")
-        st2 = m2.get("status")
+            if w1 and w2:
+                c["ticket_status"] = "WON"
+                c["profit_unit"] = round(comb_odds - 1.0, 2)
+                c["profit_eur"] = round(c["profit_unit"] * c_stake, 2)
+            elif l1 or l2:
+                c["ticket_status"] = "LOST"
+                c["profit_unit"] = -1.0
+                c["profit_eur"] = round(-c_stake, 2)
+            elif st1 == "LIVE" or st2 == "LIVE" or s1 == "IN_PROGRESS" or s2 == "IN_PROGRESS":
+                c["ticket_status"] = "LIVE"
+                c["profit_unit"] = 0.0
+                c["profit_eur"] = 0.0
+            else:
+                c["ticket_status"] = "PENDING"
+                c["profit_unit"] = 0.0
+                c["profit_eur"] = 0.0
 
-        comb_odds = c.get("odds", 2.0)
-        c_stake = c.get("default_stake", 3.0)
+        c_won = sum(1 for c in combo_list if c.get("ticket_status") == "WON")
+        c_lost = sum(1 for c in combo_list if c.get("ticket_status") == "LOST")
+        c_live = sum(1 for c in combo_list if c.get("ticket_status") == "LIVE")
+        c_upc = sum(1 for c in combo_list if c.get("ticket_status") == "PENDING")
+        c_dec = c_won + c_lost
+        c_profit_u = sum(c.get("profit_unit", 0.0) for c in combo_list)
+        c_wr = round((c_won / c_dec * 100), 1) if c_dec > 0 else 0.0
+        c_roi = round((c_profit_u / c_dec * 100), 2) if c_dec > 0 else 0.0
 
-        if w1 and w2:
-            c["ticket_status"] = "WON"
-            c["profit_unit"] = round(comb_odds - 1.0, 2)
-            c["profit_eur"] = round(c["profit_unit"] * c_stake, 2)
-        elif l1 or l2:
-            c["ticket_status"] = "LOST"
-            c["profit_unit"] = -1.0
-            c["profit_eur"] = round(-c_stake, 2)
-        elif st1 == "LIVE" or st2 == "LIVE" or s1 == "IN_PROGRESS" or s2 == "IN_PROGRESS":
-            c["ticket_status"] = "LIVE"
-            c["profit_unit"] = 0.0
-            c["profit_eur"] = 0.0
-        else:
-            c["ticket_status"] = "PENDING"
-            c["profit_unit"] = 0.0
-            c["profit_eur"] = 0.0
+        return {
+            "total_combos": len(combo_list),
+            "decided_combos": c_dec,
+            "won": c_won,
+            "lost": c_lost,
+            "live": c_live,
+            "upcoming": c_upc,
+            "default_stake": default_stake,
+            "win_rate": c_wr,
+            "profit_units": round(c_profit_u, 2),
+            "profit_eur": round(c_profit_u * default_stake, 2),
+            "roi_pct": c_roi
+        }
 
-    c_won = sum(1 for c in combos if c["ticket_status"] == "WON")
-    c_lost = sum(1 for c in combos if c["ticket_status"] == "LOST")
-    c_live = sum(1 for c in combos if c["ticket_status"] == "LIVE")
-    c_upc = sum(1 for c in combos if c["ticket_status"] == "PENDING")
-    c_dec = c_won + c_lost
-    c_profit_u = sum(c["profit_unit"] for c in combos)
-    c_stake = 3.0
-    c_wr = round((c_won / c_dec * 100), 1) if c_dec > 0 else 0.0
-    c_roi = round((c_profit_u / c_dec * 100), 2) if c_dec > 0 else 0.0
+    combos_m1 = data.get("combos_today", [])
+    data["combos_summary"] = _update_combos(combos_m1)
 
-    data["combos_summary"] = {
-        "total_combos": len(combos),
-        "decided_combos": c_dec,
-        "won": c_won,
-        "lost": c_lost,
-        "live": c_live,
-        "upcoming": c_upc,
-        "default_stake": c_stake,
-        "win_rate": c_wr,
-        "profit_units": round(c_profit_u, 2),
-        "profit_eur": round(c_profit_u * c_stake, 2),
-        "roi_pct": c_roi
-    }
+    combos_m2 = data.get("methode2_combos", [])
+    if combos_m2:
+        data["methode2_summary"] = _update_combos(combos_m2)
 
-    # ponytail: Méthode 2 supprimée définitivement suite à la décision utilisateur du 12/09
-    data["methode2_combos"] = []
-    data["methode2_summary"] = {}
+    combos_m3 = data.get("methode3_combos", [])
+    if combos_m3:
+        data["methode3_summary"] = _update_combos(combos_m3)
+
+    c_won = data["combos_summary"]["won"]
+    c_lost = data["combos_summary"]["lost"]
+    c_live = data["combos_summary"]["live"]
+    c_upc = data["combos_summary"]["upcoming"]
 
     won_c = sum(1 for x in matches if x.get("selection_status", "").startswith("WON"))
     lost_c = sum(1 for x in matches if x.get("selection_status") == "LOST")
