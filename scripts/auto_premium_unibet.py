@@ -35,11 +35,15 @@ SOLIDE_SCORE_M3_MIN     = 55    # Score M3 entre 55 et 69/100 (🟢 SOLIDE)
 OPPORTUNITE_SCORE_M3_MIN= 45    # Score M3 entre 45 et 54/100 (🟡 OPPORTUNITÉ)
 MIN_SCORE_M3_RETAINED   = 45    # Seuil minimal pour entrer en sélection combinable
 
-# Sweet Spot Cotes Combinés M3 PRO (2 Matchs) : [3.40 - 4.60]
-SWEET_SPOT_M3_MIN       = 3.40
-SWEET_SPOT_M3_MAX       = 4.60
-MIN_COTE_COMBO_M3       = 3.20  # Borne basse tolérance
-MAX_COTE_COMBO_M3       = 4.80  # Borne haute tolérance
+# Mises Modulées Paris Simples M3 PRO (Option B)
+STAKE_M3_PREMIUM        = 5.0   # Mise pour les sélections 💎 PREMIUM (Score >= 70)
+STAKE_M3_SOLIDE         = 3.0   # Mise pour les sélections 🟢 SOLIDE (Score 55-69)
+STAKE_M3_OPPORTUNITE    = 2.0   # Mise pour les sélections 🟡 OPPORTUNITÉ (Score 45-54)
+SWEET_SPOT_M3_MIN       = 3.40  # Fallback
+SWEET_SPOT_M3_MAX       = 4.60  # Fallback
+MIN_COTE_COMBO_M3       = 3.20  # Fallback
+MAX_COTE_COMBO_M3       = 4.80  # Fallback
+
 
 
 H = {
@@ -1761,13 +1765,16 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
     return active_m2
 
 
-def sync_m3_combos(existing_docs, retained_m3, combo_stake=3.0):
+def sync_m3_singles(existing_docs, retained_m3):
     """
-    Méthode 3 — Persistance et pairing des combinés M3 (2e Mi-temps plus prolifique).
-    Stockage dans existing_docs['methode3_combos'].
-    Purge > 2h en EXPIRED.
+    Méthode 3 PRO — 100% Paris Simples (2e Mi-Temps la Plus Prolifique).
+    Stockage dans existing_docs['methode3_singles'].
+    Mises modulées selon le niveau de confiance :
+      💎 PREMIUM     (Score >= 70) : 5,00 €
+      🟢 SOLIDE      (Score 55-69) : 3,00 €
+      🟡 OPPORTUNITÉ (Score 45-54) : 2,00 €
     """
-    existing_m3 = existing_docs.get("methode3_combos", [])
+    existing_m3 = existing_docs.get("methode3_singles", [])
     now_utc_purge = datetime.now(timezone.utc)
     used_m3 = set()
     m3_today = []
@@ -1777,131 +1784,154 @@ def sync_m3_combos(existing_docs, retained_m3, combo_stake=3.0):
         for m in existing_docs.get("matches_today", [])
     }
 
-    for c in existing_m3:
-        if c.get("ticket_status") in ["WON", "LOST"]:
-            m3_today.append(c)
-            for leg in [c.get("m1", {}), c.get("m2", {})]:
-                if leg.get("home"): used_m3.add(_clean_team_key(leg["home"]))
-                if leg.get("away"): used_m3.add(_clean_team_key(leg["away"]))
+    for s in existing_m3:
+        home_k = _clean_team_key(s.get("home", ""))
+        away_k = _clean_team_key(s.get("away", ""))
+        match_k = (home_k, away_k)
+
+        if s.get("ticket_status") in ["WON", "LOST"]:
+            m3_today.append(s)
+            used_m3.add(home_k); used_m3.add(away_k)
             continue
 
-        m1l = c.get("m1", {}); m2l = c.get("m2", {})
-        comb_odds = c.get("odds", 3.80)
+        if match_k in match_by_key:
+            src = match_by_key[match_k]
+            s["score_display"] = src.get("score_display", s.get("score_display"))
+            s["minute"] = src.get("minute", s.get("minute"))
+            s["status"] = src.get("status", s.get("status"))
+            s["selection_status"] = src.get("selection_status", s.get("selection_status"))
 
-        k1 = (_clean_team_key(m1l.get("home", "")), _clean_team_key(m1l.get("away", "")))
-        k2 = (_clean_team_key(m2l.get("home", "")), _clean_team_key(m2l.get("away", "")))
-        if k1 in match_by_key:
-            src = match_by_key[k1]
-            m1l["score_display"] = src.get("score_display", m1l.get("score_display"))
-            m1l["minute"] = src.get("minute", m1l.get("minute"))
-            m1l["status"] = src.get("status", m1l.get("status"))
-            m1l["selection_status"] = src.get("selection_status", m1l.get("selection_status"))
-        if k2 in match_by_key:
-            src = match_by_key[k2]
-            m2l["score_display"] = src.get("score_display", m2l.get("score_display"))
-            m2l["minute"] = src.get("minute", m2l.get("minute"))
-            m2l["status"] = src.get("status", m2l.get("status"))
-            m2l["selection_status"] = src.get("selection_status", m2l.get("selection_status"))
+        sel_st = s.get("selection_status", "PENDING")
+        is_started = (s.get("status") == "LIVE" or sel_st != "PENDING")
 
-        s1 = m1l.get("selection_status", "PENDING"); s2 = m2l.get("selection_status", "PENDING")
-        is_started = (m1l.get("status") == "LIVE" or m2l.get("status") == "LIVE" or s1 != "PENDING" or s2 != "PENDING")
-
-        _m1_iso_m3 = m1l.get("start_iso", "")
-        if _m1_iso_m3 and not is_started:
+        _s_iso = s.get("start_iso", "")
+        if _s_iso and not is_started:
             try:
-                _m1_dt_m3 = datetime.fromisoformat(_m1_iso_m3.replace("Z", "+00:00"))
-                if (now_utc_purge - _m1_dt_m3).total_seconds() > 7200:
-                    c["ticket_status"] = "EXPIRED"
-                    c["profit_unit"] = 0.0
-                    c["profit_eur"] = 0.0
-                    m3_today.append(c)
-                    for leg in [m1l, m2l]:
-                        if leg.get("home"): used_m3.add(_clean_team_key(leg["home"]))
-                        if leg.get("away"): used_m3.add(_clean_team_key(leg["away"]))
+                _s_dt = datetime.fromisoformat(_s_iso.replace("Z", "+00:00"))
+                if (now_utc_purge - _s_dt).total_seconds() > 7200:
+                    s["ticket_status"] = "EXPIRED"
+                    s["profit_unit"] = 0.0
+                    s["profit_eur"] = 0.0
+                    m3_today.append(s)
+                    used_m3.add(home_k); used_m3.add(away_k)
                     continue
             except Exception:
                 pass
 
-        if not is_started and (comb_odds < MIN_COTE_COMBO_M3 or comb_odds > MAX_COTE_COMBO_M3):
-            continue
+        odds = s.get("odds", 1.95)
+        stake = s.get("recommended_stake", 3.0)
 
-        t1h = _clean_team_key(m1l.get("home", "")); t1a = _clean_team_key(m1l.get("away", ""))
-        t2h = _clean_team_key(m2l.get("home", "")); t2a = _clean_team_key(m2l.get("away", ""))
-        if not is_started and any(t in used_m3 for t in [t1h, t1a, t2h, t2a]):
-            continue
-
-        if s1.startswith("WON") and s2.startswith("WON"):
-            c["ticket_status"] = "WON"
-            c["profit_unit"] = round(comb_odds - 1.0, 2)
-            c["profit_eur"] = round(c["profit_unit"] * combo_stake, 2)
-        elif s1 == "LOST" or s2 == "LOST":
-            c["ticket_status"] = "LOST"
-            c["profit_unit"] = -1.0
-            c["profit_eur"] = -combo_stake
-        elif m1l.get("status") == "LIVE" or m2l.get("status") == "LIVE" or s1 == "IN_PROGRESS" or s2 == "IN_PROGRESS":
-            c["ticket_status"] = "LIVE"
+        if sel_st.startswith("WON"):
+            s["ticket_status"] = "WON"
+            s["profit_unit"] = round(odds - 1.0, 2)
+            s["gain_eur"] = round(odds * stake, 2)
+            s["profit_eur"] = round(s["gain_eur"] - stake, 2)
+        elif sel_st == "LOST":
+            s["ticket_status"] = "LOST"
+            s["profit_unit"] = -1.0
+            s["gain_eur"] = 0.0
+            s["profit_eur"] = -stake
+        elif s.get("status") == "LIVE" or sel_st == "IN_PROGRESS":
+            s["ticket_status"] = "LIVE"
         else:
-            c["ticket_status"] = "PENDING"
+            s["ticket_status"] = "PENDING"
 
-        used_m3.update([t1h, t1a, t2h, t2a])
-        m3_today.append(c)
+        used_m3.add(home_k); used_m3.add(away_k)
+        m3_today.append(s)
 
-    c_idx_base = max([c.get("ticket_num", 0) for c in m3_today] or [0])
-    unassigned_m3 = []
+    s_idx_base = max([s.get("ticket_num", 0) for s in m3_today] or [0])
     for m in retained_m3:
-        if is_night_match(m): continue
-        kd = _clean_team_key(m.get("dom", "")); ke = _clean_team_key(m.get("ext", ""))
-        if kd not in used_m3 and ke not in used_m3:
-            unassigned_m3.append(m)
+        if is_night_match(m):
+            continue
+        kd = _clean_team_key(m.get("dom", ""))
+        ke = _clean_team_key(m.get("ext", ""))
+        if kd in used_m3 or ke in used_m3:
+            continue
 
-    pairs = _build_m3_pairs(unassigned_m3, used_teams=used_m3)
-    for (m1r, m2r, comb_odds) in pairs:
-        fi1 = m1r.get("m3_info", {}); fi2 = m2r.get("m3_info", {})
-        c_idx_base += 1
-        t1h = _clean_team_key(m1r.get("dom","")); t1a = _clean_team_key(m1r.get("ext",""))
-        t2h = _clean_team_key(m2r.get("dom","")); t2a = _clean_team_key(m2r.get("ext",""))
-        used_m3.update([t1h, t1a, t2h, t2a])
+        fi = m.get("m3_info", {})
+        badge = fi.get("badge", "🟡 OPPORTUNITÉ")
+        score_m3 = fi.get("score_m3", 50)
+        c_mt2 = fi.get("cote_mt2", 1.95)
 
-        def _leg_m3(raw, fi):
-            return {
-                "id": str(raw.get("id", "")), "time": raw.get("date_str", ""), "start_iso": raw.get("start_iso"),
-                "league": raw.get("league", ""), "home": raw.get("dom", ""), "away": raw.get("ext", ""),
-                "market": "HALF_MT2", "market_label": "⚡ 2e MT plus prolifique",
-                "odds": fi.get("cote_mt2", 1.95),
-                "score_m3": fi.get("score_m3", 60), "badge": fi.get("badge", "🥈 JOUABLE"),
-                "comb_mt2": fi.get("comb_mt2", 62.0), "comb_diff": fi.get("comb_diff", 0.40),
-                "status": "UPCOMING", "selection_status": "PENDING",
-                "score_display": "VS", "home_score": 0, "away_score": 0,
-                "minute": "À venir", "is_live": False, "is_finished": False, "profit": 0.0,
-            }
+        if "PREMIUM" in badge:
+            stake = STAKE_M3_PREMIUM
+        elif "SOLIDE" in badge:
+            stake = STAKE_M3_SOLIDE
+        else:
+            stake = STAKE_M3_OPPORTUNITE
+
+        pot_gain = round(stake * c_mt2, 2)
+        pot_profit = round(pot_gain - stake, 2)
+        s_idx_base += 1
+        used_m3.add(kd); used_m3.add(ke)
 
         m3_today.append({
-            "id": f"m3_combo_{c_idx_base}", "ticket_num": c_idx_base,
-            "email_ticket_num": None, "odds": comb_odds,
-            "default_stake": combo_stake, "ticket_status": "PENDING",
-            "profit_unit": 0.0, "profit_eur": 0.0,
-            "gain_eur": round(comb_odds * combo_stake, 2),
-            "m1": _leg_m3(m1r, fi1), "m2": _leg_m3(m2r, fi2),
+            "id": f"m3_single_{s_idx_base}",
+            "ticket_num": s_idx_base,
+            "email_ticket_num": None,
+            "time": m.get("date_str", ""),
+            "start_iso": m.get("start_iso", ""),
+            "league": m.get("league", ""),
+            "home": m.get("dom", ""),
+            "away": m.get("ext", ""),
+            "market": "HALF_MT2",
+            "market_label": "⚡ 2nde MT plus prolifique",
+            "odds": c_mt2,
+            "badge": badge,
+            "score_m3": score_m3,
+            "comb_mt2": fi.get("comb_mt2", 50.0),
+            "comb_diff": fi.get("comb_diff", 0.30),
+            "comb_tie": fi.get("comb_tie", 25.0),
+            "trend": fi.get("trend", 0.0),
+            "home_stats": fi.get("home_stats", {}),
+            "away_stats": fi.get("away_stats", {}),
+            "recommended_stake": stake,
+            "default_stake": stake,
+            "gain_eur": pot_gain,
+            "profit_eur": pot_profit,
+            "ticket_status": "PENDING",
+            "status": "UPCOMING",
+            "selection_status": "PENDING",
+            "score_display": "VS",
+            "home_score": 0,
+            "away_score": 0,
+            "minute": "À venir",
+            "is_live": False,
+            "is_finished": False,
+            "profit_unit": 0.0,
         })
 
-    active_m3 = [c for c in m3_today if c.get("ticket_status") in ["PENDING", "LIVE"]]
-    for idx, c in enumerate(active_m3, 1):
-        c["email_ticket_num"] = idx
+    active_m3 = [s for s in m3_today if s.get("ticket_status") in ["PENDING", "LIVE"]]
+    active_m3.sort(key=lambda s: s.get("start_iso") or "")
+    for idx, s in enumerate(active_m3, 1):
+        s["email_ticket_num"] = idx
 
-    existing_docs["methode3_combos"] = m3_today
-    decided_m3 = sum(1 for c in m3_today if c.get("ticket_status") in ["WON", "LOST"])
-    won_m3 = sum(1 for c in m3_today if c.get("ticket_status") == "WON")
-    lost_m3 = sum(1 for c in m3_today if c.get("ticket_status") == "LOST")
-    profit_u_m3 = sum(c.get("profit_unit", 0.0) for c in m3_today)
+    existing_docs["methode3_singles"] = m3_today
+    existing_docs["methode3_combos"] = []
+
+    decided_m3 = sum(1 for s in m3_today if s.get("ticket_status") in ["WON", "LOST"])
+    won_m3 = sum(1 for s in m3_today if s.get("ticket_status") == "WON")
+    lost_m3 = sum(1 for s in m3_today if s.get("ticket_status") == "LOST")
+    profit_u_m3 = sum(s.get("profit_unit", 0.0) for s in m3_today if s.get("ticket_status") in ["WON", "LOST"])
+    profit_eur_m3 = sum(s.get("profit_eur", 0.0) for s in m3_today if s.get("ticket_status") in ["WON", "LOST"])
+    total_stake = sum(s.get("recommended_stake", 3.0) for s in active_m3)
+
     existing_docs["methode3_summary"] = {
-        "total": len(m3_today), "active": len(active_m3),
-        "won": won_m3, "lost": lost_m3,
+        "total": len(m3_today),
+        "active": len(active_m3),
+        "won": won_m3,
+        "lost": lost_m3,
         "win_rate": round(won_m3 / decided_m3 * 100, 1) if decided_m3 > 0 else 0.0,
+        "total_active_stake": round(total_stake, 2),
         "profit_units": round(profit_u_m3, 2),
-        "profit_eur": round(profit_u_m3 * combo_stake, 2)
+        "profit_eur": round(profit_eur_m3, 2),
     }
-    print(f"⚡ M3 data.json : {len(m3_today)} combinés ({len(active_m3)} actifs)")
+    print(f"⚡ M3 data.json : {len(m3_today)} paris simples ({len(active_m3)} actifs)")
     return active_m3
+
+
+def sync_m3_combos(existing_docs, retained_m3, combo_stake=3.0):
+    return sync_m3_singles(existing_docs, retained_m3)
 
 
 def main():
@@ -2278,8 +2308,8 @@ def main():
     # ── Méthode 2 : pairing et persistance ───────────────────────────────────
     active_m2_combos = sync_m2_combos(existing_docs, retained_m2)
 
-    # ── Méthode 3 : pairing et persistance ───────────────────────────────────
-    active_m3_combos = sync_m3_combos(existing_docs, retained_m3)
+    # ── Méthode 3 : singles et persistance ───────────────────────────────────
+    active_m3_singles = sync_m3_singles(existing_docs, retained_m3)
 
     # Réécriture du data.json avec M1, M2 et M3
     docs_data_path = os.path.join("docs", "data.json")
@@ -2287,7 +2317,7 @@ def main():
         import json as _json
         _json.dump(existing_docs, _f, ensure_ascii=False, indent=2)
     active_m2_combos = sorted(active_m2_combos, key=lambda c: c.get("m1", {}).get("start_iso") or "")
-    active_m3_combos = sorted(active_m3_combos, key=lambda c: c.get("m1", {}).get("start_iso") or "")
+    active_m3_singles = sorted(active_m3_singles, key=lambda s: s.get("start_iso") or "")
 
 
     combos_html = ""
@@ -2479,89 +2509,82 @@ def main():
     if not m2_combos_html:
         m2_combos_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Aucun combiné M2 disponible pour ce créneau.</div>'
 
-    # ── Section M3 : Combinés Méthode 3 (2e MT la plus prolifique) ─────────
-    m3_combos_html = ""
-    paired_m3_keys = set()
-    for c in active_m3_combos:
-        c_num = c.get("email_ticket_num", c.get("ticket_num", 1))
-        comb_odds = c.get("odds", 3.80)
-        pot_win = c.get("gain_eur", round(3.0 * comb_odds, 2))
-        net_profit = round(pot_win - 3.0, 2)
-        m1l = c["m1"]; m2l = c["m2"]
-        paired_m3_keys.add((_clean_team_key(m1l.get("home","")), _clean_team_key(m1l.get("away",""))))
-        paired_m3_keys.add((_clean_team_key(m2l.get("home","")), _clean_team_key(m2l.get("away",""))))
-        _ts = c.get("ticket_status", "PENDING")
-        if _ts == "LIVE":
-            m3_live_badge = '<span style="background:#fef3c7; color:#b45309; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fde68a;">🟢 EN DIRECT</span>'
-        elif _ts == "WON":
-            m3_live_badge = '<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #86efac;">✅ GAGNÉ</span>'
-        elif _ts == "LOST":
-            m3_live_badge = '<span style="background:#fee2e2; color:#b91c1c; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fca5a5;">❌ PERDU</span>'
-        else:
-            m3_live_badge = '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 7px; border-radius:5px;">⏳ À venir</span>'
+    # ── Section M3 : Paris Simples Méthode 3 PRO (2e MT la plus prolifique) ─
+    m3_singles_html = ""
+    if active_m3_singles:
+        tot_m3_stake = sum(s.get("recommended_stake", 3.0) for s in active_m3_singles)
+        tot_m3_pot_win = sum(s.get("gain_eur", 0.0) for s in active_m3_singles)
+        tot_m3_pot_profit = round(tot_m3_pot_win - tot_m3_stake, 2)
+        avg_m3_odds = sum(s.get("odds", 1.95) for s in active_m3_singles) / len(active_m3_singles)
 
-        def _m3_status(leg):
-            ss = leg.get("selection_status", "PENDING")
-            sc = leg.get("score_display", "")
-            if ss == "WON_FINAL": return f'<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">✅ 2e MT GAGNÉE ({sc})</span>'
-            if ss == "LOST":      return f'<span style="background:#fee2e2; color:#b91c1c; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">❌ PERDU ({sc})</span>'
-            if leg.get("status") == "LIVE": return f'<span style="background:#fef3c7; color:#b45309; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">🟢 {leg.get("minute","?")} ({sc})</span>'
-            return '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 6px; border-radius:4px;">⏳ À venir</span>'
-
-        b1 = m1l.get("badge", ""); b2 = m2l.get("badge", "")
-        sc1 = m1l.get("score_m3", 60); sc2 = m2l.get("score_m3", 60)
-        mt1 = m1l.get("comb_mt2", 60.0); mt2 = m2l.get("comb_mt2", 60.0)
-
-        m3_combos_html += f'''
-        <div style="background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid #d97706; border-radius:8px; padding:10px 12px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span style="background:#d97706; color:#ffffff; font-weight:800; font-size:11px; padding:3px 8px; border-radius:5px;">⚡ M3 #{c_num}</span>
-              <span style="background:#2563eb; color:#ffffff; font-weight:900; font-size:12px; padding:2px 8px; border-radius:5px;">Cote @{comb_odds:.2f}</span>
-              {m3_live_badge}
-            </div>
-            <div style="font-size:11px; font-weight:800; color:#15803d;">Mise : <b>3,00 €</b> &bull; Gain : <b>{pot_win:.2f} €</b> (+{net_profit:.2f} € net)</div>
+        m3_singles_html += f'''
+        <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:10px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div style="font-size:12px; color:#92400e; font-weight:700;">
+            ⚡ <b>{len(active_m3_singles)} Paris Simples Qualifiés</b> &bull; Cote Moyenne : <b>@{avg_m3_odds:.2f}</b>
           </div>
-          <div style="font-size:11px; color:#334155; line-height:1.5;">
-            <div style="padding:3px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
-              <span>1️⃣ <b>{m1l.get("time","")}</b> : {m1l.get("home")} vs {m1l.get("away")} &rarr; <span style="color:#d97706; font-weight:700;">⚡ 2e MT plus prolifique</span> @{m1l.get("odds",1.95):.2f} <small style="color:#64748b;">({b1} · {sc1}/100 · MT2 {mt1:.1f}%)</small></span>
-              {_m3_status(m1l)}
-            </div>
-            <div style="padding:3px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
-              <span>2️⃣ <b>{m2l.get("time","")}</b> : {m2l.get("home")} vs {m2l.get("away")} &rarr; <span style="color:#d97706; font-weight:700;">⚡ 2e MT plus prolifique</span> @{m2l.get("odds",1.95):.2f} <small style="color:#64748b;">({b2} · {sc2}/100 · MT2 {mt2:.1f}%)</small></span>
-              {_m3_status(m2l)}
-            </div>
+          <div style="font-size:12px; color:#15803d; font-weight:800;">
+            Mise Totale : <b>{tot_m3_stake:.2f} €</b> &bull; Gain Pot. : <b>{tot_m3_pot_win:.2f} €</b> (+{tot_m3_pot_profit:.2f} € net)
           </div>
         </div>
         '''
-    if not m3_combos_html:
-        m3_combos_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Aucun signal M3 suffisamment fort aujourd’hui.</div>'
 
-    # Matchs M3 retenus mais non appairés -> RÉSERVE M3
-    reserve_m3 = []
-    for m in retained_m3:
-        mk = (_clean_team_key(m.get("dom","")), _clean_team_key(m.get("ext","")))
-        if mk not in paired_m3_keys:
-            reserve_m3.append(m)
+        for s in active_m3_singles:
+            s_num = s.get("email_ticket_num", s.get("ticket_num", 1))
+            odds = s.get("odds", 1.95)
+            stake = s.get("recommended_stake", 3.0)
+            pot_win = s.get("gain_eur", round(stake * odds, 2))
+            net_profit = round(pot_win - stake, 2)
+            badge = s.get("badge", "🟡 OPPORTUNITÉ")
+            sc3 = s.get("score_m3", 50)
+            diff3 = s.get("comb_diff", 0.30)
+            mt2_pct = s.get("comb_mt2", 50.0)
+            tie_pct = s.get("comb_tie", 25.0)
+            h_st = s.get("home_stats", {})
+            a_st = s.get("away_stats", {})
 
-    m3_reserve_html = ""
-    if reserve_m3:
-        m3_res_rows = ""
-        for m in reserve_m3:
-            fi3 = m.get("m3_info", {})
-            sc3 = fi3.get("score_m3", 0)
-            b3 = fi3.get("badge", "🟡 OPPORTUNITÉ")
-            c_mt2 = fi3.get("cote_mt2", 1.95)
-            h_st = fi3.get("home_stats", {})
-            a_st = fi3.get("away_stats", {})
-            m3_res_rows += f'<li style="margin-bottom:6px;"><b>{m.get("date_str","")}</b> | {m.get("league","")} : <b>{m.get("dom","")} vs {m.get("ext","")}</b> &rarr; <b>{b3}</b> @{c_mt2:.2f} — Score M3 : <b style="color:#b45309;">{sc3}/100</b> (Diff: <b>{fi3.get("comb_diff",0):+.2f}b</b> · MT2: {fi3.get("comb_mt2",0):.1f}% [D:{h_st.get("pct_mt2",0):.0f}% / E:{a_st.get("pct_mt2",0):.0f}%] · Nuls: {fi3.get("comb_tie",0):.0f}% · Tendance: {fi3.get("trend",0):+.1f}%)</li>'
-        m3_reserve_html = f'''
-        <div style="background:#fffdf5; border:1px solid #fde68a; border-radius:8px; padding:10px 12px; margin-top:12px; font-size:11px; color:#92400e;">
-          <b>🟡 MATCHS EN RÉSERVE M3 PRO ({len(reserve_m3)} match(s) qualifiés non combinés) :</b>
-          <div style="color:#64748b; font-size:10px; margin:2px 0 6px 0;">Sélections validées M3 PRO mais en attente d'un partenaire compatible dans le Sweet Spot [3.40 - 4.60].</div>
-          <ul style="margin:0; padding-left:16px;">{m3_res_rows}</ul>
-        </div>
-        '''
+            if "PREMIUM" in badge:
+                badge_bg = "#dcfce7"; badge_col = "#15803d"; card_border = "#10b981"
+            elif "SOLIDE" in badge:
+                badge_bg = "#e0f2fe"; badge_col = "#0369a1"; card_border = "#0284c7"
+            else:
+                badge_bg = "#fef3c7"; badge_col = "#b45309"; card_border = "#d97706"
+
+            _ts = s.get("ticket_status", "PENDING")
+            if _ts == "LIVE":
+                m3_live_badge = '<span style="background:#fef3c7; color:#b45309; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fde68a;">🟢 EN DIRECT</span>'
+            elif _ts == "WON":
+                m3_live_badge = '<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #86efac;">✅ GAGNÉ</span>'
+            elif _ts == "LOST":
+                m3_live_badge = '<span style="background:#fee2e2; color:#b91c1c; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fca5a5;">❌ PERDU</span>'
+            else:
+                m3_live_badge = '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 7px; border-radius:5px;">⏳ À venir</span>'
+
+            m3_singles_html += f'''
+            <div style="background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid {card_border}; border-radius:8px; padding:10px 12px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; flex-wrap:wrap; gap:6px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="background:{badge_bg}; color:{badge_col}; font-weight:800; font-size:11px; padding:2px 8px; border-radius:5px;">{badge} · {sc3}/100</span>
+                  <span style="font-size:12px; font-weight:800; color:#0f172a;">⏰ {s.get("time","")} &bull; {s.get("home")} vs {s.get("away")}</span>
+                  <span style="font-size:10px; color:#64748b;">({s.get("league","")})</span>
+                  {m3_live_badge}
+                </div>
+                <div style="font-size:11px; font-weight:800; color:#15803d;">
+                  Mise Conseillée : <b>{stake:.2f} €</b> &bull; Gain : <b>{pot_win:.2f} €</b> (+{net_profit:.2f} € net)
+                </div>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:11px; color:#334155; padding-top:4px; border-top:1px dashed #f1f5f9;">
+                <div>
+                  Pari Conseillé : <b style="color:#d97706;">⚡ 2nde mi-temps plus prolifique</b>
+                  <span style="background:#0f172a; color:#ffffff; font-weight:900; font-size:11px; padding:2px 7px; border-radius:4px; margin-left:6px;">@{odds:.2f}</span>
+                </div>
+                <div style="font-size:10px; color:#64748b;">
+                  Diff MT2: <b style="color:#0f172a;">{diff3:+.2f}b</b> &bull; MT2: <b>{mt2_pct:.1f}%</b> (D:{h_st.get("pct_mt2",0):.0f}% / E:{a_st.get("pct_mt2",0):.0f}%) &bull; Nuls: {tie_pct:.0f}%
+                </div>
+              </div>
+            </div>
+            '''
+    else:
+        m3_singles_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Aucun match ne valide les critères stricts M3 PRO aujourd’hui.</div>'
 
     m3_cards_html = ""
     if retained_m3:
@@ -2844,17 +2867,16 @@ def main():
             {m2_combos_html}
           </div>
 
-          <!-- SECTION COMBINÉS M3 (2e MI-TEMPS LA PLUS PROLIFIQUE) -->
+          <!-- SECTION PARIS SIMPLES M3 PRO (2e MI-TEMPS LA PLUS PROLIFIQUE) -->
           <div style="padding:14px 16px 8px 16px; background:#fffbeb; border-top:2px solid #fde68a;">
             <div style="font-size:14px; font-weight:900; color:#0f172a; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-              <span>⚡ COMBINÉS M3 PRO — 2e MI-TEMPS LA PLUS PROLIFIQUE</span>
-              <span style="font-size:11px; background:#d97706; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mise : 3,00 € par ticket</span>
+              <span>⚡ PARIS SIMPLES M3 PRO — 2e MI-TEMPS LA PLUS PROLIFIQUE</span>
+              <span style="font-size:11px; background:#d97706; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mises modulées : 2 € à 5 €</span>
             </div>
             <div style="font-size:11px; color:#64748b; margin-bottom:10px;">
-              Marché Unibet <b>« 2nde mi-temps la plus prolifique »</b> (Sweet Spot [3.40 - 4.60]). Sélection basée sur le différentiel physique réel de buts (Verrou MT2 &ge; +0.30 but et MT2 &ge; 50%).
+              Marché officiel Unibet <b>« 2nde mi-temps la plus prolifique »</b> joué exclusivement en <b>Paris Simples</b>. Tri chronologique strict. Mises conseillées selon niveau de confiance : 💎 PREMIUM : <b>5,00 €</b> &bull; 🟢 SOLIDE : <b>3,00 €</b> &bull; 🟡 OPPORTUNITÉ : <b>2,00 €</b>.
             </div>
-            {m3_combos_html}
-            {m3_reserve_html}
+            {m3_singles_html}
           </div>
 
           <!-- SECTION 2 : FICHES D'ANALYSE DÉTAILLÉES -->
