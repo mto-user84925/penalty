@@ -342,8 +342,54 @@ def sync():
         "last_updated": datetime.now(timezone.utc).isoformat()
     }
 
-    with open(data_path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
+    # M3 Backtest Ledger update
+    try:
+        ledger_path = "backtest_ledger.json"
+        if os.path.exists(ledger_path):
+            with open(ledger_path, "r", encoding="utf-8") as lf:
+                ledger_data = json.load(lf)
+            ledger_updated = 0
+            for item in ledger_data:
+                m3_sec = item.get("m3")
+                if not m3_sec:
+                    continue
+                if m3_sec.get("won_half_mt2") is not None:
+                    continue
+                m_parts = item.get("match", "").split(" vs ")
+                if len(m_parts) != 2:
+                    continue
+                mk = (clean_name(m_parts[0]), clean_name(m_parts[1]))
+                if mk in match_lookup:
+                    m_ev = match_lookup[mk]
+                    if m_ev.get("status") == "FT":
+                        h_sc = m_ev.get("home_score", 0)
+                        a_sc = m_ev.get("away_score", 0)
+                        sc_disp = m_ev.get("score_display", "")
+                        h_ht, a_ht = None, None
+                        if "(MT:" in sc_disp:
+                            try:
+                                ht_part = sc_disp.split("(MT:")[1].split(")")[0].strip()
+                                h_ht, a_ht = [int(x.strip()) for x in ht_part.split("-")]
+                            except Exception:
+                                pass
+                        if h_ht is not None and a_ht is not None:
+                            g_mt1 = h_ht + a_ht
+                            g_mt2 = (h_sc - h_ht) + (a_sc - a_ht)
+                            is_won = (g_mt2 > g_mt1)
+                            m3_sec["ht_score"] = f"{h_ht}-{a_ht}"
+                            m3_sec["ft_score"] = f"{h_sc}-{a_sc}"
+                            m3_sec["goals_mt1"] = g_mt1
+                            m3_sec["goals_mt2"] = g_mt2
+                            m3_sec["won_half_mt2"] = is_won
+                            odds = m3_sec.get("cote_mt2", 1.95) or 1.95
+                            m3_sec["profit_m3"] = round(odds - 1.0, 2) if is_won else -1.0
+                            ledger_updated += 1
+            if ledger_updated > 0:
+                with open(ledger_path, "w", encoding="utf-8") as lf:
+                    json.dump(ledger_data, lf, ensure_ascii=False, indent=2)
+                print(f"🗄️ Backtest Ledger M3 mis à jour : {ledger_updated} résultats")
+    except Exception as e_ledg:
+        print(f"⚠️ Erreur MAJ Backtest Ledger dans sync_live_scores : {e_ledg}")
 
     print(f"Sync complete. Updated {updated_count} matches. Combos: {c_won}W {c_lost}L {c_live}LIVE {c_upc}UPC.")
     return True, updated_count
