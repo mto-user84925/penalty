@@ -29549,5 +29549,70 @@
     "selected_markets": [],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3374791",
+    "timestamp_utc": "2026-09-14T06:03:36.505294+00:00",
+    "match": "RKS Rakow vs Zaglebie Lubin",
+    "league": "Pologne • D1 Pologne",
+    "date_str": "Mar. 15/09 à 18h00",
+    "fav_team": "RKS Rakow",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 48,
+      "pct_fav_success": 40,
+      "pct_fav_lead2": 10
+    },
+    "odds": {
+      "fav_odds": 1.7,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3360726",
+    "timestamp_utc": "2026-09-14T06:03:36.505294+00:00",
+    "match": "Rayo Vallecano vs Espanyol",
+    "league": "Espagne • Laliga",
+    "date_str": "Mar. 15/09 à 19h00",
+    "fav_team": "Rayo Vallecano",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 53,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 20
+    },
+    "odds": {
+      "fav_odds": 2.05,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3360739",
+    "timestamp_utc": "2026-09-14T06:03:36.505294+00:00",
+    "match": "Alaves vs CF Valence",
+    "league": "Espagne • Laliga",
+    "date_str": "Mar. 15/09 à 20h00",
+    "fav_team": "Alaves",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 47,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 20
+    },
+    "odds": {
+      "fav_odds": 1.8,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
   }
 ]
