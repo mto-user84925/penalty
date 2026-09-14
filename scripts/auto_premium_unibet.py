@@ -24,10 +24,10 @@ MIN_PCT_FAV_SUCCESS    = 50    # Nouveau filtre dur : Win ou +2b d'avance histor
 
 # ── Seuils Stratégie M3 V1.1 — 2e Mi-Temps la Plus Prolifique ───────────────
 MIN_SAMPLE_M3           = 15    # Toujours minimum 15 matchs exploitables par équipe
-MIN_COMB_MT2_PCT_M3     = 58.0  # MT2 combiné >= 58 % (assoupli de 62%)
-MIN_INDIV_MT2_PCT_M3    = 50.0  # MT2 domicile >= 50 % et MT2 extérieur >= 50 % (assoupli de 55%)
-MIN_DIFF_GOALS_M3       = 0.25  # Différentiel moyen MT2 - MT1 >= +0.25 but (assoupli de +0.40)
-MAX_TIE_PCT_M3          = 30.0  # Taux d'égalité combiné <= 30 % (assoupli de 25%)
+MIN_COMB_MT2_PCT_M3     = 55.0  # MT2 combiné >= 55 % (calibré Value Bet @1.90-@2.05)
+MIN_INDIV_MT2_PCT_M3    = 45.0  # MT2 domicile >= 45 % et MT2 extérieur >= 45 %
+MIN_DIFF_GOALS_M3       = 0.25  # Différentiel moyen MT2 - MT1 >= +0.25 but
+MAX_TIE_PCT_M3          = 30.0  # Taux d'égalité combiné <= 30 %
 
 # Niveaux de Qualité (Badges M3 V1.1)
 PREMIUM_COMB_MT2_MIN    = 67.0  # MT2 combiné >= 67%
@@ -37,7 +37,7 @@ PREMIUM_DIFF_GOALS_MIN  = 0.35  # Diff MT2 - MT1 clairement positif
 BON_COMB_MT2_MIN        = 62.0  # MT2 combiné entre 62% et 66.99%
 BON_COMB_MT2_MAX        = 66.99
 
-JOUABLE_COMB_MT2_MIN    = 58.0  # MT2 combiné entre 58% et 61.99%
+JOUABLE_COMB_MT2_MIN    = 55.0  # MT2 combiné entre 55% et 61.99%
 JOUABLE_COMB_MT2_MAX    = 61.99
 MIN_SCORE_M3_RETAINED   = 50    # Seuil pour compatibilité affichage
 
@@ -428,14 +428,14 @@ def evaluate_m3_half_stats(m, scoring_only=False):
     Validation statistique individuelle sur 20 matchs (min 15 exploitables par équipe).
     Filtres durs V1.1 :
       1. Échantillon >= 15 matchs exploitables par équipe (Dom et Ext)
-      2. MT2 combiné >= 58%
-      3. MT2 domicile >= 50% et MT2 extérieur >= 50%
+      2. MT2 combiné >= 55%
+      3. MT2 domicile >= 45% et MT2 extérieur >= 45%
       4. Différentiel moyen MT2 - MT1 >= +0.25 but
       5. Taux d'égalité combiné <= 30%
     Niveaux de qualité (Badges) :
       💎 PREMIUM : MT2 combiné >= 67% ET MT2 dom >= 60% ET MT2 ext >= 60% ET diff MT2-MT1 >= +0.35
       🟢 BON     : MT2 combiné entre 62% et 66.99% (filtres validés)
-      🟡 JOUABLE : MT2 combiné entre 58% et 61.99% (filtres validés)
+      🟡 JOUABLE : MT2 combiné entre 55% et 61.99% (filtres validés)
       🔴 ÉCARTÉ  : si au moins 1 critère éliminatoire est vérifié.
     Score M3 / 100 :
       A. Fréquence MT2 (40 pts)
@@ -495,10 +495,10 @@ def evaluate_m3_half_stats(m, scoring_only=False):
     if comb_mt2 >= 75.0:   pts_a = 40
     elif comb_mt2 >= 70.0: pts_a = 34
     elif comb_mt2 >= 67.0: pts_a = 28
-    elif comb_mt2 >= 64.0: pts_a = 22
-    elif comb_mt2 >= 61.0: pts_a = 16
-    elif comb_mt2 >= 58.0: pts_a = 10
-    else:                  pts_a = max(0, round((comb_mt2 / 58.0) * 8))
+    elif comb_mt2 >= 62.0: pts_a = 22
+    elif comb_mt2 >= 58.0: pts_a = 16
+    elif comb_mt2 >= 55.0: pts_a = 10
+    else:                  pts_a = max(0, round((comb_mt2 / 55.0) * 8))
 
     # B. Différentiel de buts MT2 / MT1 (25 pts max)
     if comb_diff >= 1.00:   pts_b = 25
@@ -2643,7 +2643,7 @@ def main():
                     </span>
                 </div>
                 <div style="background:#fefce8; border:1px solid #fef08a; border-radius:6px; padding:8px 10px; font-size:11px; color:#334155; line-height:1.6;">
-                    <div><b>📊 Moyennes combinées V1.1</b> : MT2 <b>{fi3.get('comb_mt2',0):.1f}%</b> (seuil &ge; 58%) &bull; Diff MT2−MT1 : <b>{fi3.get('comb_diff',0):+.2f} but(s)</b> (seuil &ge; +0.25) &bull; Nuls MT1=MT2 : <b>{fi3.get('comb_tie',0):.1f}%</b> (seuil &le; 30%)</div>
+                    <div><b>📊 Moyennes combinées V1.1</b> : MT2 <b>{fi3.get('comb_mt2',0):.1f}%</b> (seuil &ge; 55%) &bull; Diff MT2−MT1 : <b>{fi3.get('comb_diff',0):+.2f} but(s)</b> (seuil &ge; +0.25) &bull; Nuls MT1=MT2 : <b>{fi3.get('comb_tie',0):.1f}%</b> (seuil &le; 30%)</div>
                     <div style="margin-top:4px;"><b>🏠 {m.get('dom','')} (Dom. {h_st.get('n_matches',0)}m)</b> : 20m: MT2 {h_st.get('pct_mt2',0):.1f}% &bull; 10m: {h_st10.get('pct_mt2',0):.1f}% (tendance {fi3.get('trend_dom',0):+.1f}%) &bull; Moy. MT1: {h_st.get('avg_mt1',0):.2f} | MT2: {h_st.get('avg_mt2',0):.2f}</div>
                     <div><b>✈️ {m.get('ext','')} (Ext. {a_st.get('n_matches',0)}m)</b> : 20m: MT2 {a_st.get('pct_mt2',0):.1f}% &bull; 10m: {a_st10.get('pct_mt2',0):.1f}% (tendance {fi3.get('trend_ext',0):+.1f}%) &bull; Moy. MT1: {a_st.get('avg_mt1',0):.2f} | MT2: {a_st.get('avg_mt2',0):.2f}</div>
                     <div style="margin-top:4px; font-size:10px; color:#78350f;"><b>Score 100 pts</b> : Fréq MT2: <b>{fi3.get('pts_a',0)}/40</b> &bull; Diff Buts: <b>{fi3.get('pts_b',0)}/25</b> &bull; Concordance: <b>{fi3.get('pts_c',0)}/20</b> &bull; Forme 10v20 ({fi3.get('trend',0):+.1f}%): <b>{fi3.get('pts_d',0)}/15</b></div>
@@ -2836,7 +2836,7 @@ def main():
               <tr>
                 <td style="padding:0 3px;"><div style="background:#dbeafe; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#1d4ed8;">{nb_retained}</div><div style="font-size:10px; font-weight:700; color:#1d4ed8;">M1 OPTIMISÉ</div><div style="font-size:9px; color:#3b82f6;">Score Dom ≥ 55</div></div></td>
                 <td style="padding:0 3px;"><div style="background:#ede9fe; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#6d28d9;">{len(retained_m2)}</div><div style="font-size:10px; font-weight:700; color:#6d28d9;">M2 MARCHÉ</div><div style="font-size:9px; color:#7c3aed;">Dom &lt; 2.00 &amp; O2.5</div></div></td>
-                <td style="padding:0 3px;"><div style="background:#fef3c7; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#b45309;">{len(retained_m3)}</div><div style="font-size:10px; font-weight:700; color:#b45309;">M3 2e MI-TEMPS</div><div style="font-size:9px; color:#d97706;">Score M3 ≥ 58</div></div></td>
+                <td style="padding:0 3px;"><div style="background:#fef3c7; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#b45309;">{len(retained_m3)}</div><div style="font-size:10px; font-weight:700; color:#b45309;">M3 2e MI-TEMPS</div><div style="font-size:9px; color:#d97706;">MT2 ≥ 55%</div></div></td>
                 <td style="padding:0 3px;"><div style="background:#f0fdf4; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#15803d;">{nb_scanned}</div><div style="font-size:10px; font-weight:700; color:#15803d;">MATCHS SCANNÉS</div><div style="font-size:9px; color:#16a34a;">Unibet France</div></div></td>
               </tr>
             </table>
