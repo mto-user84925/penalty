@@ -105,7 +105,11 @@ def is_night_match(m):
     return False
 
 # ── Moteur d'Analyse « Favori Win & 2 Buts d'Avance (Early Payout) » ────────
-def evaluate_favorite_domination(m):
+def evaluate_favorite_domination(m, scoring_only=False):
+    """Évalue la domination du favori.
+    scoring_only=True : calcule le score brut sans filtres durs (cote, domicile, GF, diff).
+    Utile pour scorer TOUS les matchs scannés dans le rapport complet.
+    """
     c1, c2 = m.get("c1"), m.get("c2")
     if not c1 or not c2 or c1 <= 1.0 or c2 <= 1.0 or c1 == c2:
         return None
@@ -114,8 +118,8 @@ def evaluate_favorite_domination(m):
     fav_odds = c1 if is_dom else c2
     dog_odds = c2 if is_dom else c1
 
-    # ponytail: cote min 1.40 et max 2.20 pour éliminer les cotes faibles destructrices de capital
-    if fav_odds < MIN_COTE_FAV or fav_odds > MAX_COTE_FAV:
+    # ponytail: cote min 1.30 et max 2.20 — filtre strict M1 uniquement
+    if not scoring_only and (fav_odds < MIN_COTE_FAV or fav_odds > MAX_COTE_FAV):
         return None
 
     fav_team = m["dom"] if is_dom else m["ext"]
@@ -187,18 +191,17 @@ def evaluate_favorite_domination(m):
 
     total_score = min(100, pts_fav + pts_dog + pts_goals + pts_odds)
 
-    # ponytail: FILTRES D'OPTIMISATION ADAMCHOI MÉTHODE 1 (validés sur 62 matchs réels du 12/09)
-    # 1. Verrou Domicile : 96% des gagnants +2b jouent à domicile. Exclure les favoris extérieurs fragiles (< 75)
-    if fav_side != "dom" and total_score < 75:
-        return None
-
-    # 2. Plancher offensif AdamChoi : au moins 1.20 but/m marqué et 35% de victoires à domicile
-    if avg_fav_gf < 1.20 or pct_fav_win < 35:
-        return None
-
-    # 3. Différentiel net de buts : avantage net du favori d'au moins +0.30 but/match
-    if diff_goals < 0.30:
-        return None
+    # Filtres stricts M1 — ignorés en mode scoring_only
+    if not scoring_only:
+        # 1. Verrou Domicile : 96% des gagnants +2b jouent à domicile
+        if fav_side != "dom" and total_score < 75:
+            return None
+        # 2. Plancher offensif AdamChoi
+        if avg_fav_gf < 1.20 or pct_fav_win < 35:
+            return None
+        # 3. Différentiel net de buts minimum +0.30
+        if diff_goals < 0.30:
+            return None
 
     if total_score >= 85:
         badge = "💎 PLATINE"
@@ -2218,7 +2221,233 @@ def main():
     with open("report.md", "w", encoding="utf-8") as f:
         f.write("\n".join(report))
 
-    # ── Envoi d'email Multi-Fournisseurs (SFR + Gmail SMTP) ─────────────────
+    # ── Rapport complet ALL SCORES : tous les matchs scannés avec score + analyse ──
+    # Score brut sur les matchs non encore évalués (hors plage cote, extérieur, etc.)
+    scored_key = set()
+    all_scanned_scored = []  # (m, fi, raisons_exclusion_m1)
+    for m in scanned_results:
+        # Réutilise fav_info existant si disponible (retained ou rejected)
+        fi = m.get("fav_info")
+        reasons = []
+        if fi is None:
+            fi = evaluate_favorite_domination(m, scoring_only=True)
+            if fi is None:
+                # Vraiment pas de données (c1/c2 manquant ou aucun historique)
+                fi = {"fav_score": 0, "fav_badge": "—", "fav_team": m.get("dom", "?"),
+                      "dog_team": m.get("ext", "?"), "fav_side": "dom",
+                      "fav_odds": m.get("c1") or 0, "dog_odds": m.get("c2") or 0,
+                      "pct_fav_win": 0, "pct_fav_lead2": 0, "pct_fav_success": 0,
+                      "pct_fav_cs": 0, "avg_fav_gf": 0, "avg_fav_ga": 0,
+                      "pct_dog_loss": 0, "pct_dog_trailed2": 0, "pct_dog_no_goal": 0,
+                      "avg_dog_gf": 0, "avg_dog_ga": 0,
+                      "pts_fav": 0, "pts_dog": 0, "pts_goals": 0, "pts_odds": 0,
+                      "n_fav": 0, "n_dog": 0, "diff_goals": 0,
+                      "market": "FAV_1N2"}
+                reasons.append("Aucune donnée AdamChoi disponible")
+            else:
+                # Raisons d'exclusion M1 (scoring_only bypasse ces filtres)
+                c1v = m.get("c1") or 0; c2v = m.get("c2") or 0
+                fav_odds_v = min(c1v, c2v) if c1v and c2v else 0
+                if fav_odds_v < MIN_COTE_FAV or fav_odds_v > MAX_COTE_FAV:
+                    reasons.append(f"Cote {fav_odds_v:.2f} hors plage [{MIN_COTE_FAV}-{MAX_COTE_FAV}]")
+                if fi.get("fav_side") != "dom":
+                    reasons.append("Favori EXTÉRIEUR")
+                if fi.get("avg_fav_gf", 0) < 1.20:
+                    reasons.append(f"GF moy {fi.get('avg_fav_gf',0):.2f} < 1.20")
+                if fi.get("pct_fav_win", 0) < 35:
+                    reasons.append(f"Win% {fi.get('pct_fav_win',0)}% < 35%")
+                diff = fi.get("pts_goals", 0)  # approximation diff via pts
+                raw_diff = (fi.get("avg_fav_gf",0) - fi.get("avg_fav_ga",0)) + (fi.get("avg_dog_ga",0) - fi.get("avg_dog_gf",0))
+                if raw_diff < 0.30:
+                    reasons.append(f"Diff buts {raw_diff:.2f} < 0.30")
+        else:
+            # fi existant : retenu ou écarté par score uniquement
+            sc = fi.get("fav_score", 0)
+            if sc < MIN_SCORE_FAV_RETAINED:
+                reasons.append(f"Score {sc} < {MIN_SCORE_FAV_RETAINED}")
+
+        mk = (m.get("dom", ""), m.get("ext", ""))
+        if mk in scored_key:
+            continue
+        scored_key.add(mk)
+        all_scanned_scored.append((m, fi, reasons))
+
+    # Tri par score desc
+    all_scanned_scored.sort(key=lambda x: x[1].get("fav_score", 0), reverse=True)
+
+    # ── Helper : formate les 5 derniers matchs d'une liste d'historique ──────
+    def _fmt_last5(matches, is_fav_home):
+        """Retourne une liste de strings 'W 2-0 vs Reading (A)' pour les 5 derniers."""
+        lines = []
+        for r in matches[:5]:
+            gf = int(r.get("homeGoalsFt", r.get("homeGoals", 0)) if is_fav_home else r.get("awayGoalsFt", r.get("awayGoals", 0)))
+            ga = int(r.get("awayGoalsFt", r.get("awayGoals", 0)) if is_fav_home else r.get("homeGoalsFt", r.get("homeGoals", 0)))
+            res = "W" if gf > ga else ("D" if gf == ga else "L")
+            emoji = "✅" if res == "W" else ("➖" if res == "D" else "❌")
+            # Adversaire
+            if is_fav_home:
+                opp = r.get("awayTeam", {}).get("name", "?") if isinstance(r.get("awayTeam"), dict) else "?"
+                venue = "D"
+            else:
+                opp = r.get("homeTeam", {}).get("name", "?") if isinstance(r.get("homeTeam"), dict) else "?"
+                venue = "E"
+            # Date lisible
+            ts = r.get("date", 0)
+            try:
+                from datetime import datetime as _dt
+                d_str = _dt.utcfromtimestamp(ts / 1000).strftime("%d/%m") if ts else "??/???"
+            except Exception:
+                d_str = "??/??"
+            lines.append(f"      {emoji} {res} {gf}-{ga}  vs {opp} ({venue})  [{d_str}]")
+        if not lines:
+            lines.append("      (aucun historique disponible)")
+        return lines
+
+    # ── TXT complet ──────────────────────────────────────────────────────────
+    txt_lines = [
+        "=" * 62,
+        f"  RAPPORT COMPLET ADAMCHOI — TOUS LES MATCHS SCANNÉS",
+        f"  Généré le {now_str}  |  {len(all_scanned_scored)} matchs analysés",
+        "=" * 62,
+        "",
+    ]
+    for (m, fi, reasons) in all_scanned_scored:
+        sc = fi.get("fav_score", 0)
+        sc_bar = "█" * (sc // 10) + "░" * (10 - sc // 10)
+        is_ret = (not reasons) and sc >= MIN_SCORE_FAV_RETAINED
+        verdict = (f"✅ RETENU M1 ({fi.get('fav_badge','')})".strip() if is_ret
+                   else ("⛔ ÉCARTÉ — " + " | ".join(reasons)) if reasons
+                   else f"⚠️ Score {sc} < {MIN_SCORE_FAV_RETAINED}")
+        fav_side_lbl = "DOMICILE" if fi.get("fav_side") == "dom" else "EXTÉRIEUR"
+        is_fav_home = fi.get("fav_side") == "dom"
+        diff_goals = (fi.get("avg_fav_gf",0) - fi.get("avg_fav_ga",0)) + (fi.get("avg_dog_ga",0) - fi.get("avg_dog_gf",0))
+        cote_fav = fi.get("fav_odds", m.get("c1") or 0)
+        cote_dog = fi.get("dog_odds", m.get("c2") or 0)
+
+        # Historiques bruts pour les 5 derniers matchs
+        rec_h = m.get("recent_h_dom", [])
+        rec_a = m.get("recent_a_ext", [])
+        fav_history = rec_h if is_fav_home else rec_a
+        dog_history = rec_a if is_fav_home else rec_h
+        fav_last5 = _fmt_last5(fav_history, is_fav_home)
+        dog_last5 = _fmt_last5(dog_history, not is_fav_home)
+
+        txt_lines += [
+            "─" * 62,
+            f"  [{m.get('date_str','?')}] {m.get('league','?')}",
+            f"  {m.get('dom','?')} vs {m.get('ext','?')}",
+            f"  FAVORI : {fi.get('fav_team','?')} ({fav_side_lbl}) @{cote_fav:.2f}  |  OUTSIDER : {fi.get('dog_team','?')} @{cote_dog:.2f}",
+            "",
+            f"  SCORE DOMINATION : {sc}/100  [{sc_bar}]",
+            f"  VERDICT : {verdict}",
+            "",
+            "  ┌─ DÉTAIL DES COMPOSANTES ─────────────────────────┐",
+            f"  │  Domination favori  : {fi.get('pts_fav',0):2d}/40  (Win+Lead2: {fi.get('pct_fav_success',0)}% sur {fi.get('n_fav',0)} matchs, CS: {fi.get('pct_fav_cs',0)}%)",
+            f"  │  Faiblesse adverse  : {fi.get('pts_dog',0):2d}/25  (Encaissé 2+: {fi.get('pct_dog_trailed2',0)}%, Défaite: {fi.get('pct_dog_loss',0)}%)",
+            f"  │  Différentiel buts  : {fi.get('pts_goals',0):2d}/20  (GF {fi.get('avg_fav_gf',0):.2f}/m − GA {fi.get('avg_fav_ga',0):.2f}/m, diff nette: {diff_goals:+.2f})",
+            f"  │  Probabilité cote   : {fi.get('pts_odds',0):2d}/15  (Prob implicite: {round(100/cote_fav) if cote_fav > 0 else 0}%)",
+            "  └───────────────────────────────────────────────────┘",
+            "",
+            f"  FAVORI — {fi.get('n_fav',0)} derniers matchs ({fav_side_lbl}) :",
+            f"    • Buts marqués/match  : {fi.get('avg_fav_gf',0):.2f}  {'✅' if fi.get('avg_fav_gf',0) >= 1.20 else '❌'} (seuil M1 ≥ 1.20)",
+            f"    • Win%                : {fi.get('pct_fav_win',0)}%  {'✅' if fi.get('pct_fav_win',0) >= 35 else '❌'} (seuil M1 ≥ 35%)",
+            f"    • Win/Lead2% (pari)   : {fi.get('pct_fav_success',0)}%",
+            f"    • Lead2% seul         : {fi.get('pct_fav_lead2',0)}%",
+            f"    • CleanSheet%         : {fi.get('pct_fav_cs',0)}%",
+            f"    • Buts encaissés/m    : {fi.get('avg_fav_ga',0):.2f}",
+            f"    5 derniers résultats ({fav_side_lbl}) :",
+        ] + fav_last5 + [
+            "",
+            f"  OUTSIDER — {fi.get('n_dog',0)} derniers matchs :",
+            f"    • Buts encaissés/m    : {fi.get('avg_dog_ga',0):.2f}",
+            f"    • Défaites%           : {fi.get('pct_dog_loss',0)}%",
+            f"    • Encaissé 2+ buts%   : {fi.get('pct_dog_trailed2',0)}%",
+            f"    • Matchs sans but      : {fi.get('pct_dog_no_goal',0)}%",
+            f"    5 derniers résultats ({'EXTÉRIEUR' if is_fav_home else 'DOMICILE'}) :",
+        ] + dog_last5 + [
+            "",
+            f"  FILTRES M1 :",
+            f"    {'✅' if fi.get('fav_side')=='dom' else '❌'} Côté domicile (favori = {fav_side_lbl})",
+            f"    {'✅' if fi.get('avg_fav_gf',0) >= 1.20 else '❌'} GF ≥ 1.20  → {fi.get('avg_fav_gf',0):.2f}",
+            f"    {'✅' if fi.get('pct_fav_win',0) >= 35 else '❌'} Win% ≥ 35% → {fi.get('pct_fav_win',0)}%",
+            f"    {'✅' if diff_goals >= 0.30 else '❌'} Diff buts ≥ 0.30 → {diff_goals:+.2f}",
+            f"    {'✅' if MIN_COTE_FAV <= cote_fav <= MAX_COTE_FAV else '❌'} Cote [{MIN_COTE_FAV}-{MAX_COTE_FAV}] → {cote_fav:.2f}",
+            f"    {'✅' if sc >= MIN_SCORE_FAV_RETAINED else '❌'} Score ≥ {MIN_SCORE_FAV_RETAINED} → {sc}/100",
+            "",
+        ]
+    txt_lines.append("=" * 62)
+    txt_lines.append(f"  FIN DU RAPPORT — {len(all_scanned_scored)} matchs analysés")
+    txt_lines.append("=" * 62)
+
+    with open("all_scores.txt", "w", encoding="utf-8") as f:
+        f.write("\n".join(txt_lines))
+    print(f"📋 all_scores.txt généré : {len(all_scanned_scored)} matchs")
+
+    # ── HTML GitHub Pages (all_scores.html) ─────────────────────────────────
+    html_rows = ""
+    for (m, fi, reasons) in all_scanned_scored:
+        sc = fi.get("fav_score", 0)
+        is_ret = (not reasons) and sc >= MIN_SCORE_FAV_RETAINED
+        is_rej = (not reasons) and sc < MIN_SCORE_FAV_RETAINED
+        row_bg = "#f0fdf4" if is_ret else ("#fff7ed" if is_rej else "#fef2f2")
+        sc_col = "#15803d" if sc >= 75 else ("#92400e" if sc >= 50 else "#dc2626")
+        sc_bg  = "#dcfce7" if sc >= 75 else ("#fef3c7" if sc >= 50 else "#fee2e2")
+        if is_ret:
+            verdict_html = f'<span style="color:#15803d;font-weight:800;">✅ M1 RETENU<br><small>{fi.get("fav_badge","")}</small></span>'
+        elif reasons:
+            verdict_html = f'<span style="color:#dc2626;font-weight:700;">⛔ FILTRÉ<br><small style="font-size:9px;">{"<br>".join(reasons)}</small></span>'
+        else:
+            verdict_html = f'<span style="color:#b45309;font-weight:700;">⚠️ Score {sc}&lt;{MIN_SCORE_FAV_RETAINED}</span>'
+        cote_fav = fi.get("fav_odds", 0)
+        diff_goals = (fi.get("avg_fav_gf",0) - fi.get("avg_fav_ga",0)) + (fi.get("avg_dog_ga",0) - fi.get("avg_dog_gf",0))
+        html_rows += (
+            f'<tr style="background:{row_bg};">'
+            f'<td style="padding:6px 8px;font-size:11px;color:#64748b;white-space:nowrap;">{m.get("date_str","")}</td>'
+            f'<td style="padding:6px 8px;font-size:12px;font-weight:700;">{m.get("dom","")} vs {m.get("ext","")}'
+            f'<br><span style="font-size:10px;color:#94a3b8;font-weight:400;">{m.get("league","")}</span></td>'
+            f'<td style="padding:6px 6px;text-align:center;font-size:11px;">{fi.get("fav_team","")} <small>({("DOM" if fi.get("fav_side")=="dom" else "EXT")})</small></td>'
+            f'<td style="padding:6px 6px;text-align:center;font-weight:800;">@{cote_fav:.2f}</td>'
+            f'<td style="padding:6px 6px;text-align:center;">'
+            f'<span style="background:{sc_bg};color:{sc_col};font-weight:800;font-size:12px;padding:2px 7px;border-radius:5px;">{sc}/100</span><br>'
+            f'<span style="font-size:9px;color:#64748b;">Dom:{fi.get("pts_fav",0)}/40 Adv:{fi.get("pts_dog",0)}/25 But:{fi.get("pts_goals",0)}/20 Cote:{fi.get("pts_odds",0)}/15</span></td>'
+            f'<td style="padding:6px 6px;text-align:center;font-size:11px;">'
+            f'GF {fi.get("avg_fav_gf",0):.2f} · Win {fi.get("pct_fav_win",0)}%<br>'
+            f'<span style="font-size:9px;color:#64748b;">Lead2 {fi.get("pct_fav_lead2",0)}% · Diff {diff_goals:+.2f}</span></td>'
+            f'<td style="padding:6px 6px;text-align:center;font-size:11px;">{verdict_html}</td>'
+            f'</tr>'
+        )
+
+    all_scores_html = f"""<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>All Scores AdamChoi — {now_str}</title>
+<style>body{{font-family:'Segoe UI',sans-serif;background:#f1f5f9;margin:0;padding:12px;}}
+table{{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.07);}}
+th{{background:#0f172a;color:#fff;padding:8px 6px;font-size:10px;text-transform:uppercase;font-weight:700;}}
+td{{border-bottom:1px solid #f1f5f9;}}
+h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
+</style></head>
+<body>
+<h1>📊 RAPPORT COMPLET ADAMCHOI — {len(all_scanned_scored)} MATCHS SCANNÉS</h1>
+<p>Généré le {now_str} · Tri par score décroissant · Seuil M1 ≥ {MIN_SCORE_FAV_RETAINED}/100</p>
+<table>
+<thead><tr>
+  <th>Heure</th><th>Match &amp; Ligue</th><th>Favori</th><th>Cote</th>
+  <th>Score /100 + Composantes</th><th>Stats Favori</th><th>Verdict M1</th>
+</tr></thead>
+<tbody>{html_rows}</tbody>
+</table>
+<p style="margin-top:12px;text-align:center;font-size:11px;color:#94a3b8;">
+  ⚠️ Rapport automatique Unibet France · AdamChoi Token 0 · {now_str}
+</p>
+</body></html>"""
+
+    os.makedirs("docs", exist_ok=True)
+    with open("docs/all_scores.html", "w", encoding="utf-8") as f:
+        f.write(all_scores_html)
+    print("📊 docs/all_scores.html généré")
+
+
     recipients     = [r.strip() for r in os.environ.get("EMAIL_TO", "gregory.langlet@sfr.fr, langlet.gregory@gmail.com").split(",") if r.strip()]
     gmail_email    = os.environ.get("GMAIL_EMAIL", "langlet.gregory@gmail.com")
     gmail_password = os.environ.get("GMAIL_APP_PASSWORD", "")
