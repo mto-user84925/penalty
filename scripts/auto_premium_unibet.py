@@ -2097,18 +2097,19 @@ def main():
         n_fav = fi.get("n_fav", 0)
         detail_html = (
             f'<span style="font-size:9px; color:#475569; line-height:1.6;">'
-            f'Dom: <b>{pts_fav}/40</b> · Adv: <b>{pts_dog}/25</b> · Buts: <b>{pts_goals}/20</b> · Cote: <b>{pts_odds}/15</b>'
+            f'Dom: <b>{pts_fav}/45</b> · Adv: <b>{pts_dog}/25</b> · Buts: <b>{pts_goals}/20</b> · Cote: <b>{pts_odds}/10</b>'
             f'<br>GF moy: {avg_gf:.2f}/m · Win%: {pct_win}% · ({n_fav} matchs)'
             f'</span>'
         )
 
-        if retained:
-            badge_cell = f'<span style="color:#15803d; font-weight:700; font-size:11px;">✅ RETENU<br><span style="font-weight:400; color:#166534;">{fi["fav_badge"]}</span></span>'
+        if sc >= MIN_SCORE_FAV_COMBO:
+            badge_cell = f'<span style="color:#15803d; font-weight:700; font-size:11px;">✅ COMBINABLE<br><span style="font-weight:400; color:#166534;">{fi["fav_badge"]}</span></span>'
+        elif sc >= MIN_SCORE_FAV_RESERVE:
+            badge_cell = f'<span style="color:#0369a1; font-weight:700; font-size:11px;">🔵 RÉSERVE<br><span style="font-weight:400; color:#0284c7; font-size:9px;">50-54 non combiné</span></span>'
         else:
-            # Explication du rejet : quel critère manque ?
             reasons = []
-            if sc < MIN_SCORE_FAV_RETAINED:
-                reasons.append(f"Score {sc} &lt; {MIN_SCORE_FAV_RETAINED}")
+            if sc < MIN_SCORE_FAV_RESERVE:
+                reasons.append(f"Score {sc} &lt; {MIN_SCORE_FAV_RESERVE}")
             badge_cell = f'<span style="color:#dc2626; font-weight:700; font-size:11px;">⚠️ ÉCARTÉ<br><span style="font-weight:400; color:#b91c1c; font-size:9px;">{" · ".join(reasons)}</span></span>'
 
         scan_rows_html += (
