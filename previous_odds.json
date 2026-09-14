@@ -1,23 +1,23 @@
 {
   "favs": {
-    "3360722": {
-      "match": "Villarreal - Betis Séville",
-      "league": "Espagne • Laliga",
-      "date_str": "Lun. 14/09 à 21h00",
-      "fav_team": "Villarreal",
-      "fav_odds": 1.9,
+    "3376611": {
+      "match": "Bahia Salvador - Remo PA",
+      "league": "Bresil • D1 Bresil",
+      "date_str": "Mar. 15/09 à 01h00",
+      "fav_team": "Bahia Salvador",
+      "fav_odds": 1.34,
       "p2_fav_odds": null,
-      "fav_score": 57,
+      "fav_score": 62,
       "fav_badge": "🥉 BRONZE+"
     },
-    "3374791": {
-      "match": "RKS Rakow - Zaglebie Lubin",
-      "league": "Pologne • D1 Pologne",
-      "date_str": "Mar. 15/09 à 18h00",
-      "fav_team": "RKS Rakow",
-      "fav_odds": 1.72,
+    "3370819": {
+      "match": "CDUC Ecuador - Orense SC",
+      "league": "Equateur • D1 Equateur",
+      "date_str": "Mar. 15/09 à 02h00",
+      "fav_team": "CDUC Ecuador",
+      "fav_odds": 1.37,
       "p2_fav_odds": null,
-      "fav_score": 55,
+      "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"
     },
     "3379727": {
@@ -25,19 +25,9 @@
       "league": "Irlande Du Nord • D1 Irlande Nord",
       "date_str": "Mar. 15/09 à 20h45",
       "fav_team": "FC Larne",
-      "fav_odds": 1.56,
+      "fav_odds": 1.58,
       "p2_fav_odds": null,
       "fav_score": 59,
-      "fav_badge": "🥉 BRONZE+"
-    },
-    "3379161": {
-      "match": "Middlesbrough - Millwall",
-      "league": "Angleterre • Championship",
-      "date_str": "Mar. 15/09 à 20h45",
-      "fav_team": "Middlesbrough",
-      "fav_odds": 1.47,
-      "p2_fav_odds": null,
-      "fav_score": 57,
       "fav_badge": "🥉 BRONZE+"
     },
     "3373031": {
@@ -48,16 +38,6 @@
       "fav_odds": 2.05,
       "p2_fav_odds": null,
       "fav_score": 59,
-      "fav_badge": "🥉 BRONZE+"
-    },
-    "3380017": {
-      "match": "Boyaca Chico - Alianza FC",
-      "league": "Colombie • D1 Colombie",
-      "date_str": "Mer. 16/09 à 02h30",
-      "fav_team": "Boyaca Chico",
-      "fav_odds": 2.1,
-      "p2_fav_odds": null,
-      "fav_score": 63,
       "fav_badge": "🥉 BRONZE+"
     }
   }
