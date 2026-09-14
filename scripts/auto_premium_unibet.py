@@ -2465,7 +2465,7 @@ h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
     if not clean_subject.strip():
         clean_subject = f"Rapport +2 Gagnant du {subject_date} - {nb_retained} favoris"
 
-    msg = MIMEMultipart('alternative')
+    msg = MIMEMultipart('mixed')
     msg["Subject"] = clean_subject
     msg["From"] = f"Gregory LANGLET <{gmail_email}>"
     msg["To"] = ", ".join(recipients)
@@ -2473,9 +2473,28 @@ h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
     msg["Message-ID"] = make_msgid()
     msg["X-Mailer"] = "Python/smtplib"
 
+    # Corps HTML + texte imbriqués dans une partie alternative
     plain_fallback = f"Rapport +2 Gagnant du {subject_date} - {nb_retained} favoris retenus. Consultez la version HTML pour les details complets."
-    msg.attach(MIMEText(plain_fallback, 'plain', 'utf-8'))
-    msg.attach(MIMEText(html_body, 'html', 'utf-8'))
+    alt_part = MIMEMultipart('alternative')
+    alt_part.attach(MIMEText(plain_fallback, 'plain', 'utf-8'))
+    alt_part.attach(MIMEText(html_body, 'html', 'utf-8'))
+    msg.attach(alt_part)
+
+    # Pièce jointe : all_scores.txt
+    if os.path.exists("all_scores.txt"):
+        from email.mime.base import MIMEBase
+        from email import encoders
+        try:
+            with open("all_scores.txt", "rb") as f_att:
+                att = MIMEBase('application', 'octet-stream')
+                att.set_payload(f_att.read())
+            encoders.encode_base64(att)
+            att.add_header('Content-Disposition', 'attachment', filename='all_scores.txt')
+            msg.attach(att)
+            print("📎 all_scores.txt attaché à l'email")
+        except Exception as e_att:
+            print(f"⚠️ Impossible d'attacher all_scores.txt : {e_att}")
+
 
     sent_success = False
 
@@ -2497,14 +2516,29 @@ h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
     # Fallback SFR SMTP si configuré
     if not sent_success and smtp_host and smtp_user and smtp_pass:
         try:
-            msg_sfr = MIMEMultipart('alternative')
+            msg_sfr = MIMEMultipart('mixed')
             msg_sfr["Subject"] = clean_subject
             msg_sfr["From"] = f"Gregory LANGLET <{smtp_user}>"
             msg_sfr["To"] = ", ".join(recipients)
             msg_sfr["Date"] = formatdate(localtime=True)
             msg_sfr["Message-ID"] = make_msgid()
-            msg_sfr.attach(MIMEText(plain_fallback, 'plain', 'utf-8'))
-            msg_sfr.attach(MIMEText(html_body, 'html', 'utf-8'))
+            alt_sfr = MIMEMultipart('alternative')
+            alt_sfr.attach(MIMEText(plain_fallback, 'plain', 'utf-8'))
+            alt_sfr.attach(MIMEText(html_body, 'html', 'utf-8'))
+            msg_sfr.attach(alt_sfr)
+            if os.path.exists("all_scores.txt"):
+                try:
+                    from email.mime.base import MIMEBase
+                    from email import encoders
+                    with open("all_scores.txt", "rb") as f_att2:
+                        att2 = MIMEBase('application', 'octet-stream')
+                        att2.set_payload(f_att2.read())
+                    encoders.encode_base64(att2)
+                    att2.add_header('Content-Disposition', 'attachment', filename='all_scores.txt')
+                    msg_sfr.attach(att2)
+                except Exception:
+                    pass
+
 
             sfr_auth_user = smtp_user.split("@")[0] if "@" in smtp_user else smtp_user
 
