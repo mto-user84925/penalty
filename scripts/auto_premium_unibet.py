@@ -22,30 +22,24 @@ MIN_SCORE_FAV_RETAINED = 50    # Seuil minimal global pour analyse/affichage
 MIN_SCORE_FAV_SOLID    = 75    # Score AdamChoi pour être qualifié Favori Solide (Or / Platine)
 MIN_PCT_FAV_SUCCESS    = 50    # Nouveau filtre dur : Win ou +2b d'avance historique >= 50%
 
-# ── Seuils Stratégie M3 V1.1 — 2e Mi-Temps la Plus Prolifique ───────────────
-MIN_SAMPLE_M3           = 15    # Toujours minimum 15 matchs exploitables par équipe
-MIN_COMB_MT2_PCT_M3     = 55.0  # MT2 combiné >= 55 % (calibré Value Bet @1.90-@2.05)
-MIN_INDIV_MT2_PCT_M3    = 45.0  # MT2 domicile >= 45 % et MT2 extérieur >= 45 %
-MIN_DIFF_GOALS_M3       = 0.25  # Différentiel moyen MT2 - MT1 >= +0.25 but
-MAX_TIE_PCT_M3          = 30.0  # Taux d'égalité combiné <= 30 %
+# ── Seuils Stratégie M3 PRO — 2e Mi-Temps la Plus Prolifique ───────────────
+MIN_SAMPLE_M3           = 10    # Minimum 10 matchs exploitables par équipe
+MIN_COMB_MT2_PCT_M3     = 50.0  # MT2 combiné >= 50 % (biais positif)
+MIN_INDIV_MT2_PCT_M3    = 40.0  # MT2 domicile >= 40 % et MT2 extérieur >= 40 %
+MIN_DIFF_GOALS_M3       = 0.30  # Différentiel moyen MT2 - MT1 >= +0.30 but (Verrou qui Saute)
+MAX_TIE_PCT_M3          = 35.0  # Taux d'égalité combiné <= 35 %
 
-# Niveaux de Qualité (Badges M3 V1.1)
-PREMIUM_COMB_MT2_MIN    = 67.0  # MT2 combiné >= 67%
-PREMIUM_INDIV_MT2_MIN   = 60.0  # MT2 dom >= 60% et MT2 ext >= 60%
-PREMIUM_DIFF_GOALS_MIN  = 0.35  # Diff MT2 - MT1 clairement positif
+# Niveaux de Qualité (Badges M3 PRO)
+PREMIUM_SCORE_M3_MIN    = 70    # Score M3 >= 70/100 (💎 PREMIUM)
+SOLIDE_SCORE_M3_MIN     = 55    # Score M3 entre 55 et 69/100 (🟢 SOLIDE)
+OPPORTUNITE_SCORE_M3_MIN= 45    # Score M3 entre 45 et 54/100 (🟡 OPPORTUNITÉ)
+MIN_SCORE_M3_RETAINED   = 45    # Seuil minimal pour entrer en sélection combinable
 
-BON_COMB_MT2_MIN        = 62.0  # MT2 combiné entre 62% et 66.99%
-BON_COMB_MT2_MAX        = 66.99
-
-JOUABLE_COMB_MT2_MIN    = 55.0  # MT2 combiné entre 55% et 61.99%
-JOUABLE_COMB_MT2_MAX    = 61.99
-MIN_SCORE_M3_RETAINED   = 50    # Seuil pour compatibilité affichage
-
-# Sweet Spot Cotes Combinés M3 V1.1 : configurable autour de [3.50 - 4.50]
-SWEET_SPOT_M3_MIN       = 3.50
-SWEET_SPOT_M3_MAX       = 4.50
+# Sweet Spot Cotes Combinés M3 PRO (2 Matchs) : [3.40 - 4.60]
+SWEET_SPOT_M3_MIN       = 3.40
+SWEET_SPOT_M3_MAX       = 4.60
 MIN_COTE_COMBO_M3       = 3.20  # Borne basse tolérance
-MAX_COTE_COMBO_M3       = 5.00  # Borne haute tolérance
+MAX_COTE_COMBO_M3       = 4.80  # Borne haute tolérance
 
 
 H = {
@@ -400,48 +394,31 @@ def _calc_team_half_stats(matches_list):
     }
 
 def _m3_pair_priority(m1, m2):
-    """Poids d'association pour combiné M3 (hiérarchie stricte). -1 si non permis."""
+    """Poids d'association pour combiné M3 PRO (hiérarchie fluide par niveau de confiance)."""
     fi1 = m1.get("m3_info", {}); fi2 = m2.get("m3_info", {})
-    b1 = fi1.get("badge", ""); b2 = fi2.get("badge", "")
-    is_p1 = "PREMIUM" in b1; is_p2 = "PREMIUM" in b2
-    is_b1 = "BON" in b1;     is_b2 = "BON" in b2
-    is_j1 = "JOUABLE" in b1; is_j2 = "JOUABLE" in b2
-
-    if is_p1 and is_p2:
-        return 50000  # 1. PREMIUM + PREMIUM
-    elif (is_p1 and is_b2) or (is_p2 and is_b1):
-        return 40000  # 2. PREMIUM + BON
-    elif is_b1 and is_b2:
-        return 30000  # 3. BON + BON
-    elif (is_p1 and is_j2) or (is_p2 and is_j1):
-        return 20000  # 4. PREMIUM + JOUABLE
-    elif (is_b1 and is_j2) or (is_b2 and is_j1):
-        return 10000  # 5. BON + JOUABLE (uniquement si nécessaire)
-    else:
-        # JOUABLE + JOUABLE -> STRICTEMENT INTERDIT
-        return -1
+    r1 = fi1.get("badge_rank", 1); r2 = fi2.get("badge_rank", 1)
+    # Poids croissant selon la combinaison des rangs (1=Opportunité, 2=Solide, 3=Premium)
+    return (r1 + r2) * 10000
 
 
 def evaluate_m3_half_stats(m, scoring_only=False):
     """
-    Méthode 3 V1.1 — 2e Mi-Temps la Plus Prolifique.
-    Validation statistique individuelle sur 20 matchs (min 15 exploitables par équipe).
-    Filtres durs V1.1 :
-      1. Échantillon >= 15 matchs exploitables par équipe (Dom et Ext)
-      2. MT2 combiné >= 55%
-      3. MT2 domicile >= 45% et MT2 extérieur >= 45%
-      4. Différentiel moyen MT2 - MT1 >= +0.25 but
-      5. Taux d'égalité combiné <= 30%
-    Niveaux de qualité (Badges) :
-      💎 PREMIUM : MT2 combiné >= 67% ET MT2 dom >= 60% ET MT2 ext >= 60% ET diff MT2-MT1 >= +0.35
-      🟢 BON     : MT2 combiné entre 62% et 66.99% (filtres validés)
-      🟡 JOUABLE : MT2 combiné entre 55% et 61.99% (filtres validés)
-      🔴 ÉCARTÉ  : si au moins 1 critère éliminatoire est vérifié.
-    Score M3 / 100 :
-      A. Fréquence MT2 (40 pts)
-      B. Différentiel Buts (25 pts)
-      C. Concordance Dom/Ext (20 pts)
-      D. Forme Récente 10 vs 20 (15 pts)
+    Méthode M3 PRO — 2e Mi-Temps la Plus Prolifique.
+    Validation quantitative dynamique (xG temporels et différentiel physique de buts).
+    Critères Physiques M3 PRO :
+      1. Échantillon >= 10 matchs exploitables par équipe (Dom et Ext)
+      2. Différentiel moyen Buts MT2 - MT1 >= +0.30 but (Le Verrou qui Saute)
+      3. Biais positif MT2 combiné >= 50.0% (Value Bet contre cote Unibet ~@1.90-@2.05)
+      4. Taux d'égalité MT1=MT2 <= 35.0%
+    Niveaux de Qualité (Badges M3 PRO) :
+      💎 PREMIUM     : Score M3 >= 70/100 (Diff >= +0.60b et MT2 >= 55%)
+      🟢 SOLIDE      : Score M3 entre 55 et 69/100 (Diff >= +0.40b et MT2 >= 50%)
+      🟡 OPPORTUNITÉ : Score M3 entre 45 et 54/100 (Diff >= +0.30b)
+      🔴 ÉCARTÉ      : Si au moins un critère physique éliminatoire n'est pas rempli.
+    Score M3 PRO / 100 :
+      - A. Différentiel Buts MT2 - MT1 (45 pts max)
+      - B. Fréquence MT2 (35 pts max)
+      - C. Forme Récente 10 vs 20 (20 pts max)
     """
     rec_h = m.get("recent_h_dom_20") or m.get("recent_h_dom", [])
     rec_a = m.get("recent_a_ext_20") or m.get("recent_a_ext", [])
@@ -454,7 +431,7 @@ def evaluate_m3_half_stats(m, scoring_only=False):
     st_ext_10 = _calc_team_half_stats(rec_a[:10])
 
     reasons = []
-    # Filtre 1 : Échantillon >= 15 matchs exploitables par équipe
+    # Filtre 1 : Échantillon >= 10 matchs exploitables par équipe
     if st_dom["n"] < MIN_SAMPLE_M3:
         reasons.append(f"Échantillon Dom {st_dom['n']} < {MIN_SAMPLE_M3}")
     if st_ext["n"] < MIN_SAMPLE_M3:
@@ -466,21 +443,15 @@ def evaluate_m3_half_stats(m, scoring_only=False):
     comb_avg2 = round((st_dom["avg_mt2"] + st_ext["avg_mt2"]) / 2.0, 2)
     comb_diff = round(comb_avg2 - comb_avg1, 2)
 
-    # Filtre 2 : MT2 combiné >= 58%
-    if comb_mt2 < MIN_COMB_MT2_PCT_M3:
-        reasons.append(f"MT2 combiné {comb_mt2}% < {MIN_COMB_MT2_PCT_M3}%")
-
-    # Filtre 3 : MT2 individuel Dom >= 50% et Ext >= 50%
-    if st_dom["pct_mt2"] < MIN_INDIV_MT2_PCT_M3:
-        reasons.append(f"MT2 Dom {st_dom['pct_mt2']}% < {MIN_INDIV_MT2_PCT_M3}%")
-    if st_ext["pct_mt2"] < MIN_INDIV_MT2_PCT_M3:
-        reasons.append(f"MT2 Ext {st_ext['pct_mt2']}% < {MIN_INDIV_MT2_PCT_M3}%")
-
-    # Filtre 4 : Différentiel buts MT2 - MT1 >= +0.25
+    # Filtre 2 : Différentiel moyen de buts >= +0.30 but (Le Verrou physique)
     if comb_diff < MIN_DIFF_GOALS_M3:
         reasons.append(f"Diff buts {comb_diff:+.2f} < +{MIN_DIFF_GOALS_M3:.2f}")
 
-    # Filtre 5 : Taux égalité combiné <= 30%
+    # Filtre 3 : MT2 combiné >= 50%
+    if comb_mt2 < MIN_COMB_MT2_PCT_M3:
+        reasons.append(f"MT2 combiné {comb_mt2}% < {MIN_COMB_MT2_PCT_M3}%")
+
+    # Filtre 4 : Taux égalité combiné <= 35%
     if comb_tie > MAX_TIE_PCT_M3:
         reasons.append(f"Égalité combinée {comb_tie}% > {MAX_TIE_PCT_M3}%")
 
@@ -490,57 +461,45 @@ def evaluate_m3_half_stats(m, scoring_only=False):
     comb_mt2_10 = round((st_dom_10["pct_mt2"] + st_ext_10["pct_mt2"]) / 2.0, 1) if (st_dom_10["n"] >= 5 and st_ext_10["n"] >= 5) else comb_mt2
     trend = round(comb_mt2_10 - comb_mt2, 1)
 
-    # ── CALCUL DU SCORE M3 / 100 ──────────────────────────────────────────────
-    # A. Fréquence MT2 (40 pts max)
-    if comb_mt2 >= 75.0:   pts_a = 40
-    elif comb_mt2 >= 70.0: pts_a = 34
-    elif comb_mt2 >= 67.0: pts_a = 28
-    elif comb_mt2 >= 62.0: pts_a = 22
-    elif comb_mt2 >= 58.0: pts_a = 16
-    elif comb_mt2 >= 55.0: pts_a = 10
-    else:                  pts_a = max(0, round((comb_mt2 / 55.0) * 8))
+    # ── CALCUL DU SCORE M3 PRO / 100 ──────────────────────────────────────────
+    # A. Différentiel de buts MT2 - MT1 (45 pts max)
+    if comb_diff >= 1.00:   pts_a = 45
+    elif comb_diff >= 0.80: pts_a = 39
+    elif comb_diff >= 0.60: pts_a = 33
+    elif comb_diff >= 0.45: pts_a = 26
+    elif comb_diff >= 0.35: pts_a = 20
+    elif comb_diff >= 0.30: pts_a = 15
+    else:                   pts_a = max(0, round((comb_diff / 0.30) * 10))
 
-    # B. Différentiel de buts MT2 / MT1 (25 pts max)
-    if comb_diff >= 1.00:   pts_b = 25
-    elif comb_diff >= 0.80: pts_b = 21
-    elif comb_diff >= 0.60: pts_b = 17
-    elif comb_diff >= 0.45: pts_b = 13
-    elif comb_diff >= 0.35: pts_b = 9
-    elif comb_diff >= 0.25: pts_b = 5
-    else:                   pts_b = 0
+    # B. Fréquence MT2 combinée (35 pts max)
+    if comb_mt2 >= 70.0:   pts_b = 35
+    elif comb_mt2 >= 65.0: pts_b = 30
+    elif comb_mt2 >= 60.0: pts_b = 25
+    elif comb_mt2 >= 55.0: pts_b = 20
+    elif comb_mt2 >= 50.0: pts_b = 14
+    else:                  pts_b = max(0, round((comb_mt2 / 50.0) * 10))
 
-    # C. Concordance Domicile / Extérieur (20 pts max)
-    gap = abs(st_dom["pct_mt2"] - st_ext["pct_mt2"])
-    if gap <= 3.0:    pts_c = 20
-    elif gap <= 6.0:  pts_c = 17
-    elif gap <= 10.0: pts_c = 14
-    elif gap <= 15.0: pts_c = 10
-    elif gap <= 20.0: pts_c = 6
-    elif gap <= 25.0: pts_c = 3
-    else:             pts_c = 0
+    # C. Forme Récente & Dynamique (20 pts max)
+    if trend >= 10.0:    pts_c = 20
+    elif trend >= 5.0:   pts_c = 17
+    elif trend >= 0.0:   pts_c = 14   # Neutre ou positif
+    elif trend >= -5.0:  pts_c = 10
+    elif trend >= -10.0: pts_c = 6
+    else:                pts_c = 2
 
-    # D. Forme Récente (10 derniers vs 20) (15 pts max)
-    if trend >= 10.0:    pts_d = 15
-    elif trend >= 5.0:   pts_d = 13
-    elif trend >= 1.0:   pts_d = 10
-    elif trend >= -2.0:  pts_d = 8   # Neutre
-    elif trend >= -6.0:  pts_d = 5
-    elif trend >= -10.0: pts_d = 3
-    else:                pts_d = 1
+    total_score = max(0, min(100, pts_a + pts_b + pts_c))
 
-    total_score = max(0, min(100, pts_a + pts_b + pts_c + pts_d))
-
-    # Badges M3 V1.1
+    # Badges M3 PRO
     if len(reasons) == 0:
         is_retained = True
-        if comb_mt2 >= PREMIUM_COMB_MT2_MIN and st_dom["pct_mt2"] >= PREMIUM_INDIV_MT2_MIN and st_ext["pct_mt2"] >= PREMIUM_INDIV_MT2_MIN and comb_diff >= PREMIUM_DIFF_GOALS_MIN:
+        if total_score >= PREMIUM_SCORE_M3_MIN and comb_diff >= 0.60 and comb_mt2 >= 55.0:
             badge = "💎 PREMIUM"
             badge_rank = 3
-        elif comb_mt2 >= BON_COMB_MT2_MIN:
-            badge = "🟢 BON"
+        elif total_score >= SOLIDE_SCORE_M3_MIN:
+            badge = "🟢 SOLIDE"
             badge_rank = 2
         else:
-            badge = "🟡 JOUABLE"
+            badge = "🟡 OPPORTUNITÉ"
             badge_rank = 1
     else:
         is_retained = False
@@ -576,7 +535,7 @@ def evaluate_m3_half_stats(m, scoring_only=False):
         "pts_a": pts_a,
         "pts_b": pts_b,
         "pts_c": pts_c,
-        "pts_d": pts_d,
+        "pts_d": 0,
         "cote_mt2": cote_mt2,
         "market": "HALF_MT2",
         "market_label": "⚡ 2e MT plus prolifique"
@@ -585,15 +544,11 @@ def evaluate_m3_half_stats(m, scoring_only=False):
 
 def _build_m3_pairs(candidates, cote_min=SWEET_SPOT_M3_MIN, cote_max=SWEET_SPOT_M3_MAX, used_teams=None):
     """
-    Appairage des combinés M3 (2 matchs) selon la hiérarchie stricte :
-      1. PREMIUM + PREMIUM (50 000 pts)
-      2. PREMIUM + BON (40 000 pts)
-      3. BON + BON (30 000 pts)
-      4. PREMIUM + JOUABLE (20 000 pts)
-      5. BON + JOUABLE (10 000 pts si nécessaire)
-      ⛔ JOUABLE + JOUABLE interdit.
-      ⛔ Match ÉCARTÉ interdit.
-    Sweet spot prioritaire [3.50, 4.50], tolérance élargie [3.20, 5.00].
+    Appairage fluide des combinés M3 PRO (2 matchs) :
+      - Association par session sportive quotidienne (06h - 06h).
+      - Sweet Spot de cote combinée prioritaire [3.40, 4.60] (tolérance [3.20, 4.80]).
+      - Tous les matchs qualifiés (💎 PREMIUM, 🟢 SOLIDE, 🟡 OPPORTUNITÉ) sont combinables.
+      - Maximisation conjointe de la cote Sweet Spot et du Score M3 total.
     """
     pool = [m for m in candidates if m.get("m3_info", {}).get("is_retained")]
     pool.sort(key=lambda m: (m.get("m3_info", {}).get("badge_rank", 0), m.get("m3_info", {}).get("score_m3", 0)), reverse=True)
@@ -602,8 +557,8 @@ def _build_m3_pairs(candidates, cote_min=SWEET_SPOT_M3_MIN, cote_max=SWEET_SPOT_
     used_t = set(used_teams) if used_teams else set()
     pairs = []
 
-    # 1er passage : Sweet Spot strict [3.50, 4.50]
-    # 2nd passage : Sweet Spot élargi [3.20, 5.00] si besoin
+    # 1er passage : Sweet Spot strict [3.40, 4.60]
+    # 2nd passage : Sweet Spot tolérance élargie [3.20, 4.80]
     for target_min, target_max in [(cote_min, cote_max), (MIN_COTE_COMBO_M3, MAX_COTE_COMBO_M3)]:
         for i, m1 in enumerate(pool):
             if id(m1) in used: continue
@@ -612,7 +567,7 @@ def _build_m3_pairs(candidates, cote_min=SWEET_SPOT_M3_MIN, cote_max=SWEET_SPOT_
 
             fi1 = m1.get("m3_info", {})
             o1 = fi1.get("cote_mt2", 1.95)
-            sc1 = fi1.get("score_m3", 58)
+            sc1 = fi1.get("score_m3", 50)
 
             best_partner = None
             best_affinity = -1
@@ -628,12 +583,10 @@ def _build_m3_pairs(candidates, cote_min=SWEET_SPOT_M3_MIN, cote_max=SWEET_SPOT_
                 if d1 and d2 and d1 != d2: continue
 
                 weight = _m3_pair_priority(m1, m2)
-                if weight < 0:
-                    continue  # Interdit (ex: JOUABLE + JOUABLE)
 
                 fi2 = m2.get("m3_info", {})
                 o2 = fi2.get("cote_mt2", 1.95)
-                sc2 = fi2.get("score_m3", 58)
+                sc2 = fi2.get("score_m3", 50)
 
                 co = round(o1 * o2, 2)
                 if target_min <= co <= target_max:
@@ -2187,7 +2140,7 @@ def main():
             seen_m3_matches.add(match_key)
 
     retained_m3.sort(key=lambda x: x.get("dt_obj", now_utc))
-    print(f"⚡ M3 Sélections Retenues (2e MT Prolifique V1.1, MT2 >= {MIN_COMB_MT2_PCT_M3}%) : {len(retained_m3)}")
+    print(f"⚡ M3 Sélections Retenues (2e MT Prolifique PRO, Diff >= +{MIN_DIFF_GOALS_M3:.2f}b, MT2 >= {MIN_COMB_MT2_PCT_M3}%) : {len(retained_m3)}")
 
 
 
@@ -2597,15 +2550,15 @@ def main():
         for m in reserve_m3:
             fi3 = m.get("m3_info", {})
             sc3 = fi3.get("score_m3", 0)
-            b3 = fi3.get("badge", "🟡 JOUABLE")
+            b3 = fi3.get("badge", "🟡 OPPORTUNITÉ")
             c_mt2 = fi3.get("cote_mt2", 1.95)
             h_st = fi3.get("home_stats", {})
             a_st = fi3.get("away_stats", {})
-            m3_res_rows += f'<li style="margin-bottom:6px;"><b>{m.get("date_str","")}</b> | {m.get("league","")} : <b>{m.get("dom","")} vs {m.get("ext","")}</b> &rarr; <b>{b3}</b> @{c_mt2:.2f} — Score M3 : <b style="color:#b45309;">{sc3}/100</b> (MT2: {fi3.get("comb_mt2",0):.1f}% [D:{h_st.get("pct_mt2",0):.0f}% / E:{a_st.get("pct_mt2",0):.0f}%] · Diff: {fi3.get("comb_diff",0):+.2f}b · Nuls: {fi3.get("comb_tie",0):.0f}% · Tendance: {fi3.get("trend",0):+.1f}%)</li>'
+            m3_res_rows += f'<li style="margin-bottom:6px;"><b>{m.get("date_str","")}</b> | {m.get("league","")} : <b>{m.get("dom","")} vs {m.get("ext","")}</b> &rarr; <b>{b3}</b> @{c_mt2:.2f} — Score M3 : <b style="color:#b45309;">{sc3}/100</b> (Diff: <b>{fi3.get("comb_diff",0):+.2f}b</b> · MT2: {fi3.get("comb_mt2",0):.1f}% [D:{h_st.get("pct_mt2",0):.0f}% / E:{a_st.get("pct_mt2",0):.0f}%] · Nuls: {fi3.get("comb_tie",0):.0f}% · Tendance: {fi3.get("trend",0):+.1f}%)</li>'
         m3_reserve_html = f'''
         <div style="background:#fffdf5; border:1px solid #fde68a; border-radius:8px; padding:10px 12px; margin-top:12px; font-size:11px; color:#92400e;">
-          <b>🟡 MATCHS EN RÉSERVE M3 ({len(reserve_m3)} match(s) qualifiés non combinés) :</b>
-          <div style="color:#64748b; font-size:10px; margin:2px 0 6px 0;">Sélections ayant validé les 5 filtres durs V1.1 mais en attente d'un partenaire compatible dans le Sweet Spot [3.50 - 4.50].</div>
+          <b>🟡 MATCHS EN RÉSERVE M3 PRO ({len(reserve_m3)} match(s) qualifiés non combinés) :</b>
+          <div style="color:#64748b; font-size:10px; margin:2px 0 6px 0;">Sélections validées M3 PRO mais en attente d'un partenaire compatible dans le Sweet Spot [3.40 - 4.60].</div>
           <ul style="margin:0; padding-left:16px;">{m3_res_rows}</ul>
         </div>
         '''
@@ -2615,8 +2568,8 @@ def main():
         for m in retained_m3:
             fi3 = m.get("m3_info", {})
             sc3 = fi3.get("score_m3", 0)
-            badge3 = fi3.get("badge", "🟡 JOUABLE")
-            sc_bg3 = "#15803d" if "PREMIUM" in badge3 else ("#0284c7" if "BON" in badge3 else "#b45309")
+            badge3 = fi3.get("badge", "🟡 OPPORTUNITÉ")
+            sc_bg3 = "#15803d" if "PREMIUM" in badge3 else ("#0284c7" if "SOLIDE" in badge3 else "#b45309")
             cote_mt2_v = fi3.get("cote_mt2", 1.95)
             h_st = fi3.get("home_stats", {})
             a_st = fi3.get("away_stats", {})
@@ -2643,10 +2596,10 @@ def main():
                     </span>
                 </div>
                 <div style="background:#fefce8; border:1px solid #fef08a; border-radius:6px; padding:8px 10px; font-size:11px; color:#334155; line-height:1.6;">
-                    <div><b>📊 Moyennes combinées V1.1</b> : MT2 <b>{fi3.get('comb_mt2',0):.1f}%</b> (seuil &ge; 55%) &bull; Diff MT2−MT1 : <b>{fi3.get('comb_diff',0):+.2f} but(s)</b> (seuil &ge; +0.25) &bull; Nuls MT1=MT2 : <b>{fi3.get('comb_tie',0):.1f}%</b> (seuil &le; 30%)</div>
-                    <div style="margin-top:4px;"><b>🏠 {m.get('dom','')} (Dom. {h_st.get('n_matches',0)}m)</b> : 20m: MT2 {h_st.get('pct_mt2',0):.1f}% &bull; 10m: {h_st10.get('pct_mt2',0):.1f}% (tendance {fi3.get('trend_dom',0):+.1f}%) &bull; Moy. MT1: {h_st.get('avg_mt1',0):.2f} | MT2: {h_st.get('avg_mt2',0):.2f}</div>
-                    <div><b>✈️ {m.get('ext','')} (Ext. {a_st.get('n_matches',0)}m)</b> : 20m: MT2 {a_st.get('pct_mt2',0):.1f}% &bull; 10m: {a_st10.get('pct_mt2',0):.1f}% (tendance {fi3.get('trend_ext',0):+.1f}%) &bull; Moy. MT1: {a_st.get('avg_mt1',0):.2f} | MT2: {a_st.get('avg_mt2',0):.2f}</div>
-                    <div style="margin-top:4px; font-size:10px; color:#78350f;"><b>Score 100 pts</b> : Fréq MT2: <b>{fi3.get('pts_a',0)}/40</b> &bull; Diff Buts: <b>{fi3.get('pts_b',0)}/25</b> &bull; Concordance: <b>{fi3.get('pts_c',0)}/20</b> &bull; Forme 10v20 ({fi3.get('trend',0):+.1f}%): <b>{fi3.get('pts_d',0)}/15</b></div>
+                    <div><b>📊 Indicateurs Physiques M3 PRO</b> : Diff MT2−MT1 : <b style="color:#b45309;">{fi3.get('comb_diff',0):+.2f} but(s)</b> (seuil &ge; +0.30) &bull; MT2 <b>{fi3.get('comb_mt2',0):.1f}%</b> (seuil &ge; 50%) &bull; Nuls MT1=MT2 : <b>{fi3.get('comb_tie',0):.1f}%</b></div>
+                    <div style="margin-top:4px;"><b>🏠 {m.get('dom','')} (Dom. {h_st.get('n_matches',0)}m)</b> : MT2 {h_st.get('pct_mt2',0):.1f}% &bull; 10m: {h_st10.get('pct_mt2',0):.1f}% (tendance {fi3.get('trend_dom',0):+.1f}%) &bull; Moy. MT1: {h_st.get('avg_mt1',0):.2f} | MT2: {h_st.get('avg_mt2',0):.2f}</div>
+                    <div><b>✈️ {m.get('ext','')} (Ext. {a_st.get('n_matches',0)}m)</b> : MT2 {a_st.get('pct_mt2',0):.1f}% &bull; 10m: {a_st10.get('pct_mt2',0):.1f}% (tendance {fi3.get('trend_ext',0):+.1f}%) &bull; Moy. MT1: {a_st.get('avg_mt1',0):.2f} | MT2: {a_st.get('avg_mt2',0):.2f}</div>
+                    <div style="margin-top:4px; font-size:10px; color:#78350f;"><b>Barème M3 PRO</b> : Diff Buts: <b>{fi3.get('pts_a',0)}/45</b> &bull; Fréq MT2: <b>{fi3.get('pts_b',0)}/35</b> &bull; Dynamique 10v20 ({fi3.get('trend',0):+.1f}%): <b>{fi3.get('pts_c',0)}/20</b></div>
                 </div>
             </div>'''
     else:
@@ -2836,7 +2789,7 @@ def main():
               <tr>
                 <td style="padding:0 3px;"><div style="background:#dbeafe; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#1d4ed8;">{nb_retained}</div><div style="font-size:10px; font-weight:700; color:#1d4ed8;">M1 OPTIMISÉ</div><div style="font-size:9px; color:#3b82f6;">Score Dom ≥ 55</div></div></td>
                 <td style="padding:0 3px;"><div style="background:#ede9fe; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#6d28d9;">{len(retained_m2)}</div><div style="font-size:10px; font-weight:700; color:#6d28d9;">M2 MARCHÉ</div><div style="font-size:9px; color:#7c3aed;">Dom &lt; 2.00 &amp; O2.5</div></div></td>
-                <td style="padding:0 3px;"><div style="background:#fef3c7; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#b45309;">{len(retained_m3)}</div><div style="font-size:10px; font-weight:700; color:#b45309;">M3 2e MI-TEMPS</div><div style="font-size:9px; color:#d97706;">MT2 ≥ 55%</div></div></td>
+                <td style="padding:0 3px;"><div style="background:#fef3c7; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#b45309;">{len(retained_m3)}</div><div style="font-size:10px; font-weight:700; color:#b45309;">M3 2e MI-TEMPS</div><div style="font-size:9px; color:#d97706;">Diff &ge; +0.30b</div></div></td>
                 <td style="padding:0 3px;"><div style="background:#f0fdf4; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#15803d;">{nb_scanned}</div><div style="font-size:10px; font-weight:700; color:#15803d;">MATCHS SCANNÉS</div><div style="font-size:9px; color:#16a34a;">Unibet France</div></div></td>
               </tr>
             </table>
@@ -2894,11 +2847,11 @@ def main():
           <!-- SECTION COMBINÉS M3 (2e MI-TEMPS LA PLUS PROLIFIQUE) -->
           <div style="padding:14px 16px 8px 16px; background:#fffbeb; border-top:2px solid #fde68a;">
             <div style="font-size:14px; font-weight:900; color:#0f172a; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-              <span>⚡ COMBINÉS M3 — 2e MI-TEMPS LA PLUS PROLIFIQUE</span>
+              <span>⚡ COMBINÉS M3 PRO — 2e MI-TEMPS LA PLUS PROLIFIQUE</span>
               <span style="font-size:11px; background:#d97706; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mise : 3,00 € par ticket</span>
             </div>
             <div style="font-size:11px; color:#64748b; margin-bottom:10px;">
-              Marché Unibet <b>« 2nde mi-temps la plus prolifique »</b> (cote combinée Sweet Spot [3.50 - 4.50]). Sélection validée sur l'historique 15–20 matchs récents Dom/Ext AdamChoi sous 5 filtres durs V1.1.
+              Marché Unibet <b>« 2nde mi-temps la plus prolifique »</b> (Sweet Spot [3.40 - 4.60]). Sélection basée sur le différentiel physique réel de buts (Verrou MT2 &ge; +0.30 but et MT2 &ge; 50%).
             </div>
             {m3_combos_html}
             {m3_reserve_html}
@@ -3197,12 +3150,12 @@ def main():
         cote_fav = fi.get("fav_odds", 0)
         diff_goals = (fi.get("avg_fav_gf",0) - fi.get("avg_fav_ga",0)) + (fi.get("avg_dog_ga",0) - fi.get("avg_dog_gf",0))
 
-        # Cellules M3 V1.1
+        # Cellules M3 PRO
         if fi3:
             sc3 = fi3.get("score_m3", 0)
             badge3 = fi3.get("badge", "🔴 ÉCARTÉ")
-            sc_col3 = "#15803d" if "PREMIUM" in badge3 else ("#0284c7" if "BON" in badge3 else ("#b45309" if "JOUABLE" in badge3 else "#64748b"))
-            sc_bg3  = "#dcfce7" if "PREMIUM" in badge3 else ("#e0f2fe" if "BON" in badge3 else ("#fef3c7" if "JOUABLE" in badge3 else "#f1f5f9"))
+            sc_col3 = "#15803d" if "PREMIUM" in badge3 else ("#0284c7" if "SOLIDE" in badge3 else ("#b45309" if "OPPORTUNITÉ" in badge3 else "#64748b"))
+            sc_bg3  = "#dcfce7" if "PREMIUM" in badge3 else ("#e0f2fe" if "SOLIDE" in badge3 else ("#fef3c7" if "OPPORTUNITÉ" in badge3 else "#f1f5f9"))
             c_mt2 = fi3.get("cote_mt2")
             c_mt2_str = f"@{c_mt2:.2f}" if c_mt2 else "N/D"
             h_st = fi3.get("home_stats", {})
@@ -3217,9 +3170,9 @@ def main():
             m3_cell = (
                 f'<span style="background:{sc_bg3};color:{sc_col3};font-weight:800;font-size:11px;padding:2px 6px;border-radius:4px;">{badge3} · {sc3}/100</span><br>'
                 f'<span style="font-size:9px;color:#334155;line-height:1.3;display:inline-block;margin-top:2px;">'
-                f'<b>MT2: {fi3.get("comb_mt2",0):.1f}%</b> (D:{h_st.get("pct_mt2",0):.0f}% [{h_st.get("n_matches",0)}m] / E:{a_st.get("pct_mt2",0):.0f}% [{a_st.get("n_matches",0)}m])<br>'
+                f'<b>Diff: {fi3.get("comb_diff",0):+.2f}b</b> · MT2: {fi3.get("comb_mt2",0):.1f}% (D:{h_st.get("pct_mt2",0):.0f}% / E:{a_st.get("pct_mt2",0):.0f}%)<br>'
                 f'10m: {fi3.get("comb_mt2_10",0):.1f}% ({fi3.get("trend",0):+.1f}%) · Nul: {fi3.get("comb_tie",0):.0f}%<br>'
-                f'Diff: {fi3.get("comb_diff",0):+.2f}b · <b style="color:#0f172a;">{c_mt2_str}</b>'
+                f'<b style="color:#0f172a;">{c_mt2_str}</b>'
                 f'</span>'
             )
         else:
@@ -3253,7 +3206,7 @@ h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
 </style></head>
 <body>
 <h1>📊 RAPPORT COMPLET ADAMCHOI — {len(all_scanned_scored)} MATCHS SCANNÉS</h1>
-<p>Généré le {now_str} · Tri par score M1 décroissant · M1 : Combinable ≥ {MIN_SCORE_FAV_COMBO}/100, Réserve {MIN_SCORE_FAV_RESERVE}–{MIN_SCORE_FAV_COMBO-1}/100 &bull; M3 : 2e MT Prolifique V1.1 (MT2 ≥ {MIN_COMB_MT2_PCT_M3}% · 5 filtres durs)</p>
+<p>Généré le {now_str} · Tri par score M1 décroissant · M1 : Combinable ≥ {MIN_SCORE_FAV_COMBO}/100, Réserve {MIN_SCORE_FAV_RESERVE}–{MIN_SCORE_FAV_COMBO-1}/100 &bull; M3 : 2e MT Prolifique PRO (Diff &ge; +0.30b · MT2 &ge; 50%)</p>
 <table>
 <thead><tr>
   <th>Heure</th><th>Match &amp; Ligue</th><th>Favori (Cote)</th>
