@@ -29725,5 +29725,30 @@
     "result": null,
     "won_p2": null,
     "m3": null
+  },
+  {
+    "match_id": "3380017",
+    "timestamp_utc": "2026-09-14T16:04:41.905899+00:00",
+    "match": "Boyaca Chico vs Alianza FC",
+    "league": "Colombie • D1 Colombie",
+    "date_str": "Mer. 16/09 à 02h30",
+    "fav_team": "Boyaca Chico",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 63,
+      "pct_fav_success": 80,
+      "pct_fav_lead2": 60
+    },
+    "odds": {
+      "fav_odds": 2.1,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null,
+    "m3": null
   }
 ]
