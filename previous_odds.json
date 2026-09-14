@@ -1,15 +1,5 @@
 {
   "favs": {
-    "3376867": {
-      "match": "Chivas - UNAM Pumas",
-      "league": "Mexique • D1 Mexique",
-      "date_str": "Lun. 14/09 à 03h07",
-      "fav_team": "Chivas",
-      "fav_odds": 1.46,
-      "p2_fav_odds": null,
-      "fav_score": 53,
-      "fav_badge": "🥉 BRONZE"
-    },
     "3373747": {
       "match": "Dynamo Kiev - Epitsentr",
       "league": "Ukraine • D1 Ukraine",
@@ -65,7 +55,7 @@
       "league": "Israel • D1 Israel",
       "date_str": "Lun. 14/09 à 19h30",
       "fav_team": "Mac.Tel Aviv",
-      "fav_odds": 2.0,
+      "fav_odds": 1.95,
       "p2_fav_odds": null,
       "fav_score": 51,
       "fav_badge": "🥉 BRONZE"
@@ -115,7 +105,7 @@
       "league": "Equateur • D1 Equateur",
       "date_str": "Mar. 15/09 à 02h00",
       "fav_team": "CDUC Ecuador",
-      "fav_odds": 1.38,
+      "fav_odds": 1.35,
       "p2_fav_odds": null,
       "fav_score": 64,
       "fav_badge": "🥉 BRONZE"
@@ -125,19 +115,9 @@
       "league": "Argentine • D1 Argentine",
       "date_str": "Mar. 15/09 à 02h15",
       "fav_team": "Instituto Atl.",
-      "fav_odds": 1.34,
+      "fav_odds": 1.33,
       "p2_fav_odds": null,
-      "fav_score": 71,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3370811": {
-      "match": "America - Depor.Pasto",
-      "league": "Colombie • D1 Colombie",
-      "date_str": "Mar. 15/09 à 03h00",
-      "fav_team": "America",
-      "fav_odds": 1.3,
-      "p2_fav_odds": null,
-      "fav_score": 68,
+      "fav_score": 72,
       "fav_badge": "🥈 ARGENT"
     },
     "3378998": {
@@ -145,10 +125,20 @@
       "league": "Mexique • D1 Mexique",
       "date_str": "Mar. 15/09 à 03h00",
       "fav_team": "FC Leon",
-      "fav_odds": 1.79,
+      "fav_odds": 1.8,
       "p2_fav_odds": null,
       "fav_score": 56,
       "fav_badge": "🥉 BRONZE"
+    },
+    "3370811": {
+      "match": "America - Depor.Pasto",
+      "league": "Colombie • D1 Colombie",
+      "date_str": "Mar. 15/09 à 03h00",
+      "fav_team": "America",
+      "fav_odds": 1.33,
+      "p2_fav_odds": null,
+      "fav_score": 68,
+      "fav_badge": "🥈 ARGENT"
     }
   }
 }
