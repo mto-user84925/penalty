@@ -1,5 +1,5 @@
 # ⚽ SÉLECTION OFFICIELLE UNIBET — +2 GAGNANT (MÈNE DE 2 BUTS OU GAGNE)
-**Généré le** : 14/09/2026 à 09:00 UTC  |  **Matchs scannés** : 72  |  **Favoris analysés** : 23  |  **Favoris retenus** : 16
+**Généré le** : 14/09/2026 à 09:15 UTC  |  **Matchs scannés** : 72  |  **Favoris analysés** : 23  |  **Favoris retenus** : 16
 **Règle d'or Unibet** : Si l'équipe mène de 2 buts (2-0, 3-1, 4-2...) à n'importe quel moment du match, le pari est PAYÉ GAGNANT immédiatement (même en cas d'égalisation à 2-2 ou défaite 2-3). Si l'équipe gagne simplement 1-0 ou 2-1, le pari est également gagnant à la fin du match.
 
 ## 📅 Planning Chronologique des Favoris Retenus
@@ -15,7 +15,7 @@
 | Lun. 14/09 à 21h00 | Espagne • Laliga | **Villarreal vs Betis Séville** | **Villarreal** | **@1.90 (1N2)** | **59/100** (🥉 BRONZE) | **70%** |
 | Lun. 14/09 à 21h45 | Portugal • Liga Portugal | **Braga vs Estoril Praia** | **Braga** | **@1.32 (1N2)** | **60/100** (🥉 BRONZE) | **50%** |
 | Mar. 15/09 à 01h00 | Bresil • D1 Bresil | **Bahia Salvador vs Remo PA** | **Bahia Salvador** | **@1.36 (1N2)** | **56/100** (🥉 BRONZE) | **40%** |
-| Mar. 15/09 à 02h00 | Equateur • D1 Equateur | **CDUC Ecuador vs Orense SC** | **CDUC Ecuador** | **@1.30 (1N2)** | **65/100** (🥈 ARGENT) | **60%** |
+| Mar. 15/09 à 02h00 | Equateur • D1 Equateur | **CDUC Ecuador vs Orense SC** | **CDUC Ecuador** | **@1.32 (1N2)** | **65/100** (🥈 ARGENT) | **60%** |
 | Mar. 15/09 à 02h15 | Argentine • D1 Argentine | **Instituto Atl. vs Estudiantes Rí** | **Instituto Atl.** | **@1.35 (1N2)** | **71/100** (🥈 ARGENT) | **70%** |
 | Mar. 15/09 à 03h00 | Colombie • D1 Colombie | **America vs Depor.Pasto** | **America** | **@1.30 (1N2)** | **68/100** (🥈 ARGENT) | **70%** |
 | Mar. 15/09 à 03h00 | Mexique • D1 Mexique | **FC Leon vs Atl. San Luis** | **FC Leon** | **@1.80 (1N2)** | **56/100** (🥉 BRONZE) | **60%** |
