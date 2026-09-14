@@ -39,6 +39,7 @@ BON_COMB_MT2_MAX        = 66.99
 
 JOUABLE_COMB_MT2_MIN    = 58.0  # MT2 combiné entre 58% et 61.99%
 JOUABLE_COMB_MT2_MAX    = 61.99
+MIN_SCORE_M3_RETAINED   = 50    # Seuil pour compatibilité affichage
 
 # Sweet Spot Cotes Combinés M3 V1.1 : configurable autour de [3.50 - 4.50]
 SWEET_SPOT_M3_MIN       = 3.50
@@ -2186,7 +2187,7 @@ def main():
             seen_m3_matches.add(match_key)
 
     retained_m3.sort(key=lambda x: x.get("dt_obj", now_utc))
-    print(f"⚡ M3 Sélections Retenues (2e MT Prolifique, Score >= {MIN_SCORE_M3_RETAINED}) : {len(retained_m3)}")
+    print(f"⚡ M3 Sélections Retenues (2e MT Prolifique V1.1, MT2 >= {MIN_COMB_MT2_PCT_M3}%) : {len(retained_m3)}")
 
 
 
@@ -3252,7 +3253,7 @@ h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
 </style></head>
 <body>
 <h1>📊 RAPPORT COMPLET ADAMCHOI — {len(all_scanned_scored)} MATCHS SCANNÉS</h1>
-<p>Généré le {now_str} · Tri par score M1 décroissant · M1 : Combinable ≥ {MIN_SCORE_FAV_COMBO}/100, Réserve {MIN_SCORE_FAV_RESERVE}–{MIN_SCORE_FAV_COMBO-1}/100 &bull; M3 : 2e MT Prolifique ≥ {MIN_SCORE_M3_RETAINED}/100 (5 filtres durs)</p>
+<p>Généré le {now_str} · Tri par score M1 décroissant · M1 : Combinable ≥ {MIN_SCORE_FAV_COMBO}/100, Réserve {MIN_SCORE_FAV_RESERVE}–{MIN_SCORE_FAV_COMBO-1}/100 &bull; M3 : 2e MT Prolifique V1.1 (MT2 ≥ {MIN_COMB_MT2_PCT_M3}% · 5 filtres durs)</p>
 <table>
 <thead><tr>
   <th>Heure</th><th>Match &amp; Ligue</th><th>Favori (Cote)</th>
