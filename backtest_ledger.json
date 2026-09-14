@@ -29614,5 +29614,70 @@
     "selected_markets": [],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3379161",
+    "timestamp_utc": "2026-09-14T08:03:43.100903+00:00",
+    "match": "Middlesbrough vs Millwall",
+    "league": "Angleterre • Championship",
+    "date_str": "Mar. 15/09 à 20h45",
+    "fav_team": "Middlesbrough",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 47,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.49,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3378338",
+    "timestamp_utc": "2026-09-14T08:03:43.100903+00:00",
+    "match": "Motherwell vs Aberdeen",
+    "league": "Ecosse • D1 Ecosse",
+    "date_str": "Mar. 15/09 à 20h45",
+    "fav_team": "Motherwell",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 48,
+      "pct_fav_success": 40,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.73,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3379300",
+    "timestamp_utc": "2026-09-14T08:03:43.100903+00:00",
+    "match": "Fram Reykjavik vs Breidablik",
+    "league": "Islande • D1 Islande",
+    "date_str": "Mar. 15/09 à 21h15",
+    "fav_team": "Fram Reykjavik",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 53,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 50
+    },
+    "odds": {
+      "fav_odds": 1.51,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
