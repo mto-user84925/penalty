@@ -1,15 +1,5 @@
 {
   "favs": {
-    "3379727": {
-      "match": "FC Larne - Cliftonville",
-      "league": "Irlande Du Nord • D1 Irlande Nord",
-      "date_str": "Mar. 15/09 à 20h45",
-      "fav_team": "FC Larne",
-      "fav_odds": 1.51,
-      "p2_fav_odds": null,
-      "fav_score": 60,
-      "fav_badge": "🥉 BRONZE+"
-    },
     "3378338": {
       "match": "Motherwell - Aberdeen",
       "league": "Ecosse • D1 Ecosse",
@@ -20,12 +10,22 @@
       "fav_score": 67,
       "fav_badge": "🥈 ARGENT"
     },
+    "3379727": {
+      "match": "FC Larne - Cliftonville",
+      "league": "Irlande Du Nord • D1 Irlande Nord",
+      "date_str": "Mar. 15/09 à 20h45",
+      "fav_team": "FC Larne",
+      "fav_odds": 1.52,
+      "p2_fav_odds": null,
+      "fav_score": 60,
+      "fav_badge": "🥉 BRONZE+"
+    },
     "3373031": {
       "match": "Sao Paulo - Boca Juniors",
       "league": "Amerique • Copa Sudamericana",
       "date_str": "Mer. 16/09 à 02h30",
       "fav_team": "Sao Paulo",
-      "fav_odds": 2.1,
+      "fav_odds": 2.15,
       "p2_fav_odds": null,
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"
@@ -45,7 +45,7 @@
       "league": "Lettonie • D1 Lettonie",
       "date_str": "Mer. 16/09 à 18h00",
       "fav_team": "FK Auda",
-      "fav_odds": 1.3,
+      "fav_odds": 1.31,
       "p2_fav_odds": null,
       "fav_score": 55,
       "fav_badge": "🥉 BRONZE+"
