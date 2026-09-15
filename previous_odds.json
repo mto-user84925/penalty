@@ -1,15 +1,5 @@
 {
   "favs": {
-    "3379161": {
-      "match": "Middlesbrough - Millwall",
-      "league": "Angleterre • Championship",
-      "date_str": "Mar. 15/09 à 20h45",
-      "fav_team": "Middlesbrough",
-      "fav_odds": 1.4,
-      "p2_fav_odds": null,
-      "fav_score": 57,
-      "fav_badge": "🥉 BRONZE+"
-    },
     "3378338": {
       "match": "Motherwell - Aberdeen",
       "league": "Ecosse • D1 Ecosse",
@@ -19,6 +9,16 @@
       "p2_fav_odds": null,
       "fav_score": 66,
       "fav_badge": "🥈 ARGENT"
+    },
+    "3379727": {
+      "match": "FC Larne - Cliftonville",
+      "league": "Irlande Du Nord • D1 Irlande Nord",
+      "date_str": "Mar. 15/09 à 20h45",
+      "fav_team": "FC Larne",
+      "fav_odds": 1.54,
+      "p2_fav_odds": null,
+      "fav_score": 59,
+      "fav_badge": "🥉 BRONZE+"
     },
     "3373031": {
       "match": "Sao Paulo - Boca Juniors",
@@ -30,14 +30,24 @@
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"
     },
-    "3380017": {
-      "match": "Boyaca Chico - Alianza FC",
-      "league": "Colombie • D1 Colombie",
-      "date_str": "Mer. 16/09 à 02h30",
-      "fav_team": "Boyaca Chico",
-      "fav_odds": 2.05,
+    "3377651": {
+      "match": "Paide - Parnu JK Vapru",
+      "league": "Estonie • D1 Estonie",
+      "date_str": "Mer. 16/09 à 18h00",
+      "fav_team": "Paide",
+      "fav_odds": 1.4,
       "p2_fav_odds": null,
-      "fav_score": 63,
+      "fav_score": 61,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3375701": {
+      "match": "Man. United - Brighton Hove",
+      "league": "Angleterre • Efl Cup",
+      "date_str": "Mer. 16/09 à 21h00",
+      "fav_team": "Man. United",
+      "fav_odds": 1.74,
+      "p2_fav_odds": null,
+      "fav_score": 55,
       "fav_badge": "🥉 BRONZE+"
     }
   }

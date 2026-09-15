@@ -29798,5 +29798,55 @@
     "result": null,
     "won_p2": null,
     "m3": null
+  },
+  {
+    "match_id": "3377651",
+    "timestamp_utc": "2026-09-15T08:04:36.680887+00:00",
+    "match": "Paide vs Parnu JK Vapru",
+    "league": "Estonie • D1 Estonie",
+    "date_str": "Mer. 16/09 à 18h00",
+    "fav_team": "Paide",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 61,
+      "pct_fav_success": 55,
+      "pct_fav_lead2": 35
+    },
+    "odds": {
+      "fav_odds": 1.4,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null,
+    "m3": null
+  },
+  {
+    "match_id": "3375701",
+    "timestamp_utc": "2026-09-15T08:04:36.680887+00:00",
+    "match": "Man. United vs Brighton Hove",
+    "league": "Angleterre • Efl Cup",
+    "date_str": "Mer. 16/09 à 21h00",
+    "fav_team": "Man. United",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 55,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.74,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null,
+    "m3": null
   }
 ]
