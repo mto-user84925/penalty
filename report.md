@@ -1,5 +1,5 @@
 # ⚽ SÉLECTION OFFICIELLE UNIBET — +2 GAGNANT (MÈNE DE 2 BUTS OU GAGNE)
-**Généré le** : 15/09/2026 à 20:03 UTC  |  **Matchs scannés** : 42  |  **Favoris analysés** : 6  |  **Favoris retenus** : 4
+**Généré le** : 15/09/2026 à 22:04 UTC  |  **Matchs scannés** : 43  |  **Favoris analysés** : 6  |  **Favoris retenus** : 4
 **Règle d'or Unibet** : Si l'équipe mène de 2 buts (2-0, 3-1, 4-2...) à n'importe quel moment du match, le pari est PAYÉ GAGNANT immédiatement (même en cas d'égalisation à 2-2 ou défaite 2-3). Si l'équipe gagne simplement 1-0 ou 2-1, le pari est également gagnant à la fin du match.
 
 ## 📅 Planning Chronologique des Favoris Retenus
