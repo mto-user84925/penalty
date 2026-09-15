@@ -1,31 +1,11 @@
 {
   "favs": {
-    "3376611": {
-      "match": "Bahia Salvador - Remo PA",
-      "league": "Bresil • D1 Bresil",
-      "date_str": "Mar. 15/09 à 01h00",
-      "fav_team": "Bahia Salvador",
-      "fav_odds": 1.36,
-      "p2_fav_odds": null,
-      "fav_score": 62,
-      "fav_badge": "🥉 BRONZE+"
-    },
-    "3370819": {
-      "match": "CDUC Ecuador - Orense SC",
-      "league": "Equateur • D1 Equateur",
-      "date_str": "Mar. 15/09 à 02h00",
-      "fav_team": "CDUC Ecuador",
-      "fav_odds": 1.37,
-      "p2_fav_odds": null,
-      "fav_score": 59,
-      "fav_badge": "🥉 BRONZE+"
-    },
     "3379727": {
       "match": "FC Larne - Cliftonville",
       "league": "Irlande Du Nord • D1 Irlande Nord",
       "date_str": "Mar. 15/09 à 20h45",
       "fav_team": "FC Larne",
-      "fav_odds": 1.58,
+      "fav_odds": 1.56,
       "p2_fav_odds": null,
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"
