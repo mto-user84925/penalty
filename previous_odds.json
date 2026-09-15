@@ -1,13 +1,23 @@
 {
   "favs": {
-    "3379727": {
-      "match": "FC Larne - Cliftonville",
-      "league": "Irlande Du Nord • D1 Irlande Nord",
+    "3379161": {
+      "match": "Middlesbrough - Millwall",
+      "league": "Angleterre • Championship",
       "date_str": "Mar. 15/09 à 20h45",
-      "fav_team": "FC Larne",
-      "fav_odds": 1.53,
+      "fav_team": "Middlesbrough",
+      "fav_odds": 1.45,
       "p2_fav_odds": null,
-      "fav_score": 59,
+      "fav_score": 57,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3380017": {
+      "match": "Boyaca Chico - Alianza FC",
+      "league": "Colombie • D1 Colombie",
+      "date_str": "Mer. 16/09 à 02h30",
+      "fav_team": "Boyaca Chico",
+      "fav_odds": 2.05,
+      "p2_fav_odds": null,
+      "fav_score": 63,
       "fav_badge": "🥉 BRONZE+"
     },
     "3373031": {
