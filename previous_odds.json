@@ -1,15 +1,5 @@
 {
   "favs": {
-    "3378338": {
-      "match": "Motherwell - Aberdeen",
-      "league": "Ecosse • D1 Ecosse",
-      "date_str": "Mar. 15/09 à 20h45",
-      "fav_team": "Motherwell",
-      "fav_odds": 1.74,
-      "p2_fav_odds": null,
-      "fav_score": 66,
-      "fav_badge": "🥈 ARGENT"
-    },
     "3379727": {
       "match": "FC Larne - Cliftonville",
       "league": "Irlande Du Nord • D1 Irlande Nord",
@@ -19,6 +9,16 @@
       "p2_fav_odds": null,
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"
+    },
+    "3378338": {
+      "match": "Motherwell - Aberdeen",
+      "league": "Ecosse • D1 Ecosse",
+      "date_str": "Mar. 15/09 à 20h45",
+      "fav_team": "Motherwell",
+      "fav_odds": 1.74,
+      "p2_fav_odds": null,
+      "fav_score": 66,
+      "fav_badge": "🥈 ARGENT"
     },
     "3373031": {
       "match": "Sao Paulo - Boca Juniors",
@@ -45,9 +45,9 @@
       "league": "Angleterre • Efl Cup",
       "date_str": "Mer. 16/09 à 21h00",
       "fav_team": "Man. United",
-      "fav_odds": 1.74,
+      "fav_odds": 1.7,
       "p2_fav_odds": null,
-      "fav_score": 55,
+      "fav_score": 56,
       "fav_badge": "🥉 BRONZE+"
     }
   }
