@@ -29848,5 +29848,53 @@
     "result": null,
     "won_p2": null,
     "m3": null
+  },
+  {
+    "match_id": "3379577",
+    "timestamp_utc": "2026-09-15T12:04:50.247179+00:00",
+    "match": "FK Auda vs Ogre United",
+    "league": "Lettonie • D1 Lettonie",
+    "date_str": "Mer. 16/09 à 18h00",
+    "fav_team": "FK Auda",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 55,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 60
+    },
+    "odds": {
+      "fav_odds": 1.3,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null,
+    "m3": null
+  },
+  {
+    "match_id": "3379255",
+    "timestamp_utc": "2026-09-15T12:04:50.247179+00:00",
+    "match": "Once Caldas vs DeportesTolima",
+    "league": "Colombie • D1 Colombie",
+    "date_str": "Jeu. 17/09 à 01h15",
+    "fav_team": "Once Caldas",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 52,
+      "pct_fav_success": 58,
+      "pct_fav_lead2": 33
+    },
+    "odds": {
+      "fav_odds": 1.88,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null,
+    "m3": null
   }
 ]
