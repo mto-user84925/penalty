@@ -29775,5 +29775,28 @@
     "result": null,
     "won_p2": null,
     "m3": null
+  },
+  {
+    "match_id": "3378481",
+    "timestamp_utc": "2026-09-15T06:03:44.707663+00:00",
+    "match": "FC Lugano vs Saint Gall",
+    "league": "Suisse • D1 Suisse",
+    "date_str": "Mer. 16/09 à 19h00",
+    "fav_team": "FC Lugano",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 53,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 35
+    },
+    "odds": {
+      "fav_odds": 1.74,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null,
+    "m3": null
   }
 ]
