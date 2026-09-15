@@ -1,25 +1,5 @@
 {
   "favs": {
-    "3378338": {
-      "match": "Motherwell - Aberdeen",
-      "league": "Ecosse • D1 Ecosse",
-      "date_str": "Mar. 15/09 à 20h45",
-      "fav_team": "Motherwell",
-      "fav_odds": 1.72,
-      "p2_fav_odds": null,
-      "fav_score": 67,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3379727": {
-      "match": "FC Larne - Cliftonville",
-      "league": "Irlande Du Nord • D1 Irlande Nord",
-      "date_str": "Mar. 15/09 à 20h45",
-      "fav_team": "FC Larne",
-      "fav_odds": 1.37,
-      "p2_fav_odds": null,
-      "fav_score": 60,
-      "fav_badge": "🥉 BRONZE+"
-    },
     "3373031": {
       "match": "Sao Paulo - Boca Juniors",
       "league": "Amerique • Copa Sudamericana",
@@ -38,6 +18,16 @@
       "fav_odds": 1.41,
       "p2_fav_odds": null,
       "fav_score": 61,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3380208": {
+      "match": "Niedercorn - Racing Union",
+      "league": "Luxembourg • D1 Luxembourg",
+      "date_str": "Mer. 16/09 à 20h00",
+      "fav_team": "Niedercorn",
+      "fav_odds": 2.15,
+      "p2_fav_odds": null,
+      "fav_score": 62,
       "fav_badge": "🥉 BRONZE+"
     },
     "3375701": {

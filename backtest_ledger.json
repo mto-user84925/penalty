@@ -29896,5 +29896,30 @@
     "result": null,
     "won_p2": null,
     "m3": null
+  },
+  {
+    "match_id": "3380208",
+    "timestamp_utc": "2026-09-15T20:03:36.609600+00:00",
+    "match": "Niedercorn vs Racing Union",
+    "league": "Luxembourg • D1 Luxembourg",
+    "date_str": "Mer. 16/09 à 20h00",
+    "fav_team": "Niedercorn",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 62,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 2.15,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null,
+    "m3": null
   }
 ]
