@@ -1,15 +1,15 @@
 {
   "summary": {
     "total_matches": 408,
-    "decided_matches": 373,
+    "decided_matches": 375,
     "won": 214,
-    "lost": 159,
-    "live": 2,
+    "lost": 161,
+    "live": 0,
     "upcoming": 33,
-    "win_rate": 57.4,
-    "profit_units": -15.05,
-    "roi_pct": -4.03,
-    "last_updated": "2026-09-15T22:04:54.451321+00:00"
+    "win_rate": 57.1,
+    "profit_units": -17.05,
+    "roi_pct": -4.55,
+    "last_updated": "2026-09-16T00:03:58.500915+00:00"
   },
   "matches_today": [
     {
@@ -8819,15 +8819,15 @@
       "badge": "💎 PREMIUM",
       "comb_mt2": 60.0,
       "comb_diff": 1.1,
-      "status": "LIVE",
-      "selection_status": "IN_PROGRESS",
-      "score_display": "0 - 0 (MT: 0-0)",
-      "home_score": 0,
+      "status": "FINISHED",
+      "selection_status": "LOST",
+      "score_display": "2 - 0 (MT: 1-0)",
+      "home_score": 2,
       "away_score": 0,
-      "minute": "4'",
-      "is_live": true,
-      "is_finished": false,
-      "profit": 0.0,
+      "minute": "Terminé",
+      "is_live": false,
+      "is_finished": true,
+      "profit": -1.0,
       "fav_side": "dom",
       "away_odds": 7.6
     },
@@ -8871,15 +8871,15 @@
       "badge": "🟢 SOLIDE",
       "comb_mt2": 55.0,
       "comb_diff": 0.65,
-      "status": "LIVE",
-      "selection_status": "IN_PROGRESS",
-      "score_display": "0 - 0 (MT: 0-0)",
-      "home_score": 0,
-      "away_score": 0,
-      "minute": "4'",
-      "is_live": true,
-      "is_finished": false,
-      "profit": 0.0,
+      "status": "FINISHED",
+      "selection_status": "LOST",
+      "score_display": "2 - 1 (MT: 2-0)",
+      "home_score": 2,
+      "away_score": 1,
+      "minute": "Terminé",
+      "is_live": false,
+      "is_finished": true,
+      "profit": -1.0,
       "fav_side": "ext",
       "away_odds": 2.85
     },
@@ -9049,7 +9049,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 2.15,
+      "odds": 2.1,
       "domination_score": 59,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 70,
@@ -9074,7 +9074,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.74,
+      "odds": 1.72,
       "domination_score": 63,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 80,
@@ -9087,7 +9087,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.05
+      "away_odds": 4.15
     },
     {
       "id": "3376858",
@@ -9236,7 +9236,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.3,
+      "odds": 1.28,
       "domination_score": 74,
       "badge_tier": "🎯 M2",
       "win_pct_historical": 74,
@@ -9304,7 +9304,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.2
+      "away_odds": 5.0
     },
     {
       "id": "3375701",
@@ -9316,7 +9316,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.73,
+      "odds": 1.71,
       "domination_score": 56,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 50,
@@ -9329,7 +9329,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 3.65
+      "away_odds": 3.6
     },
     {
       "id": "3377727",
@@ -9357,7 +9357,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.7
+      "away_odds": 5.5
     },
     {
       "id": "3375923",
@@ -9398,7 +9398,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.21,
+      "odds": 1.2,
       "domination_score": 55,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 78,
@@ -9413,7 +9413,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 6.7
+      "away_odds": 6.6
     },
     {
       "id": "3375934",
@@ -9466,7 +9466,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 2.75
+      "away_odds": 2.65
     },
     {
       "id": "3380209",
@@ -9494,7 +9494,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 2.95
+      "away_odds": 2.8
     },
     {
       "id": "3375920",
@@ -15062,13 +15062,13 @@
   "methode3_combos": [],
   "methode3_summary": {
     "total": 36,
-    "active": 9,
+    "active": 7,
     "won": 9,
-    "lost": 8,
-    "win_rate": 52.9,
-    "total_active_stake": 28.0,
-    "profit_units": 0.86,
-    "profit_eur": 0.69
+    "lost": 10,
+    "win_rate": 47.4,
+    "total_active_stake": 20.0,
+    "profit_units": -1.14,
+    "profit_eur": -7.31
   },
   "methode3_singles": [
     {
@@ -15828,18 +15828,18 @@
       },
       "recommended_stake": 5.0,
       "default_stake": 5.0,
-      "gain_eur": 10.25,
-      "profit_eur": 5.25,
-      "ticket_status": "LIVE",
-      "status": "LIVE",
-      "selection_status": "IN_PROGRESS",
-      "score_display": "0 - 0 (MT: 0-0)",
+      "gain_eur": 0.0,
+      "profit_eur": -5.0,
+      "ticket_status": "LOST",
+      "status": "FINISHED",
+      "selection_status": "LOST",
+      "score_display": "2 - 0 (MT: 1-0)",
       "home_score": 0,
       "away_score": 0,
-      "minute": "4'",
+      "minute": "Terminé",
       "is_live": false,
       "is_finished": false,
-      "profit_unit": 0.0
+      "profit_unit": -1.0
     },
     {
       "id": "m3_single_15",
@@ -15883,18 +15883,18 @@
       },
       "recommended_stake": 3.0,
       "default_stake": 3.0,
-      "gain_eur": 6.0,
-      "profit_eur": 3.0,
-      "ticket_status": "LIVE",
-      "status": "LIVE",
-      "selection_status": "IN_PROGRESS",
-      "score_display": "0 - 0 (MT: 0-0)",
+      "gain_eur": 0.0,
+      "profit_eur": -3.0,
+      "ticket_status": "LOST",
+      "status": "FINISHED",
+      "selection_status": "LOST",
+      "score_display": "2 - 1 (MT: 2-0)",
       "home_score": 0,
       "away_score": 0,
-      "minute": "4'",
+      "minute": "Terminé",
       "is_live": false,
       "is_finished": false,
-      "profit_unit": 0.0
+      "profit_unit": -1.0
     },
     {
       "id": "m3_single_16",
@@ -16669,7 +16669,7 @@
     {
       "id": "m3_single_30",
       "ticket_num": 30,
-      "email_ticket_num": 3,
+      "email_ticket_num": 1,
       "time": "Mer. 16/09 à 17h45",
       "start_iso": "2026-09-16T15:45:00.000Z",
       "league": "Lituanie • D1 Lituanie",
@@ -16724,7 +16724,7 @@
     {
       "id": "m3_single_31",
       "ticket_num": 31,
-      "email_ticket_num": 4,
+      "email_ticket_num": 2,
       "time": "Mer. 16/09 à 18h00",
       "start_iso": "2026-09-16T16:00:00.000Z",
       "league": "Bosnie Herzeg • D1 Bosnie",
@@ -16779,7 +16779,7 @@
     {
       "id": "m3_single_32",
       "ticket_num": 32,
-      "email_ticket_num": 5,
+      "email_ticket_num": 3,
       "time": "Mer. 16/09 à 18h45",
       "start_iso": "2026-09-16T16:45:00.000Z",
       "league": "Coupes D Europe • Ligue Europa",
@@ -16834,7 +16834,7 @@
     {
       "id": "m3_single_33",
       "ticket_num": 33,
-      "email_ticket_num": 6,
+      "email_ticket_num": 4,
       "time": "Mer. 16/09 à 19h00",
       "start_iso": "2026-09-16T17:00:00.000Z",
       "league": "Espagne • Laliga",
@@ -16889,7 +16889,7 @@
     {
       "id": "m3_single_34",
       "ticket_num": 34,
-      "email_ticket_num": 7,
+      "email_ticket_num": 5,
       "time": "Mer. 16/09 à 21h00",
       "start_iso": "2026-09-16T19:00:00.000Z",
       "league": "Coupes D Europe • Ligue Europa",
@@ -16944,7 +16944,7 @@
     {
       "id": "m3_single_35",
       "ticket_num": 35,
-      "email_ticket_num": 8,
+      "email_ticket_num": 6,
       "time": "Mer. 16/09 à 21h00",
       "start_iso": "2026-09-16T19:00:00.000Z",
       "league": "Coupes D Europe • Ligue Europa",
@@ -16999,7 +16999,7 @@
     {
       "id": "m3_single_36",
       "ticket_num": 36,
-      "email_ticket_num": 9,
+      "email_ticket_num": 7,
       "time": "Mer. 16/09 à 21h00",
       "start_iso": "2026-09-16T19:00:00.000Z",
       "league": "Coupes D Europe • Ligue Europa",
