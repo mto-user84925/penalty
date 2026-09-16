@@ -29944,5 +29944,30 @@
     "result": null,
     "won_p2": null,
     "m3": null
+  },
+  {
+    "match_id": "3360723",
+    "timestamp_utc": "2026-09-16T06:04:31.765506+00:00",
+    "match": "Betis Séville vs Getafe",
+    "league": "Espagne • Laliga",
+    "date_str": "Jeu. 17/09 à 19h00",
+    "fav_team": "Betis Séville",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 58,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 35
+    },
+    "odds": {
+      "fav_odds": 1.59,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null,
+    "m3": null
   }
 ]

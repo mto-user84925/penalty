@@ -25,9 +25,19 @@
       "league": "Angleterre • Efl Cup",
       "date_str": "Mer. 16/09 à 21h00",
       "fav_team": "Man. United",
-      "fav_odds": 1.68,
+      "fav_odds": 1.71,
       "p2_fav_odds": null,
       "fav_score": 56,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3360723": {
+      "match": "Betis Séville - Getafe",
+      "league": "Espagne • Laliga",
+      "date_str": "Jeu. 17/09 à 19h00",
+      "fav_team": "Betis Séville",
+      "fav_odds": 1.59,
+      "p2_fav_odds": null,
+      "fav_score": 58,
       "fav_badge": "🥉 BRONZE+"
     }
   }
