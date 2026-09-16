@@ -49,6 +49,14 @@ SWEET_SPOT_M3_MAX       = 4.60  # Fallback
 MIN_COTE_COMBO_M3       = 3.20  # Fallback
 MAX_COTE_COMBO_M3       = 4.80  # Fallback
 
+# ── Méthode 5 : Combinés 2 Matchs Tendance Pure Bookmaker (Dom & Ext) ────────
+M5_MIN_ODDS                 = 1.30  # Cote minimale du favori (exigence stricte)
+M5_MAX_ODDS                 = 1.85  # Cote maximale du favori (probabilité implicite >= 54%)
+M5_MIN_DIFF_DOG             = 0.40  # Écart minimum avec l'outsider
+SWEET_SPOT_M5_MIN           = 1.80  # Sweet Spot combiné 2 matchs
+SWEET_SPOT_M5_MAX           = 2.65  # Sweet Spot combiné 2 matchs
+DEFAULT_STAKE_M5            = 3.0   # Mise fixe 3,00 € par combiné
+
 
 
 H = {
@@ -762,6 +770,68 @@ def evaluate_favorite_m2(m):
         "fav_score": round(implied_prob_pct),
         "fav_badge": "🎯 M2",
         "fav_classe": f"Over2.5@{over25:.2f} < Under@{under25:.2f}",
+        "pct_fav_win": round(implied_prob_pct),
+        "pct_fav_success": round(implied_prob_pct),
+        "market": "FAV_1N2",
+        "market_label": "👑 Favori (+2b)",
+    }
+
+
+def evaluate_favorite_m5(m):
+    """
+    Méthode 5 — Tendance Pure Bookmaker (Dom & Ext).
+    Conditions :
+      1. Favori net désigné par le marché 1N2 (c1 < c2 ou c2 < c1)
+      2. Cote unitaire du favori comprise entre 1.30 et 1.85 (exigence utilisateur)
+      3. Écart net avec l'outsider : Cote Outsider - Cote Favori >= 0.40
+    Pari joué : +2 Gagnant (Early Payout) si disponible, sinon 1N2 classique.
+    """
+    c1 = m.get("c1")
+    c2 = m.get("c2")
+    p2_c1 = m.get("p2_c1")
+    p2_c2 = m.get("p2_c2")
+
+    if not c1 or not c2 or c1 <= 1.0 or c2 <= 1.0:
+        return None
+
+    # Détection du favori
+    if c1 < c2:
+        fav_side = "dom"
+        fav_team = m.get("dom", "")
+        dog_team = m.get("ext", "")
+        fav_odds = c1
+        dog_odds = c2
+        p2_fav_odds = p2_c1 if (p2_c1 and p2_c1 > 1.0) else c1
+    else:
+        fav_side = "ext"
+        fav_team = m.get("ext", "")
+        dog_team = m.get("dom", "")
+        fav_odds = c2
+        dog_odds = c1
+        p2_fav_odds = p2_c2 if (p2_c2 and p2_c2 > 1.0) else c2
+
+    # Règle d'or : Cote unitaire entre 1.30 et 1.85
+    if fav_odds < M5_MIN_ODDS or fav_odds > M5_MAX_ODDS:
+        return None
+
+    # Écart net avec l'outsider (>= 0.40 pour éviter les faux favoris)
+    if (dog_odds - fav_odds) < M5_MIN_DIFF_DOG:
+        return None
+
+    implied_prob_pct = round((1.0 / fav_odds) * 100, 1)
+    odds_for_combo = p2_fav_odds if (p2_fav_odds and p2_fav_odds > 1.0) else fav_odds
+
+    return {
+        "fav_team": fav_team,
+        "dog_team": dog_team,
+        "fav_side": fav_side,
+        "fav_odds": fav_odds,
+        "p2_fav_odds": odds_for_combo,
+        "dog_odds": dog_odds,
+        "odds_diff": round(dog_odds - fav_odds, 2),
+        "fav_score": round(implied_prob_pct),
+        "fav_badge": "🔥 M5",
+        "fav_classe": f"Favori {fav_side.upper()} @{fav_odds:.2f} (Adv. @{dog_odds:.2f})",
         "pct_fav_win": round(implied_prob_pct),
         "pct_fav_success": round(implied_prob_pct),
         "market": "FAV_1N2",
@@ -1878,6 +1948,163 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
     return active_m2
 
 
+def sync_m5_combos(existing_docs, retained_m5, used_teams=None, combo_stake=DEFAULT_STAKE_M5):
+    """
+    Méthode 5 — Combinés 2 Matchs Tendance Pure Bookmaker (Dom & Ext).
+    Conditions :
+      - Appairage par session sportive quotidienne (06h - 06h).
+      - Sweet Spot de cote combinée [1.80, 2.65] (favoris unitaires entre 1.30 et 1.85).
+      - Mise fixe 3,00 € par ticket combiné.
+      - Déduplication stricte des équipes actives.
+    """
+    existing_m5 = existing_docs.get("methode5_combos", [])
+    now_utc_purge = datetime.now(timezone.utc)
+    used_m5 = set()
+    existing_m5_matches = set()
+    m5_today = []
+
+    match_by_key = {
+        (_clean_team_key(m.get("home", "")), _clean_team_key(m.get("away", ""))): m
+        for m in existing_docs.get("matches_today", [])
+    }
+
+    for c in existing_m5:
+        m1l = c.get("m1", {}); m2l = c.get("m2", {})
+        k1 = (_clean_team_key(m1l.get("home", "")), _clean_team_key(m1l.get("away", "")))
+        k2 = (_clean_team_key(m2l.get("home", "")), _clean_team_key(m2l.get("away", "")))
+        if k1[0] and k1[1]: existing_m5_matches.add(k1)
+        if k2[0] and k2[1]: existing_m5_matches.add(k2)
+
+        if c.get("ticket_status") in ["WON", "LOST", "EXPIRED"]:
+            m5_today.append(c)
+            continue
+
+        comb_odds = c.get("odds", 2.0)
+
+        if k1 in match_by_key:
+            src = match_by_key[k1]
+            m1l["score_display"] = src.get("score_display", m1l.get("score_display"))
+            m1l["minute"] = src.get("minute", m1l.get("minute"))
+            m1l["status"] = src.get("status", m1l.get("status"))
+            m1l["selection_status"] = src.get("selection_status", m1l.get("selection_status"))
+        if k2 in match_by_key:
+            src = match_by_key[k2]
+            m2l["score_display"] = src.get("score_display", m2l.get("score_display"))
+            m2l["minute"] = src.get("minute", m2l.get("minute"))
+            m2l["status"] = src.get("status", m2l.get("status"))
+            m2l["selection_status"] = src.get("selection_status", m2l.get("selection_status"))
+
+        s1 = m1l.get("selection_status", "PENDING"); s2 = m2l.get("selection_status", "PENDING")
+        is_started = (m1l.get("status") == "LIVE" or m2l.get("status") == "LIVE" or s1 != "PENDING" or s2 != "PENDING")
+
+        # Purge si match passé > 2h
+        _m1_iso_m5 = m1l.get("start_iso", "")
+        if _m1_iso_m5 and not is_started:
+            try:
+                _m1_dt_m5 = datetime.fromisoformat(_m1_iso_m5.replace("Z", "+00:00"))
+                if (now_utc_purge - _m1_dt_m5).total_seconds() > 7200:
+                    c["ticket_status"] = "LOST"
+                    c["profit_unit"] = -1.0
+                    c["profit_eur"] = -(c.get("default_stake") or DEFAULT_STAKE_M5)
+                    m5_today.append(c)
+                    continue
+            except Exception:
+                pass
+
+        # Purge si hors Sweet Spot et non commencé
+        if not is_started and (comb_odds < SWEET_SPOT_M5_MIN or comb_odds > SWEET_SPOT_M5_MAX):
+            continue
+
+        t1h = _clean_team_key(m1l.get("home", "")); t1a = _clean_team_key(m1l.get("away", ""))
+        t2h = _clean_team_key(m2l.get("home", "")); t2a = _clean_team_key(m2l.get("away", ""))
+        if not is_started and any(t in used_m5 for t in [t1h, t1a, t2h, t2a]):
+            continue
+
+        if s1.startswith("WON") and s2.startswith("WON"):
+            c["ticket_status"] = "WON"
+            c["profit_unit"] = round(comb_odds - 1.0, 2)
+        elif s1 == "LOST" or s2 == "LOST":
+            c["ticket_status"] = "LOST"
+            c["profit_unit"] = -1.0
+        elif m1l.get("status") == "LIVE" or m2l.get("status") == "LIVE":
+            c["ticket_status"] = "LIVE"
+        else:
+            c["ticket_status"] = "PENDING"
+
+        used_m5.update([t1h, t1a, t2h, t2a])
+        m5_today.append(c)
+
+    # Pairing des nouveaux favoris M5 non encore en combiné
+    pool = []
+    for m in retained_m5:
+        kd = _clean_team_key(m.get("dom", "")); ke = _clean_team_key(m.get("ext", ""))
+        if (kd, ke) not in existing_m5_matches and kd not in used_m5 and ke not in used_m5 and not is_night_match(m):
+            pool.append(m)
+
+    c_idx_base = max([c.get("ticket_num", 0) for c in m5_today] or [0])
+    while len(pool) >= 2:
+        best_pair = None; best_score = 999.0
+        for i in range(len(pool)):
+            fi1 = pool[i].get("fav_info_m5", {})
+            c1v = fi1.get("p2_fav_odds") or fi1.get("fav_odds") or 1.50
+            d1 = _get_session_day(pool[i])
+            for j in range(i + 1, len(pool)):
+                d2 = _get_session_day(pool[j])
+                if d1 and d2 and d1 != d2: continue
+                fi2 = pool[j].get("fav_info_m5", {})
+                c2v = fi2.get("p2_fav_odds") or fi2.get("fav_odds") or 1.50
+                comb_odds = round(c1v * c2v, 2)
+                if comb_odds < SWEET_SPOT_M5_MIN or comb_odds > SWEET_SPOT_M5_MAX: continue
+                dist = abs(comb_odds - 2.15) + (i * 0.02) + (j * 0.03)
+                if dist < best_score: best_score = dist; best_pair = (i, j)
+
+        if not best_pair: break
+        i, j = best_pair
+        m2r = pool.pop(j); m1r = pool.pop(i)
+        fi1 = m1r.get("fav_info_m5", {}); fi2 = m2r.get("fav_info_m5", {})
+        c1v = fi1.get("p2_fav_odds") or fi1.get("fav_odds") or 1.50
+        c2v = fi2.get("p2_fav_odds") or fi2.get("fav_odds") or 1.50
+        comb_odds = round(c1v * c2v, 2)
+        c_idx_base += 1
+        used_m5.update([_clean_team_key(m1r.get("dom","")), _clean_team_key(m1r.get("ext","")),
+                        _clean_team_key(m2r.get("dom","")), _clean_team_key(m2r.get("ext",""))])
+        def _leg5(raw, fi):
+            return {
+                "id": str(raw.get("id", "")), "time": raw.get("date_str", ""), "start_iso": raw.get("start_iso"),
+                "league": raw.get("league", ""), "home": raw.get("dom", ""), "away": raw.get("ext", ""),
+                "fav_team": fi.get("fav_team", ""), "fav_side": fi.get("fav_side", "dom"),
+                "market": "FAV_1N2", "market_label": "👑 Favori (+2b)",
+                "odds": fi.get("p2_fav_odds") or fi.get("fav_odds") or 1.50,
+                "dog_odds": fi.get("dog_odds"), "odds_diff": fi.get("odds_diff"),
+                "domination_score": fi.get("fav_score", 0), "badge_tier": "🔥 M5",
+                "win_pct_historical": fi.get("pct_fav_success", 0),
+                "status": "UPCOMING", "selection_status": "PENDING",
+                "score_display": "VS", "home_score": 0, "away_score": 0,
+                "minute": "À venir", "is_live": False, "is_finished": False, "profit": 0.0,
+            }
+        m5_today.append({
+            "id": f"m5_combo_{c_idx_base}", "ticket_num": c_idx_base,
+            "email_ticket_num": None, "odds": comb_odds,
+            "default_stake": combo_stake, "ticket_status": "PENDING",
+            "profit_unit": 0.0, "profit_eur": 0.0,
+            "gain_eur": round(comb_odds * combo_stake, 2),
+            "m1": _leg5(m1r, fi1), "m2": _leg5(m2r, fi2),
+        })
+
+    active_m5 = [c for c in m5_today if c.get("ticket_status") in ["PENDING", "LIVE"]]
+    for idx, c in enumerate(active_m5, 1):
+        c["email_ticket_num"] = idx
+
+    existing_docs["methode5_combos"] = m5_today
+    existing_docs["methode5_summary"] = {
+        "total": len(m5_today), "active": len(active_m5),
+        "won": sum(1 for c in m5_today if c.get("ticket_status") == "WON"),
+        "lost": sum(1 for c in m5_today if c.get("ticket_status") == "LOST"),
+    }
+    print(f"🔥 M5 data.json : {len(m5_today)} combinés ({len(active_m5)} actifs)")
+    return active_m5
+
+
 def sync_m3_singles(existing_docs, retained_m3):
     """
     Méthode 3 PRO — 100% Paris Simples (2e Mi-Temps la Plus Prolifique).
@@ -2286,6 +2513,22 @@ def main():
     retained_m3.sort(key=lambda x: x.get("dt_obj", now_utc))
     print(f"⚡ M3 Sélections Retenues (2e MT Prolifique PRO + Filtres Bookmakers) : {len(retained_m3)}")
 
+    # ── Méthode 5 : Tendance Pure Bookmaker (Dom & Ext [1.30, 1.85]) ─────────
+    retained_m5 = []
+    seen_m5_matches = set()
+    for m in scanned_results:
+        match_key = (_clean_team_key(m.get("dom", "")), _clean_team_key(m.get("ext", "")))
+        if match_key in seen_m5_matches:
+            continue
+        fi5 = evaluate_favorite_m5(m)
+        if fi5:
+            m["fav_info_m5"] = fi5
+            retained_m5.append(m)
+            seen_m5_matches.add(match_key)
+
+    retained_m5.sort(key=lambda x: x.get("dt_obj", now_utc))
+    print(f"🔥 M5 Sélections Retenues (Tendance Bookmaker Dom & Ext [1.30, 1.85]) : {len(retained_m5)}")
+
 
 
 
@@ -2425,13 +2668,17 @@ def main():
     # ── Méthode 3 : singles et persistance ───────────────────────────────────
     active_m3_singles = sync_m3_singles(existing_docs, retained_m3)
 
-    # Réécriture du data.json avec M1, M2 et M3
+    # ── Méthode 5 : pairing et persistance ───────────────────────────────────
+    active_m5_combos = sync_m5_combos(existing_docs, retained_m5)
+
+    # Réécriture du data.json avec M1, M2, M3 et M5
     docs_data_path = os.path.join("docs", "data.json")
     with open(docs_data_path, "w", encoding="utf-8") as _f:
         import json as _json
         _json.dump(existing_docs, _f, ensure_ascii=False, indent=2)
     active_m2_combos = sorted(active_m2_combos, key=lambda c: c.get("m1", {}).get("start_iso") or "")
     active_m3_singles = sorted(active_m3_singles, key=lambda s: s.get("start_iso") or "")
+    active_m5_combos = sorted(active_m5_combos, key=lambda c: c.get("m1", {}).get("start_iso") or "")
 
 
     # ponytail: Filtrage strict pour l'email — Uniquement les sélections pré-match À VENIR
@@ -2453,6 +2700,12 @@ def main():
         s for s in active_m3_singles
         if s.get("ticket_status") == "PENDING"
         and is_match_upcoming(s, now_utc_filter)
+    ]
+    email_m5_combos = [
+        c for c in active_m5_combos
+        if c.get("ticket_status") == "PENDING"
+        and is_match_upcoming(c.get("m1"), now_utc_filter)
+        and is_match_upcoming(c.get("m2"), now_utc_filter)
     ]
 
     combos_html = ""
@@ -2707,6 +2960,46 @@ def main():
     else:
         m3_singles_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:16px; background:#fff; border-radius:8px;">⏳ Aucun pari simple M3 PRO à venir sur ce créneau (les sélections précédentes sont en direct ou terminées).</div>'
 
+    # ── Section M5 : Combinés Méthode 5 (Tendance Pure Bookmaker Dom & Ext) ───
+    m5_combos_html = ""
+    for idx, c in enumerate(email_m5_combos, 1):
+        c_num = idx
+        comb_odds = c.get("odds", 2.0)
+        pot_win = round(DEFAULT_STAKE_M5 * comb_odds, 2)
+        net_profit = round(pot_win - DEFAULT_STAKE_M5, 2)
+        m1l = c["m1"]; m2l = c["m2"]
+        m5_live_badge = '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 7px; border-radius:5px;">⏳ À venir</span>'
+
+        def _m5_status(leg):
+            return '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 6px; border-radius:4px;">⏳ À venir</span>'
+
+        side1 = "Dom." if m1l.get("fav_side") == "dom" else "Ext."
+        side2 = "Dom." if m2l.get("fav_side") == "dom" else "Ext."
+        m5_combos_html += f'''
+        <div style="background:#ffffff; border:1px solid #fed7aa; border-left:4px solid #ea580c; border-radius:8px; padding:10px 12px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="background:#ea580c; color:#ffffff; font-weight:800; font-size:11px; padding:3px 8px; border-radius:5px;">🔥 M5 #{c_num}</span>
+              <span style="background:#0f172a; color:#ffffff; font-weight:900; font-size:12px; padding:2px 8px; border-radius:5px;">Cote @{comb_odds:.2f}</span>
+              {m5_live_badge}
+            </div>
+            <div style="font-size:11px; font-weight:800; color:#15803d;">Mise : <b>3,00 €</b> &bull; Gain : <b>{pot_win:.2f} €</b> (+{net_profit:.2f} € net)</div>
+          </div>
+          <div style="font-size:11px; color:#334155; line-height:1.5;">
+            <div style="padding:3px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
+              <span>1️⃣ <b>{m1l.get("time","")}</b> : {m1l.get("home")} vs {m1l.get("away")} &rarr; <span style="color:#ea580c; font-weight:700;">👑 {m1l.get("fav_team")} ({side1})</span> @{m1l.get("odds",1.5):.2f} (Adv. @{m1l.get("dog_odds", 3.0):.2f})</span>
+              {_m5_status(m1l)}
+            </div>
+            <div style="padding:3px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
+              <span>2️⃣ <b>{m2l.get("time","")}</b> : {m2l.get("home")} vs {m2l.get("away")} &rarr; <span style="color:#ea580c; font-weight:700;">👑 {m2l.get("fav_team")} ({side2})</span> @{m2l.get("odds",1.5):.2f} (Adv. @{m2l.get("dog_odds", 3.0):.2f})</span>
+              {_m5_status(m2l)}
+            </div>
+          </div>
+        </div>
+        '''
+    if not m5_combos_html:
+        m5_combos_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:16px; background:#fff; border-radius:8px;">⏳ Aucun combiné M5 à venir sur ce créneau (les sélections précédentes sont en direct ou terminées).</div>'
+
     email_m3_cards = [m for m in retained_m3 if is_match_upcoming(m, now_utc_filter)]
     m3_cards_html = ""
     if email_m3_cards:
@@ -2912,6 +3205,7 @@ def main():
     nb_upcoming_m1 = len(email_retained_favs)
     nb_upcoming_m2 = len([m for m in retained_m2 if is_match_upcoming(m, now_utc_filter)])
     nb_upcoming_m3 = len(email_m3_singles)
+    nb_upcoming_m5 = len([m for m in retained_m5 if is_match_upcoming(m, now_utc_filter)])
     nb_upcoming_scanned = len([m for m in scanned_results if is_match_upcoming(m, now_utc_filter)])
     nb_all_favs = len(email_all_favs_chrono)
     nb_retained = len(retained_favs)
@@ -2940,10 +3234,11 @@ def main():
           <div style="background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:14px 16px;">
             <table style="width:100%; border-collapse:collapse; text-align:center;">
               <tr>
-                <td style="padding:0 3px;"><div style="background:#dbeafe; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#1d4ed8;">{nb_upcoming_m1}</div><div style="font-size:10px; font-weight:700; color:#1d4ed8;">M1 À VENIR</div><div style="font-size:9px; color:#3b82f6;">Score Dom ≥ 55</div></div></td>
-                <td style="padding:0 3px;"><div style="background:#ede9fe; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#6d28d9;">{nb_upcoming_m2}</div><div style="font-size:10px; font-weight:700; color:#6d28d9;">M2 À VENIR</div><div style="font-size:9px; color:#7c3aed;">Dom &lt; 2.00 &amp; O2.5</div></div></td>
-                <td style="padding:0 3px;"><div style="background:#fef3c7; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#b45309;">{nb_upcoming_m3}</div><div style="font-size:10px; font-weight:700; color:#b45309;">M3 2e MT À VENIR</div><div style="font-size:9px; color:#d97706;">Diff &ge; +0.30b</div></div></td>
-                <td style="padding:0 3px;"><div style="background:#f0fdf4; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#15803d;">{nb_upcoming_scanned}</div><div style="font-size:10px; font-weight:700; color:#15803d;">MATCHS À VENIR</div><div style="font-size:9px; color:#16a34a;">Unibet France</div></div></td>
+                <td style="padding:0 2px;"><div style="background:#dbeafe; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#1d4ed8;">{nb_upcoming_m1}</div><div style="font-size:10px; font-weight:700; color:#1d4ed8;">M1 À VENIR</div><div style="font-size:9px; color:#3b82f6;">Score Dom ≥ 55</div></div></td>
+                <td style="padding:0 2px;"><div style="background:#ede9fe; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#6d28d9;">{nb_upcoming_m2}</div><div style="font-size:10px; font-weight:700; color:#6d28d9;">M2 À VENIR</div><div style="font-size:9px; color:#7c3aed;">Dom &lt; 2.00</div></div></td>
+                <td style="padding:0 2px;"><div style="background:#fef3c7; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#b45309;">{nb_upcoming_m3}</div><div style="font-size:10px; font-weight:700; color:#b45309;">M3 2e MT</div><div style="font-size:9px; color:#d97706;">Diff &ge; +0.30b</div></div></td>
+                <td style="padding:0 2px;"><div style="background:#ffedd5; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#c2410c;">{nb_upcoming_m5}</div><div style="font-size:10px; font-weight:700; color:#c2410c;">M5 TENDANCE</div><div style="font-size:9px; color:#ea580c;">[1.30 - 1.85]</div></div></td>
+                <td style="padding:0 2px;"><div style="background:#f0fdf4; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#15803d;">{nb_upcoming_scanned}</div><div style="font-size:10px; font-weight:700; color:#15803d;">MATCHS</div><div style="font-size:9px; color:#16a34a;">Unibet France</div></div></td>
               </tr>
             </table>
           </div>
@@ -3007,6 +3302,18 @@ def main():
               Marché officiel Unibet <b>« 2nde mi-temps la plus prolifique »</b> joué exclusivement en <b>Paris Simples</b>. Tri chronologique strict. Flat betting strict : <b>3,00 €</b> par sélection pour maximiser le rendement long terme et neutraliser la variance.
             </div>
             {m3_singles_html}
+          </div>
+
+          <!-- SECTION COMBINÉS M5 (TENDANCE PURE BOOKMAKER DOM & EXT) -->
+          <div style="padding:14px 16px 8px 16px; background:#fff7ed; border-top:2px solid #fed7aa;">
+            <div style="font-size:14px; font-weight:900; color:#0f172a; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+              <span>🔥 COMBINÉS M5 — TENDANCE PURE BOOKMAKER (DOM &amp; EXT)</span>
+              <span style="font-size:11px; background:#ea580c; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mise : 3,00 € par ticket</span>
+            </div>
+            <div style="font-size:11px; color:#64748b; margin-bottom:10px;">
+              Favoris purs désignés par le bookmaker (à domicile ou à l'extérieur) avec cote unitaire comprise entre <b>1.30 et 1.85</b> et écart net avec l'outsider. Règle Unibet +2 Gagnant (Early Payout).
+            </div>
+            {m5_combos_html}
           </div>
 
           <!-- SECTION 2 : FICHES D'ANALYSE DÉTAILLÉES -->
@@ -3478,12 +3785,12 @@ h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
 
     now_dt = datetime.now(ZoneInfo("Europe/Paris")) if ZoneInfo else datetime.now(timezone.utc)
     subject_date = now_dt.strftime('%d/%m à %Hh%M')
-    raw_subject = f"⚽ Matchs à Venir {subject_date} — {len(email_combos)} Combos M1 · {len(email_m2_combos)} M2 · {len(email_m3_singles)} M3 (Simples)"
+    raw_subject = f"⚽ Matchs à Venir {subject_date} — {len(email_combos)} Combos M1 · {len(email_m2_combos)} M2 · {len(email_m3_singles)} M3 · {len(email_m5_combos)} M5"
     
     # Nettoyage ASCII du sujet pour compatibilité maximale MTA
     clean_subject = unicodedata.normalize('NFKD', raw_subject).encode('ASCII', 'ignore').decode('ASCII')
     if not clean_subject.strip():
-        clean_subject = f"Matchs a Venir {subject_date} - {len(email_combos)} Combos M1, {len(email_m2_combos)} M2, {len(email_m3_singles)} M3"
+        clean_subject = f"Matchs a Venir {subject_date} - {len(email_combos)} Combos M1, {len(email_m2_combos)} M2, {len(email_m3_singles)} M3, {len(email_m5_combos)} M5"
 
     msg = MIMEMultipart('mixed')
     msg["Subject"] = clean_subject
@@ -3494,7 +3801,7 @@ h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
     msg["X-Mailer"] = "Python/smtplib"
 
     # Corps HTML + texte imbriqués dans une partie alternative
-    plain_fallback = f"Matchs a Venir du {subject_date} - {len(email_combos)} Combos M1, {len(email_m2_combos)} M2, {len(email_m3_singles)} M3 retenus. Consultez la version HTML ou https://mto-user84925.github.io/penalty/email.html pour les details complets."
+    plain_fallback = f"Matchs a Venir du {subject_date} - {len(email_combos)} Combos M1, {len(email_m2_combos)} M2, {len(email_m3_singles)} M3, {len(email_m5_combos)} M5 retenus. Consultez la version HTML ou https://mto-user84925.github.io/penalty/email.html pour les details complets."
     alt_part = MIMEMultipart('alternative')
     alt_part.attach(MIMEText(plain_fallback, 'plain', 'utf-8'))
     alt_part.attach(MIMEText(html_body, 'html', 'utf-8'))
