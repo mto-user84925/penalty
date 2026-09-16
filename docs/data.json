@@ -9,7 +9,7 @@
     "win_rate": 56.8,
     "profit_units": -19.05,
     "roi_pct": -5.05,
-    "last_updated": "2026-09-16T11:24:34.222978+00:00"
+    "last_updated": "2026-09-16T12:05:54.117715+00:00"
   },
   "matches_today": [
     {
@@ -9251,7 +9251,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 7.7
+      "away_odds": 7.8
     },
     {
       "id": "3378481",
@@ -9507,7 +9507,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.22,
+      "odds": 1.21,
       "domination_score": 75,
       "badge_tier": "🎯 M2",
       "win_pct_historical": 75,
@@ -9522,7 +9522,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 9.5
+      "away_odds": 10.0
     },
     {
       "id": "3360723",
@@ -9559,7 +9559,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.74,
+      "odds": 1.76,
       "domination_score": 71,
       "badge_tier": "🥈 ARGENT",
       "win_pct_historical": 70,
@@ -9572,7 +9572,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 3.9
+      "away_odds": 3.8
     },
     {
       "id": "3375922",
