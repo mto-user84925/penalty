@@ -30021,5 +30021,30 @@
       "won_half_mt2": null,
       "profit_m3": null
     }
+  },
+  {
+    "match_id": "3373244",
+    "timestamp_utc": "2026-09-16T12:51:03.254244+00:00",
+    "match": "Torque vs Cienciano",
+    "league": "Amerique • Copa Sudamericana",
+    "date_str": "Ven. 18/09 à 02h30",
+    "fav_team": "Torque",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 65,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.47,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null,
+    "m3": null
   }
 ]
