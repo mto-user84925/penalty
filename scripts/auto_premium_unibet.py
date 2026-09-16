@@ -22,12 +22,16 @@ MIN_SCORE_FAV_RETAINED = 50    # Seuil minimal global pour analyse/affichage
 MIN_SCORE_FAV_SOLID    = 75    # Score AdamChoi pour être qualifié Favori Solide (Or / Platine)
 MIN_PCT_FAV_SUCCESS    = 50    # Nouveau filtre dur : Win ou +2b d'avance historique >= 50%
 
+# ── Sweet Spot Combinés M1 (+2 Gagnant) ───────────────────────────────────────
+SWEET_SPOT_M1_MIN       = 2.10  # Borne basse Sweet Spot M1 élargie
+SWEET_SPOT_M1_MAX       = 2.95  # Borne haute Sweet Spot M1 élargie
+
 # ── Seuils Stratégie M3 PRO — 2e Mi-Temps la Plus Prolifique ───────────────
 MIN_SAMPLE_M3           = 10    # Minimum 10 matchs exploitables par équipe
 MIN_COMB_MT2_PCT_M3     = 50.0  # MT2 combiné >= 50 % (biais positif)
 MIN_INDIV_MT2_PCT_M3    = 40.0  # MT2 domicile >= 40 % et MT2 extérieur >= 40 %
 MIN_DIFF_GOALS_M3       = 0.30  # Différentiel moyen MT2 - MT1 >= +0.30 but (Verrou qui Saute)
-MAX_TIE_PCT_M3          = 35.0  # Taux d'égalité combiné <= 35 %
+MAX_TIE_PCT_M3          = 28.0  # Taux d'égalité combiné <= 28 % (élimine les pièges d'égalité MT1=MT2)
 
 # Niveaux de Qualité (Badges M3 PRO)
 PREMIUM_SCORE_M3_MIN    = 70    # Score M3 >= 70/100 (💎 PREMIUM)
@@ -35,10 +39,11 @@ SOLIDE_SCORE_M3_MIN     = 55    # Score M3 entre 55 et 69/100 (🟢 SOLIDE)
 OPPORTUNITE_SCORE_M3_MIN= 45    # Score M3 entre 45 et 54/100 (🟡 OPPORTUNITÉ)
 MIN_SCORE_M3_RETAINED   = 45    # Seuil minimal pour entrer en sélection combinable
 
-# Mises Modulées Paris Simples M3 PRO (Option B)
-STAKE_M3_PREMIUM        = 5.0   # Mise pour les sélections 💎 PREMIUM (Score >= 70)
-STAKE_M3_SOLIDE         = 3.0   # Mise pour les sélections 🟢 SOLIDE (Score 55-69)
-STAKE_M3_OPPORTUNITE    = 2.0   # Mise pour les sélections 🟡 OPPORTUNITÉ (Score 45-54)
+# Mise Fixe Paris Simples M3 PRO (Flat Betting strict anti-variance)
+DEFAULT_STAKE_M3        = 3.0   # Mise fixe unique 3,00 € pour tous les paris simples
+STAKE_M3_PREMIUM        = 3.0   # Mise fixe
+STAKE_M3_SOLIDE         = 3.0   # Mise fixe
+STAKE_M3_OPPORTUNITE    = 3.0   # Mise fixe
 SWEET_SPOT_M3_MIN       = 3.40  # Fallback
 SWEET_SPOT_M3_MAX       = 4.60  # Fallback
 MIN_COTE_COMBO_M3       = 3.20  # Fallback
@@ -300,14 +305,14 @@ def evaluate_btts(m):
     return None
 
 # ── Moteur d'Appairage Optimisé M1 (Option 2) ───────────────────────────────
-def _build_optimized_pairs(pool, cote_min=2.20, cote_max=2.85, used_teams=None):
+def _build_optimized_pairs(pool, cote_min=SWEET_SPOT_M1_MIN, cote_max=SWEET_SPOT_M1_MAX, used_teams=None):
     """
-    Appairage optimisé M1 (Option 2) :
+    Appairage optimisé M1 :
     Recherche la meilleure paire maximisant score1 + score2 sous contraintes :
       - score combiné le plus élevé possible
-      - cote combinée dans le Sweet Spot [2.20 - 2.85]
+      - cote combinée dans le Sweet Spot élargi [2.10 - 2.95]
       - chaque équipe une seule fois
-      - même session sportive (Option 1)
+      - même session sportive ou écart < 36h en milieu de semaine
     """
     candidates = list(pool)
     candidates.sort(key=lambda x: x.get("fav_info", {}).get("fav_score", 0), reverse=True)
@@ -336,7 +341,13 @@ def _build_optimized_pairs(pool, cote_min=2.20, cote_max=2.85, used_teams=None):
             d1 = _get_session_day(m1)
             d2 = _get_session_day(m2)
             if d1 and d2 and d1 != d2:
-                continue
+                try:
+                    dt1 = datetime.fromisoformat(m1.get("start_iso", "").replace("Z", "+00:00"))
+                    dt2 = datetime.fromisoformat(m2.get("start_iso", "").replace("Z", "+00:00"))
+                    if abs((dt2 - dt1).total_seconds()) > 36.0 * 3600:
+                        continue
+                except Exception:
+                    continue
             fi2 = m2.get("fav_info", {})
             o2 = fi2.get("p2_fav_odds") or fi2.get("fav_odds") or 1.50
             co = round(o1 * o2, 2)
@@ -435,6 +446,11 @@ def evaluate_m3_half_stats(m, scoring_only=False):
     st_ext_10 = _calc_team_half_stats(rec_a[:10])
 
     reasons = []
+    # Filtre 0 : Exclusion des ligues mineures / semi-pro sans suivi live fiable
+    lg = (m.get("league") or "").lower()
+    if any(ex in lg for ex in ["galles", "wales", "irlande du nord", "northern ireland"]):
+        reasons.append(f"Ligue exclue ({m.get('league')})")
+
     # Filtre 1 : Échantillon >= 10 matchs exploitables par équipe
     if st_dom["n"] < MIN_SAMPLE_M3:
         reasons.append(f"Échantillon Dom {st_dom['n']} < {MIN_SAMPLE_M3}")
@@ -642,6 +658,14 @@ def evaluate_favorite_m2(m):
     # Marché offensif : over25 doit être moins cher que under25
     if over25 >= under25:
         return None
+
+    # Filtre offensif minimum : au moins 1.40 but marqué par match à domicile si stats disponibles
+    rec_h = m.get("recent_h_dom", [])
+    if rec_h:
+        dom_gf_tot = sum(int(rm.get("homeGoals", rm.get("homeGoalsFt", 0))) for rm in rec_h)
+        avg_dom_gf = dom_gf_tot / len(rec_h)
+        if avg_dom_gf < 1.40:
+            return None
 
     implied_prob_pct = round((1.0 / c1) * 100, 1)
     odds_for_combo = p2_c1 if (p2_c1 and p2_c1 > 1.0) else c1
@@ -1420,10 +1444,18 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
         # Purge des combinés non conformes créés avant les nouvelles règles
         is_started = (st1 == "LIVE" or st2 == "LIVE" or s1 != "PENDING" or s2 != "PENDING")
         is_corrupted = (m1.get("fav_team") not in [m1.get("home"), m1.get("away")]) or (m2.get("fav_team") not in [m2.get("home"), m2.get("away")])
-        is_subpar = (comb_odds < 2.20) or (m1.get("market", "FAV_1N2") != "FAV_1N2") or (m2.get("market", "FAV_1N2") != "FAV_1N2") or (m1.get("odds", 2.0) < MIN_COTE_FAV) or (m2.get("odds", 2.0) < MIN_COTE_FAV) or is_corrupted
+        is_subpar = (comb_odds < SWEET_SPOT_M1_MIN) or (comb_odds > SWEET_SPOT_M1_MAX) or (m1.get("market", "FAV_1N2") != "FAV_1N2") or (m2.get("market", "FAV_1N2") != "FAV_1N2") or (m1.get("odds", 2.0) < MIN_COTE_FAV) or (m2.get("odds", 2.0) < MIN_COTE_FAV) or is_corrupted
         d1 = _get_session_day(m1)
         d2 = _get_session_day(m2)
-        is_cross_day = bool(d1 and d2 and d1 != d2)
+        is_cross_day = False
+        if d1 and d2 and d1 != d2:
+            try:
+                _dt1 = datetime.fromisoformat(m1.get("start_iso", "").replace("Z", "+00:00"))
+                _dt2 = datetime.fromisoformat(m2.get("start_iso", "").replace("Z", "+00:00"))
+                if abs((_dt2 - _dt1).total_seconds()) > 36.0 * 3600:
+                    is_cross_day = True
+            except Exception:
+                is_cross_day = True
         is_night = is_night_match(m1) or is_night_match(m2)
         if not is_started and (is_subpar or is_cross_day or is_night):
             continue
@@ -1470,8 +1502,8 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
         if k_dom not in used_teams and k_ext not in used_teams:
             unassigned_favs.append(m)
 
-    # Appairage optimisé M1 (score max sous Sweet Spot 2.20-2.85)
-    pairs = _build_optimized_pairs(unassigned_favs, cote_min=2.20, cote_max=2.85)
+    # Appairage optimisé M1 (score max sous Sweet Spot élargi 2.10-2.95)
+    pairs = _build_optimized_pairs(unassigned_favs, cote_min=SWEET_SPOT_M1_MIN, cote_max=SWEET_SPOT_M1_MAX)
     c_idx = max([c.get("ticket_num", 0) for c in combos_today] or [0])
 
     for (m1_raw, m2_raw, comb_odds) in pairs:
@@ -1769,10 +1801,7 @@ def sync_m3_singles(existing_docs, retained_m3):
     """
     Méthode 3 PRO — 100% Paris Simples (2e Mi-Temps la Plus Prolifique).
     Stockage dans existing_docs['methode3_singles'].
-    Mises modulées selon le niveau de confiance :
-      💎 PREMIUM     (Score >= 70) : 5,00 €
-      🟢 SOLIDE      (Score 55-69) : 3,00 €
-      🟡 OPPORTUNITÉ (Score 45-54) : 2,00 €
+    Flat Betting strict : mise fixe 3,00 € par sélection.
     """
     existing_m3 = existing_docs.get("methode3_singles", [])
     now_utc_purge = datetime.now(timezone.utc)
@@ -1819,7 +1848,13 @@ def sync_m3_singles(existing_docs, retained_m3):
                 pass
 
         odds = s.get("odds", 1.95)
-        stake = s.get("recommended_stake", 3.0)
+        # Flat betting strict 3,00 € pour tous les paris actifs
+        if s.get("ticket_status") not in ["WON", "LOST"]:
+            stake = DEFAULT_STAKE_M3
+            s["recommended_stake"] = DEFAULT_STAKE_M3
+            s["default_stake"] = DEFAULT_STAKE_M3
+        else:
+            stake = s.get("recommended_stake", DEFAULT_STAKE_M3)
 
         if sel_st.startswith("WON"):
             s["ticket_status"] = "WON"
@@ -1853,13 +1888,7 @@ def sync_m3_singles(existing_docs, retained_m3):
         score_m3 = fi.get("score_m3", 50)
         c_mt2 = fi.get("cote_mt2", 1.95)
 
-        if "PREMIUM" in badge:
-            stake = STAKE_M3_PREMIUM
-        elif "SOLIDE" in badge:
-            stake = STAKE_M3_SOLIDE
-        else:
-            stake = STAKE_M3_OPPORTUNITE
-
+        stake = DEFAULT_STAKE_M3
         pot_gain = round(stake * c_mt2, 2)
         pot_profit = round(pot_gain - stake, 2)
         s_idx_base += 1
@@ -2849,7 +2878,7 @@ def main():
               <span style="font-size:11px; background:#2563eb; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mise : 3,00 € par ticket</span>
             </div>
             <div style="font-size:11px; color:#64748b; margin-bottom:10px;">
-              Paires optimisées maximisant la somme des scores sous cote combinée Sweet Spot [2.20 - 2.85] (seuil combo ≥ 55/100). Dès qu'une équipe mène de 2 buts, sa sélection est payée immédiatement.
+              Paires optimisées maximisant la somme des scores sous cote combinée Sweet Spot [2.10 - 2.95] (seuil combo ≥ 55/100). Dès qu'une équipe mène de 2 buts, sa sélection est payée immédiatement.
             </div>
             {combos_html}
             {m1_reserve_html}
@@ -2871,10 +2900,10 @@ def main():
           <div style="padding:14px 16px 8px 16px; background:#fffbeb; border-top:2px solid #fde68a;">
             <div style="font-size:14px; font-weight:900; color:#0f172a; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
               <span>⚡ PARIS SIMPLES M3 PRO — 2e MI-TEMPS LA PLUS PROLIFIQUE</span>
-              <span style="font-size:11px; background:#d97706; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mises modulées : 2 € à 5 €</span>
+              <span style="font-size:11px; background:#d97706; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mise fixe : 3,00 € par pari simple</span>
             </div>
             <div style="font-size:11px; color:#64748b; margin-bottom:10px;">
-              Marché officiel Unibet <b>« 2nde mi-temps la plus prolifique »</b> joué exclusivement en <b>Paris Simples</b>. Tri chronologique strict. Mises conseillées selon niveau de confiance : 💎 PREMIUM : <b>5,00 €</b> &bull; 🟢 SOLIDE : <b>3,00 €</b> &bull; 🟡 OPPORTUNITÉ : <b>2,00 €</b>.
+              Marché officiel Unibet <b>« 2nde mi-temps la plus prolifique »</b> joué exclusivement en <b>Paris Simples</b>. Tri chronologique strict. Flat betting strict : <b>3,00 €</b> par sélection pour maximiser le rendement long terme et neutraliser la variance.
             </div>
             {m3_singles_html}
           </div>
