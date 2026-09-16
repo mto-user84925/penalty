@@ -1,23 +1,13 @@
 {
   "favs": {
-    "3380208": {
-      "match": "Niedercorn - Racing Union",
-      "league": "Luxembourg • D1 Luxembourg",
-      "date_str": "Mer. 16/09 à 20h00",
-      "fav_team": "Niedercorn",
-      "fav_odds": 2.15,
-      "p2_fav_odds": null,
-      "fav_score": 62,
-      "fav_badge": "🥉 BRONZE+"
-    },
     "3375701": {
       "match": "Man. United - Brighton Hove",
       "league": "Angleterre • Efl Cup",
       "date_str": "Mer. 16/09 à 21h00",
       "fav_team": "Man. United",
-      "fav_odds": 1.51,
+      "fav_odds": 1.66,
       "p2_fav_odds": null,
-      "fav_score": 57,
+      "fav_score": 56,
       "fav_badge": "🥉 BRONZE+"
     },
     "3360723": {
