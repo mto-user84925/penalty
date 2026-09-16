@@ -9,7 +9,7 @@
     "win_rate": 56.8,
     "profit_units": -19.05,
     "roi_pct": -5.05,
-    "last_updated": "2026-09-16T10:38:02.052828+00:00"
+    "last_updated": "2026-09-16T11:20:28.608307+00:00"
   },
   "matches_today": [
     {
@@ -9426,7 +9426,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 2.0,
+      "odds": 1.98,
       "domination_score": 52,
       "badge_tier": "🎯 M2",
       "win_pct_historical": 52,
@@ -9441,7 +9441,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 3.0
+      "away_odds": 3.1
     },
     {
       "id": "3380208",
@@ -9507,7 +9507,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.23,
+      "odds": 1.22,
       "domination_score": 75,
       "badge_tier": "🎯 M2",
       "win_pct_historical": 75,
@@ -9559,8 +9559,8 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.73,
-      "domination_score": 72,
+      "odds": 1.74,
+      "domination_score": 71,
       "badge_tier": "🥈 ARGENT",
       "win_pct_historical": 70,
       "status": "UPCOMING",
@@ -9572,7 +9572,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.0
+      "away_odds": 3.9
     },
     {
       "id": "3375922",
@@ -13890,7 +13890,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Jeu. 17/09 à 19h00",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -13915,7 +13915,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Mer. 16/09 à 21h00",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
