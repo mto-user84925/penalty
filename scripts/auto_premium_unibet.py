@@ -518,6 +518,20 @@ def evaluate_m3_half_stats(m, scoring_only=False):
     if comb_tie > MAX_TIE_PCT_M3:
         reasons.append(f"Égalité combinée {comb_tie}% > {MAX_TIE_PCT_M3}%")
 
+    # ponytail: Filtres Bookmaker M3 — Validation du marché pour sécuriser la 2e MT prolifique
+    # 1. Éviter les matchs "festival offensif" (Over 2.5 <= 1.45) où la MT1 risque d'accumuler déjà 2-3 buts
+    o25 = m.get("over25")
+    if o25 and o25 <= 1.45:
+        reasons.append(f"Marché Over2.5 @{o25:.2f} <= 1.45 (risque de festival précoce en MT1)")
+
+    # 2. Vérifier la hiérarchie du marché "Mi-temps la plus prolifique" si coté
+    c_mt1 = m.get("cote_mt1")
+    c_mt2 = m.get("cote_mt2")
+    if c_mt1 and c_mt1 <= 2.85:
+        reasons.append(f"Cote MT1 @{c_mt1:.2f} <= 2.85 (bookmaker anticipe des buts précoces)")
+    if c_mt1 and c_mt2 and c_mt2 >= c_mt1:
+        reasons.append(f"Cote MT2 @{c_mt2:.2f} >= MT1 @{c_mt1:.2f} (MT2 non favorite)")
+
     # Forme récente (10 vs 20)
     trend_dom = round(st_dom_10["pct_mt2"] - st_dom["pct_mt2"], 1) if st_dom_10["n"] >= 5 else 0.0
     trend_ext = round(st_ext_10["pct_mt2"] - st_ext["pct_mt2"], 1) if st_ext_10["n"] >= 5 else 0.0
@@ -600,6 +614,9 @@ def evaluate_m3_half_stats(m, scoring_only=False):
         "pts_c": pts_c,
         "pts_d": 0,
         "cote_mt2": cote_mt2,
+        "cote_mt1": m.get("cote_mt1"),
+        "cote_mt_nul": m.get("cote_mt_nul"),
+        "over25": m.get("over25"),
         "market": "HALF_MT2",
         "market_label": "⚡ 2e MT plus prolifique"
     }
@@ -2267,7 +2284,7 @@ def main():
             seen_m3_matches.add(match_key)
 
     retained_m3.sort(key=lambda x: x.get("dt_obj", now_utc))
-    print(f"⚡ M3 Sélections Retenues (2e MT Prolifique PRO, Diff >= +{MIN_DIFF_GOALS_M3:.2f}b, MT2 >= {MIN_COMB_MT2_PCT_M3}%) : {len(retained_m3)}")
+    print(f"⚡ M3 Sélections Retenues (2e MT Prolifique PRO + Filtres Bookmakers) : {len(retained_m3)}")
 
 
 
