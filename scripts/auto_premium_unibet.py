@@ -810,32 +810,41 @@ def evaluate_favorite_m5(m):
         dog_odds = c1
         p2_fav_odds = p2_c2 if (p2_c2 and p2_c2 > 1.0) else c2
 
-    # Règle d'or : Cote unitaire entre 1.30 et 1.85
-    if fav_odds < M5_MIN_ODDS or fav_odds > M5_MAX_ODDS:
-        return None
-
     # Écart net avec l'outsider (>= 0.40 pour éviter les faux favoris)
     if (dog_odds - fav_odds) < M5_MIN_DIFF_DOG:
         return None
 
-    implied_prob_pct = round((1.0 / fav_odds) * 100, 1)
-    odds_for_combo = p2_fav_odds if (p2_fav_odds and p2_fav_odds > 1.0) else fav_odds
+    # Règle d'or : La cote unitaire retenue doit être strictement >= 1.30 et <= 1.85 (exigence absolue utilisateur)
+    # On privilégie +2 Gagnant si >= 1.30, sinon 1N2 classique si >= 1.30
+    if p2_fav_odds and p2_fav_odds >= M5_MIN_ODDS:
+        odds_for_combo = p2_fav_odds
+        market_label = "👑 Favori (+2b)"
+    elif fav_odds >= M5_MIN_ODDS:
+        odds_for_combo = fav_odds
+        market_label = "👑 Favori (Victoire)"
+    else:
+        return None
+
+    if odds_for_combo > M5_MAX_ODDS:
+        return None
+
+    implied_prob_pct = round((1.0 / odds_for_combo) * 100, 1)
 
     return {
         "fav_team": fav_team,
         "dog_team": dog_team,
         "fav_side": fav_side,
-        "fav_odds": fav_odds,
+        "fav_odds": odds_for_combo,
         "p2_fav_odds": odds_for_combo,
         "dog_odds": dog_odds,
-        "odds_diff": round(dog_odds - fav_odds, 2),
+        "odds_diff": round(dog_odds - odds_for_combo, 2),
         "fav_score": round(implied_prob_pct),
         "fav_badge": "🔥 M5",
-        "fav_classe": f"Favori {fav_side.upper()} @{fav_odds:.2f} (Adv. @{dog_odds:.2f})",
+        "fav_classe": f"Favori {fav_side.upper()} @{odds_for_combo:.2f} (Adv. @{dog_odds:.2f})",
         "pct_fav_win": round(implied_prob_pct),
         "pct_fav_success": round(implied_prob_pct),
         "market": "FAV_1N2",
-        "market_label": "👑 Favori (+2b)",
+        "market_label": market_label,
     }
 
 
@@ -2011,8 +2020,10 @@ def sync_m5_combos(existing_docs, retained_m5, used_teams=None, combo_stake=DEFA
             except Exception:
                 pass
 
-        # Purge si hors Sweet Spot et non commencé
+        # Purge si hors Sweet Spot ou cote unitaire < 1.30 et non commencé
         if not is_started and (comb_odds < SWEET_SPOT_M5_MIN or comb_odds > SWEET_SPOT_M5_MAX):
+            continue
+        if not is_started and (m1l.get("odds", 0) < M5_MIN_ODDS or m2l.get("odds", 0) < M5_MIN_ODDS):
             continue
 
         t1h = _clean_team_key(m1l.get("home", "")); t1a = _clean_team_key(m1l.get("away", ""))
@@ -2073,7 +2084,7 @@ def sync_m5_combos(existing_docs, retained_m5, used_teams=None, combo_stake=DEFA
                 "id": str(raw.get("id", "")), "time": raw.get("date_str", ""), "start_iso": raw.get("start_iso"),
                 "league": raw.get("league", ""), "home": raw.get("dom", ""), "away": raw.get("ext", ""),
                 "fav_team": fi.get("fav_team", ""), "fav_side": fi.get("fav_side", "dom"),
-                "market": "FAV_1N2", "market_label": "👑 Favori (+2b)",
+                "market": fi.get("market", "FAV_1N2"), "market_label": fi.get("market_label", "👑 Favori (+2b)"),
                 "odds": fi.get("p2_fav_odds") or fi.get("fav_odds") or 1.50,
                 "dog_odds": fi.get("dog_odds"), "odds_diff": fi.get("odds_diff"),
                 "domination_score": fi.get("fav_score", 0), "badge_tier": "🔥 M5",
