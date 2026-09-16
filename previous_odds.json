@@ -1,15 +1,5 @@
 {
   "favs": {
-    "3373031": {
-      "match": "Sao Paulo - Boca Juniors",
-      "league": "Amerique • Copa Sudamericana",
-      "date_str": "Mer. 16/09 à 02h30",
-      "fav_team": "Sao Paulo",
-      "fav_odds": 2.1,
-      "p2_fav_odds": null,
-      "fav_score": 59,
-      "fav_badge": "🥉 BRONZE+"
-    },
     "3377651": {
       "match": "Paide - Parnu JK Vapru",
       "league": "Estonie • D1 Estonie",
@@ -35,7 +25,7 @@
       "league": "Angleterre • Efl Cup",
       "date_str": "Mer. 16/09 à 21h00",
       "fav_team": "Man. United",
-      "fav_odds": 1.71,
+      "fav_odds": 1.68,
       "p2_fav_odds": null,
       "fav_score": 56,
       "fav_badge": "🥉 BRONZE+"

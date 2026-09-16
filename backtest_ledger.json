@@ -29921,5 +29921,28 @@
     "result": null,
     "won_p2": null,
     "m3": null
+  },
+  {
+    "match_id": "3373232",
+    "timestamp_utc": "2026-09-16T02:04:45.014836+00:00",
+    "match": "Atletico MG vs Santos",
+    "league": "Amerique • Copa Sudamericana",
+    "date_str": "Jeu. 17/09 à 00h00",
+    "fav_team": "Atletico MG",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 50,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.67,
+      "p2_fav_odds": null,
+      "cote_mt2": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null,
+    "m3": null
   }
 ]

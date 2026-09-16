@@ -4,12 +4,12 @@
     "decided_matches": 375,
     "won": 214,
     "lost": 161,
-    "live": 0,
-    "upcoming": 33,
+    "live": 2,
+    "upcoming": 31,
     "win_rate": 57.1,
     "profit_units": -17.05,
     "roi_pct": -4.55,
-    "last_updated": "2026-09-16T00:03:58.500915+00:00"
+    "last_updated": "2026-09-16T02:04:42.882376+00:00"
   },
   "matches_today": [
     {
@@ -9053,13 +9053,13 @@
       "domination_score": 59,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 70,
-      "status": "UPCOMING",
-      "selection_status": "PENDING",
-      "score_display": "VS",
-      "home_score": null,
-      "away_score": null,
-      "minute": "Mer. 16/09 à 02h30",
-      "is_live": false,
+      "status": "LIVE",
+      "selection_status": "IN_PROGRESS",
+      "score_display": "1 - 1",
+      "home_score": 1,
+      "away_score": 1,
+      "minute": "72'",
+      "is_live": true,
       "is_finished": false,
       "profit": 0.0,
       "away_odds": 3.15
@@ -9078,13 +9078,13 @@
       "domination_score": 63,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 80,
-      "status": "UPCOMING",
-      "selection_status": "PENDING",
-      "score_display": "VS",
-      "home_score": null,
-      "away_score": null,
-      "minute": "Mer. 16/09 à 02h30",
-      "is_live": false,
+      "status": "LIVE",
+      "selection_status": "IN_PROGRESS",
+      "score_display": "1 - 2",
+      "home_score": 1,
+      "away_score": 2,
+      "minute": "76'",
+      "is_live": true,
       "is_finished": false,
       "profit": 0.0,
       "away_odds": 4.15
@@ -9251,7 +9251,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 7.3
+      "away_odds": 7.7
     },
     {
       "id": "3378481",
@@ -9264,7 +9264,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.8,
+      "odds": 1.82,
       "domination_score": 58,
       "badge_tier": "🎯 M2",
       "win_pct_historical": 58,
@@ -9279,7 +9279,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 3.1
+      "away_odds": 3.0
     },
     {
       "id": "3377651",
@@ -9316,7 +9316,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.71,
+      "odds": 1.68,
       "domination_score": 56,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 50,
@@ -9329,7 +9329,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 3.6
+      "away_odds": 3.65
     },
     {
       "id": "3377727",
