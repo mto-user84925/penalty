@@ -677,6 +677,8 @@ def evaluate_favorite_m2(m):
       1. Favori = équipe DOMICILE uniquement (c1 < c2)
       2. Cote domicile < 2.00  (probabilité implicite de victoire > 50%)
       3. Over 2.5 < Under 2.5  (marché attend un match offensif)
+      4. Filtre Anti-Piège : Si favori fragile (c1 >= 1.75) et risque de but adverse
+         quasi-certain (btts_oui <= 1.60 ou away_over05 <= 1.30), éliminer.
     Pari identique à M1 : favori gagne ou mène de 2 buts (Early Payout).
     """
     c1 = m.get("c1")
@@ -684,6 +686,10 @@ def evaluate_favorite_m2(m):
     over25 = m.get("over25")
     under25 = m.get("under25")
     p2_c1 = m.get("p2_c1")
+    btts_oui = m.get("btts_oui")
+    btts_non = m.get("btts_non")
+    away_over05 = m.get("away_over05")
+    home_over05 = m.get("home_over05")
 
     if not c1 or not c2 or c1 <= 1.0 or c2 <= 1.0:
         return None
@@ -701,6 +707,16 @@ def evaluate_favorite_m2(m):
     # Marché offensif : over25 doit être moins cher que under25
     if over25 >= under25:
         return None
+
+    # ponytail: Filtre chirurgical Anti-Piège M2 — Si favori domicile fragile (c1 >= 1.75)
+    # et que le bookmaker attend un but adverse quasi-certain (btts_oui <= 1.60 ou away_over05 <= 1.30),
+    # le risque d'accrochage ou match nul (1-1 / 2-2) est trop élevé pour le break +2 buts.
+    # Les favoris solides (c1 < 1.75) restent conservés (Early Payout +2 buts protecteur).
+    if c1 >= 1.75:
+        if btts_oui and btts_oui <= 1.60:
+            return None
+        if away_over05 and away_over05 <= 1.30:
+            return None
 
     # Filtre offensif minimum : au moins 1.40 but marqué par match à domicile si stats disponibles
     rec_h = m.get("recent_h_dom", [])
@@ -722,6 +738,10 @@ def evaluate_favorite_m2(m):
         "dog_odds": c2,
         "over25": over25,
         "under25": under25,
+        "btts_oui": btts_oui,
+        "btts_non": btts_non,
+        "away_over05": away_over05,
+        "home_over05": home_over05,
         "fav_score": round(implied_prob_pct),
         "fav_badge": "🎯 M2",
         "fav_classe": f"Over2.5@{over25:.2f} < Under@{under25:.2f}",
@@ -1812,6 +1832,8 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
                 "domination_score": fi.get("fav_score", 0), "badge_tier": "🎯 M2",
                 "win_pct_historical": fi.get("pct_fav_success", 0),
                 "over25": fi.get("over25"), "under25": fi.get("under25"),
+                "btts_oui": fi.get("btts_oui") or raw.get("btts_oui"),
+                "away_over05": fi.get("away_over05") or raw.get("away_over05"),
                 "status": "UPCOMING", "selection_status": "PENDING",
                 "score_display": "VS", "home_score": 0, "away_score": 0,
                 "minute": "À venir", "is_live": False, "is_finished": False, "profit": 0.0,
@@ -2228,7 +2250,7 @@ def main():
             seen_m2_matches.add(match_key)
 
     retained_m2.sort(key=lambda x: x.get("dt_obj", now_utc))
-    print(f"🎯 M2 Sélections Retenues (Favori dom < 2.00 + Over2.5 < Under2.5) : {len(retained_m2)}")
+    print(f"🎯 M2 Sélections Retenues (Favori dom < 2.00 + Over2.5 < Under2.5 + Anti-Piège BTTS) : {len(retained_m2)}")
 
     # ── Méthode 3 : 2e mi-temps la plus prolifique (5 filtres durs + score /100) ──
     retained_m3 = []
@@ -2572,8 +2594,8 @@ def main():
         def _m2_status(leg):
             return '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 6px; border-radius:4px;">⏳ À venir</span>'
 
-        o25_1 = m1l.get("over25"); u25_1 = m1l.get("under25")
-        o25_2 = m2l.get("over25"); u25_2 = m2l.get("under25")
+        o25_1 = m1l.get("over25"); u25_1 = m1l.get("under25"); btts_1 = m1l.get("btts_oui")
+        o25_2 = m2l.get("over25"); u25_2 = m2l.get("under25"); btts_2 = m2l.get("btts_oui")
         m2_combos_html += f'''
         <div style="background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid #7c3aed; border-radius:8px; padding:10px 12px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
@@ -2586,11 +2608,11 @@ def main():
           </div>
           <div style="font-size:11px; color:#334155; line-height:1.5;">
             <div style="padding:3px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
-              <span>1️⃣ <b>{m1l.get("time","")}</b> : {m1l.get("home")} vs {m1l.get("away")} &rarr; <span style="color:#1d4ed8; font-weight:700;">👑 {m1l.get("fav_team")}</span> @{m1l.get("odds",1.5):.2f}{f' | Over2.5@{o25_1:.2f}/Under@{u25_1:.2f}' if o25_1 and u25_1 else ''}</span>
+              <span>1️⃣ <b>{m1l.get("time","")}</b> : {m1l.get("home")} vs {m1l.get("away")} &rarr; <span style="color:#1d4ed8; font-weight:700;">👑 {m1l.get("fav_team")}</span> @{m1l.get("odds",1.5):.2f}{f' | Over2.5@{o25_1:.2f}/Under@{u25_1:.2f}' if o25_1 and u25_1 else ''}{f' · BTTS@{btts_1:.2f}' if btts_1 else ''}</span>
               {_m2_status(m1l)}
             </div>
             <div style="padding:3px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
-              <span>2️⃣ <b>{m2l.get("time","")}</b> : {m2l.get("home")} vs {m2l.get("away")} &rarr; <span style="color:#1d4ed8; font-weight:700;">👑 {m2l.get("fav_team")}</span> @{m2l.get("odds",1.5):.2f}{f' | Over2.5@{o25_2:.2f}/Under@{u25_2:.2f}' if o25_2 and u25_2 else ''}</span>
+              <span>2️⃣ <b>{m2l.get("time","")}</b> : {m2l.get("home")} vs {m2l.get("away")} &rarr; <span style="color:#1d4ed8; font-weight:700;">👑 {m2l.get("fav_team")}</span> @{m2l.get("odds",1.5):.2f}{f' | Over2.5@{o25_2:.2f}/Under@{u25_2:.2f}' if o25_2 and u25_2 else ''}{f' · BTTS@{btts_2:.2f}' if btts_2 else ''}</span>
               {_m2_status(m2l)}
             </div>
           </div>
