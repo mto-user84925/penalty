@@ -1,15 +1,15 @@
 {
   "summary": {
-    "total_matches": 410,
+    "total_matches": 413,
     "decided_matches": 377,
     "won": 214,
     "lost": 163,
     "live": 0,
-    "upcoming": 33,
+    "upcoming": 36,
     "win_rate": 56.8,
     "profit_units": -19.05,
     "roi_pct": -5.05,
-    "last_updated": "2026-09-16T08:04:38.309390+00:00"
+    "last_updated": "2026-09-16T10:04:59.425395+00:00"
   },
   "matches_today": [
     {
@@ -9236,7 +9236,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.26,
+      "odds": 1.28,
       "domination_score": 74,
       "badge_tier": "🎯 M2",
       "win_pct_historical": 74,
@@ -9264,7 +9264,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.94,
+      "odds": 1.88,
       "domination_score": 58,
       "badge_tier": "🎯 M2",
       "win_pct_historical": 58,
@@ -9279,7 +9279,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 2.9
+      "away_odds": 2.95
     },
     {
       "id": "3377651",
@@ -9291,8 +9291,8 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.41,
-      "domination_score": 61,
+      "odds": 1.35,
+      "domination_score": 62,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 55,
       "status": "UPCOMING",
@@ -9304,7 +9304,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.0
+      "away_odds": 5.6
     },
     {
       "id": "3375701",
@@ -9316,7 +9316,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.68,
+      "odds": 1.58,
       "domination_score": 56,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 50,
@@ -9329,7 +9329,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 3.65
+      "away_odds": 4.0
     },
     {
       "id": "3377727",
@@ -9370,7 +9370,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.46,
+      "odds": 1.4,
       "domination_score": 64,
       "badge_tier": "🎯 M2",
       "win_pct_historical": 64,
@@ -9385,7 +9385,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.6
+      "away_odds": 6.0
     },
     {
       "id": "3379577",
@@ -9534,7 +9534,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.57,
+      "odds": 1.55,
       "domination_score": 58,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 60,
@@ -9547,7 +9547,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.1
+      "away_odds": 5.3
     },
     {
       "id": "3375921",
@@ -9571,7 +9571,92 @@
       "minute": "Jeu. 17/09 à 21h00",
       "is_live": false,
       "is_finished": false,
-      "profit": 0.0
+      "profit": 0.0,
+      "away_odds": 4.0
+    },
+    {
+      "id": "3375922",
+      "time": "Jeu. 17/09 à 21h00",
+      "start_iso": "2026-09-17T19:00:00.000Z",
+      "league": "Coupes D Europe • Ligue Europa",
+      "home": "Crystal Palace",
+      "away": "Lech Poznan",
+      "fav_team": "Crystal Palace",
+      "fav_side": "dom",
+      "market": "FAV_1N2",
+      "market_label": "👑 Favori (+2b)",
+      "odds": 1.32,
+      "domination_score": 74,
+      "badge_tier": "🎯 M2",
+      "win_pct_historical": 74,
+      "over25": 1.5,
+      "under25": 2.0,
+      "status": "UPCOMING",
+      "selection_status": "PENDING",
+      "score_display": "VS",
+      "home_score": 0,
+      "away_score": 0,
+      "minute": "À venir",
+      "is_live": false,
+      "is_finished": false,
+      "profit": 0.0,
+      "away_odds": 7.0
+    },
+    {
+      "id": "3375926",
+      "time": "Jeu. 17/09 à 21h00",
+      "start_iso": "2026-09-17T19:00:00.000Z",
+      "league": "Coupes D Europe • Ligue Europa",
+      "home": "Celtic",
+      "away": "Ferencvaros",
+      "fav_team": "Celtic",
+      "fav_side": "dom",
+      "market": "FAV_1N2",
+      "market_label": "👑 Favori (+2b)",
+      "odds": 1.6,
+      "domination_score": 61,
+      "badge_tier": "🎯 M2",
+      "win_pct_historical": 61,
+      "over25": 1.4,
+      "under25": 2.2,
+      "status": "UPCOMING",
+      "selection_status": "PENDING",
+      "score_display": "VS",
+      "home_score": 0,
+      "away_score": 0,
+      "minute": "À venir",
+      "is_live": false,
+      "is_finished": false,
+      "profit": 0.0,
+      "away_odds": 4.4
+    },
+    {
+      "id": "3375932",
+      "time": "Jeu. 17/09 à 21h00",
+      "start_iso": "2026-09-17T19:00:00.000Z",
+      "league": "Coupes D Europe • Ligue Europa",
+      "home": "Lillestrøm",
+      "away": "Torreense",
+      "fav_team": "Lillestrøm",
+      "fav_side": "dom",
+      "market": "FAV_1N2",
+      "market_label": "👑 Favori (+2b)",
+      "odds": 1.42,
+      "domination_score": 68,
+      "badge_tier": "🎯 M2",
+      "win_pct_historical": 68,
+      "over25": 1.45,
+      "under25": 2.05,
+      "status": "UPCOMING",
+      "selection_status": "PENDING",
+      "score_display": "VS",
+      "home_score": 0,
+      "away_score": 0,
+      "minute": "À venir",
+      "is_live": false,
+      "is_finished": false,
+      "profit": 0.0,
+      "away_odds": 5.5
     }
   ],
   "history": [],
@@ -14943,7 +15028,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Jeu. 17/09 à 21h00",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -14973,7 +15058,8 @@
         "minute": "À venir",
         "is_live": false,
         "is_finished": false,
-        "profit": 0.0
+        "profit": 0.0,
+        "away_odds": 7.0
       }
     },
     {
@@ -15011,7 +15097,8 @@
         "minute": "À venir",
         "is_live": false,
         "is_finished": false,
-        "profit": 0.0
+        "profit": 0.0,
+        "away_odds": 4.4
       },
       "m2": {
         "id": "3375932",
@@ -15038,7 +15125,8 @@
         "minute": "À venir",
         "is_live": false,
         "is_finished": false,
-        "profit": 0.0
+        "profit": 0.0,
+        "away_odds": 5.5
       }
     }
   ],
@@ -17335,7 +17423,7 @@
       "score_display": "VS",
       "home_score": 0,
       "away_score": 0,
-      "minute": "À venir",
+      "minute": "Jeu. 17/09 à 21h00",
       "is_live": false,
       "is_finished": false,
       "profit_unit": 0.0
