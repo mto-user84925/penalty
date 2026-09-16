@@ -2907,6 +2907,8 @@ def main():
     nb_upcoming_m3 = len(email_m3_singles)
     nb_upcoming_scanned = len([m for m in scanned_results if is_match_upcoming(m, now_utc_filter)])
     nb_all_favs = len(email_all_favs_chrono)
+    nb_retained = len(retained_favs)
+    nb_scanned  = len(scanned_results)
 
     html_body = f"""
     <!DOCTYPE html>
@@ -3050,7 +3052,7 @@ def main():
     # ── report.md ────────────────────────────────────────────────────────────
     report = [
         "# ⚽ SÉLECTION OFFICIELLE UNIBET — +2 GAGNANT (MÈNE DE 2 BUTS OU GAGNE)",
-        f"**Généré le** : {now_str}  |  **Matchs scannés** : {nb_scanned}  |  **Favoris analysés** : {nb_all_favs}  |  **Favoris retenus** : {nb_retained}",
+        f"**Généré le** : {now_str}  |  **Matchs scannés** : {nb_scanned}  |  **Favoris analysés** : {len(all_favs_chrono)}  |  **Favoris retenus** : {nb_retained}",
         f"**Règle d'or Unibet** : Si l'équipe mène de 2 buts (2-0, 3-1, 4-2...) à n'importe quel moment du match, le pari est PAYÉ GAGNANT immédiatement (même en cas d'égalisation à 2-2 ou défaite 2-3). Si l'équipe gagne simplement 1-0 ou 2-1, le pari est également gagnant à la fin du match.\n",
         "## 📅 Planning Chronologique des Favoris Retenus",
         "| Heure | Ligue | Match | Favori Conseillé | Cote (+2 / 1N2) | Score Domination | Réussite Win / +2b |",
@@ -3067,7 +3069,7 @@ def main():
             c_val = f"@{fi['p2_fav_odds']:.2f} (+2 Gagnant)" if fi.get("p2_fav_odds") else f"@{fi['fav_odds']:.2f} (1N2)"
         report.append(f"| {m['date_str']} | {m['league']} | **{m['dom']} vs {m['ext']}** | **{fi['fav_team']}** | **{c_val}** | **{fi['fav_score']}/100** ({fi['fav_badge']}) | **{fi['pct_fav_success']}%** |")
 
-    report.append(f"\n## 📊 Tous les Favoris Analysés ({nb_all_favs})\n")
+    report.append(f"\n## 📊 Tous les Favoris Analysés ({len(all_favs_chrono)})\n")
     report.append("| Heure | Ligue | Match | Favori | Cote | Score Domination | Réussite Win/+2b | Statut |")
     report.append("| :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: |")
     for m in all_favs_chrono:
