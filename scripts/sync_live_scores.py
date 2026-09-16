@@ -311,9 +311,9 @@ def sync():
     if combos_m2:
         data["methode2_summary"] = _update_combos(combos_m2)
 
-    combos_m3 = data.get("methode3_combos", [])
-    if combos_m3:
-        data["methode3_summary"] = _update_combos(combos_m3)
+    combos_m5 = data.get("methode5_combos", [])
+    if combos_m5:
+        data["methode5_summary"] = _update_combos(combos_m5)
 
     c_won = data["combos_summary"]["won"]
     c_lost = data["combos_summary"]["lost"]
