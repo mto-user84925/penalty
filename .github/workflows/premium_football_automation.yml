@@ -52,7 +52,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add previous_odds.json backtest_ledger.json docs/data.json docs/all_scores.html report.md
+          git add previous_odds.json backtest_ledger.json docs/data.json docs/all_scores.html docs/email.html docs/mail.html report.md
           git diff --staged --quiet || git commit -m "Auto-update odds, backtest ledger & live docs data [skip ci]"
           for i in {1..5}; do
             git fetch origin master

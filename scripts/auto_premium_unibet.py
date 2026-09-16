@@ -136,6 +136,49 @@ def is_night_match(m):
                 return True
     return False
 
+def is_match_upcoming(item, now_utc_dt=None):
+    """
+    Retourne True si le match est strictement À VENIR (non commencé, non en direct, non terminé).
+    Exclut tout match dont le statut est LIVE/FINISHED, ou dont le coup d'envoi est passé.
+    """
+    if not item:
+        return False
+    # Statuts explicites de déroulement
+    if item.get("status") in ["LIVE", "FINISHED"]:
+        return False
+    if item.get("is_live") or item.get("is_finished"):
+        return False
+    # Statuts de validation ou de ticket
+    if item.get("selection_status") not in [None, "", "PENDING"]:
+        return False
+    if item.get("ticket_status") not in [None, "", "PENDING"]:
+        return False
+    # Vérification minute de jeu
+    min_str = str(item.get("minute", "")).lower()
+    if any(k in min_str for k in ["'", "mi-temps", "mt", "en cours", "live", "term", "fin"]):
+        return False
+    # Vérification temporelle start_iso
+    start_iso = item.get("start_iso") or ""
+    ref_now = now_utc_dt or datetime.now(timezone.utc)
+    if start_iso:
+        try:
+            dt = datetime.fromisoformat(start_iso.replace("Z", "+00:00"))
+            if (ref_now - dt).total_seconds() >= -60:
+                return False
+        except Exception:
+            pass
+    # Vérification dt_obj
+    dt_obj = item.get("dt_obj")
+    if dt_obj:
+        try:
+            if dt_obj.tzinfo is None:
+                dt_obj = dt_obj.replace(tzinfo=timezone.utc)
+            if (ref_now - dt_obj).total_seconds() >= -60:
+                return False
+        except Exception:
+            pass
+    return True
+
 # ── Moteur d'Analyse « Favori Win & 2 Buts d'Avance (Early Payout) » ────────
 def evaluate_favorite_domination(m, scoring_only=False):
     """Évalue la domination du favori.
@@ -2349,21 +2392,72 @@ def main():
     active_m3_singles = sorted(active_m3_singles, key=lambda s: s.get("start_iso") or "")
 
 
+    # ponytail: Filtrage strict pour l'email — Uniquement les sélections pré-match À VENIR
+    now_utc_filter = datetime.now(timezone.utc)
+
+    def is_match_upcoming(item, now_utc_dt=None):
+        """
+        ponytail: Vérifie si une sélection (match ou leg de combiné) est strictement À VENIR (pré-match).
+        Exclut les matchs LIVE, terminés (FINISHED, WON, LOST, EXPIRED), ou dont le coup d'envoi est passé.
+        """
+        if not item or not isinstance(item, dict):
+            return False
+        st = str(item.get("status", "")).upper()
+        if st in ("LIVE", "FINISHED", "CANCELLED", "POSTPONED"):
+            return False
+        sel_st = str(item.get("selection_status", "")).upper()
+        if sel_st in ("WON", "LOST", "WON_LEAD2", "WON_FINAL", "EXPIRED"):
+            return False
+        tick_st = str(item.get("ticket_status", "")).upper()
+        if tick_st in ("WON", "LOST", "LIVE", "EXPIRED"):
+            return False
+        minute = str(item.get("minute", "")).strip().lower()
+        if minute and minute not in ("à venir", "a venir", "", "vs"):
+            return False
+        if item.get("is_live") or item.get("is_finished"):
+            return False
+        if now_utc_dt is None:
+            now_utc_dt = datetime.now(timezone.utc)
+        start_iso = item.get("start_iso")
+        if start_iso:
+            try:
+                iso_clean = start_iso.replace("Z", "+00:00")
+                match_dt = datetime.fromisoformat(iso_clean)
+                if match_dt.tzinfo is None:
+                    match_dt = match_dt.replace(tzinfo=timezone.utc)
+                if match_dt < (now_utc_dt - timedelta(seconds=60)):
+                    return False
+            except Exception:
+                pass
+        return True
+    email_combos = [
+        c for c in active_combos
+        if c.get("ticket_status") == "PENDING"
+        and is_match_upcoming(c.get("m1"), now_utc_filter)
+        and is_match_upcoming(c.get("m2"), now_utc_filter)
+    ]
+    email_m2_combos = [
+        c for c in active_m2_combos
+        if c.get("ticket_status") == "PENDING"
+        and is_match_upcoming(c.get("m1"), now_utc_filter)
+        and is_match_upcoming(c.get("m2"), now_utc_filter)
+    ]
+    email_m3_singles = [
+        s for s in active_m3_singles
+        if s.get("ticket_status") == "PENDING"
+        and is_match_upcoming(s, now_utc_filter)
+    ]
+
     combos_html = ""
     default_combo_stake = 3.0
 
-    # Tri chronologique par heure de coup d'envoi du 1er match
-    active_combos = sorted(active_combos, key=lambda c: c.get("m1", {}).get("start_iso") or "")
-
-    # ── Reconstruction du planning depuis active_combos (Source Unique de Vérité) ──
-    # ponytail: on repart des legs des combinés actifs pour garantir la parité
-    # email/site même si le match vient d'un run précédent et n'est plus dans retained_favs.
+    # ── Reconstruction du planning depuis email_combos et favoris à venir ────────
     plan_rows_html = ""
     seen_plan_legs = set()
-    for c in active_combos:
+    for c in email_combos:
         for leg in [c.get("m1", {}), c.get("m2", {})]:
-            leg_key = (leg.get("home", ""), leg.get("away", ""))
-            if leg_key in seen_plan_legs or not leg.get("home"):
+            leg_key = (_clean_team_key(leg.get("home", "")), _clean_team_key(leg.get("away", "")))
+            if leg_key in seen_plan_legs or not leg.get("home") or not is_match_upcoming(leg, now_utc_filter):
                 continue
             seen_plan_legs.add(leg_key)
             sc = leg.get("domination_score", 0)
@@ -2402,13 +2496,47 @@ def main():
                 f'{pct_succ}% {succ_lbl}</td>'
                 f'</tr>'
             )
+
+    # Compléter avec les favoris retenus à venir non encore en combiné
+    for m in retained_favs:
+        if not is_match_upcoming(m, now_utc_filter):
+            continue
+        leg_key = (_clean_team_key(m.get("dom", "")), _clean_team_key(m.get("ext", "")))
+        if leg_key in seen_plan_legs:
+            continue
+        seen_plan_legs.add(leg_key)
+        fi = m["fav_info"]
+        sc = fi.get("fav_score", 0)
+        sc_bg = "#1e40af" if sc >= 85 else ("#15803d" if sc >= 75 else ("#b45309" if sc >= 65 else "#64748b"))
+        fav_team = fi.get("fav_team", "")
+        fav_odds = fi.get("fav_odds", 1.50)
+        p2_odds = fi.get("p2_fav_odds")
+        cote_lbl = f"@{p2_odds:.2f} <span style='font-size:9px; color:#1d4ed8;'>(+2)</span>" if p2_odds else f"@{fav_odds:.2f}"
+        pct_succ = fi.get("pct_fav_success", 0)
+        plan_rows_html += (
+            f'<tr>'
+            f'<td style="padding:9px 8px; white-space:nowrap; border-bottom:1px solid #f1f5f9;">'
+            f'<span style="background:#0f172a; color:#ffffff; font-weight:800; font-size:12px; padding:4px 9px; border-radius:6px; letter-spacing:0.3px; display:inline-block; white-space:nowrap;">⏰ {m.get("date_str","")}</span></td>'
+            f'<td style="padding:9px 8px; border-bottom:1px solid #f1f5f9;">'
+            f'<b style="font-size:13px; color:#0f172a;">{m.get("dom","")} <span style="color:#94a3b8; font-weight:400; font-size:11px;">vs</span> {m.get("ext","")}</b><br>'
+            f'<span style="font-size:10px; color:#94a3b8;">{m.get("league","")}</span></td>'
+            f'<td style="padding:9px 6px; text-align:center; border-bottom:1px solid #f1f5f9;">'
+            f'<span style="background:#eff6ff; color:#1d4ed8; font-weight:800; font-size:12px; padding:4px 8px; border-radius:6px; border:1px solid #bfdbfe; white-space:nowrap;">'
+            f'👑 {fav_team}</span></td>'
+            f'<td style="padding:9px 6px; text-align:center; font-weight:900; font-size:14px; color:#0f172a; border-bottom:1px solid #f1f5f9;">{cote_lbl}</td>'
+            f'<td style="padding:9px 6px; text-align:center; border-bottom:1px solid #f1f5f9;">'
+            f'<span style="background:{sc_bg}; color:#fff; font-weight:800; font-size:11px; padding:3px 7px; border-radius:5px; white-space:nowrap;">'
+            f'{sc}/100</span></td>'
+            f'<td style="padding:9px 6px; text-align:center; font-size:11px; font-weight:700; color:#15803d; border-bottom:1px solid #f1f5f9; white-space:nowrap;">'
+            f'{pct_succ}% Win / +2b</td>'
+            f'</tr>'
+        )
+
     if not plan_rows_html:
-        plan_rows_html = '<tr><td colspan="6" style="padding:20px; text-align:center; color:#94a3b8; font-style:italic;">Aucun favori retenu sur le créneau à venir.</td></tr>'
+        plan_rows_html = '<tr><td colspan="6" style="padding:20px; text-align:center; color:#94a3b8; font-style:italic;">Aucun favori à venir sur ce créneau (tous les matchs du jour sont en direct ou terminés).</td></tr>'
 
-
-
-    for c in active_combos:
-        c_num = c.get("email_ticket_num", c.get("ticket_num", 1))
+    for idx, c in enumerate(email_combos, 1):
+        c_num = idx
         comb_odds = c.get("odds", 2.0)
         pot_win = c.get("gain_eur", round(default_combo_stake * comb_odds, 2))
         net_profit = round(pot_win - default_combo_stake, 2)
@@ -2431,30 +2559,9 @@ def main():
                 return f'<span style="color:#1d4ed8; font-weight:700;">👑 {fav_t}</span> @{c:.2f}'
 
         def _get_leg_status_html(m):
-            sel_st = m.get("selection_status", "PENDING")
-            st = m.get("status", "UPCOMING")
-            sc = m.get("score_display", "")
-            if sel_st == "WON_LEAD2":
-                return f'<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px; border:1px solid #86efac;">👑 +2b GAGNÉ ({sc})</span>'
-            elif sel_st == "WON_FINAL":
-                return f'<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px; border:1px solid #86efac;">✅ VICTOIRE ({sc})</span>'
-            elif sel_st == "LOST":
-                return f'<span style="background:#fee2e2; color:#b91c1c; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px; border:1px solid #fca5a5;">❌ PERDU ({sc})</span>'
-            elif st == "LIVE":
-                min_str = m.get("minute", "En cours")
-                return f'<span style="background:#fef3c7; color:#b45309; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px; border:1px solid #fde68a;">🟢 EN DIRECT {min_str} ({sc})</span>'
-            else:
-                return f'<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 6px; border-radius:4px;">⏳ À venir</span>'
+            return '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 6px; border-radius:4px;">⏳ À venir</span>'
 
-        _ts = c.get("ticket_status", "PENDING")
-        if _ts == "LIVE":
-            live_badge = '<span style="background:#fef3c7; color:#b45309; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fde68a;">🟢 EN DIRECT</span>'
-        elif _ts == "WON":
-            live_badge = '<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #86efac;">✅ GAGNÉ</span>'
-        elif _ts == "LOST":
-            live_badge = '<span style="background:#fee2e2; color:#b91c1c; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fca5a5;">❌ PERDU</span>'
-        else:
-            live_badge = '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 7px; border-radius:5px;">⏳ À venir</span>'
+        live_badge = '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 7px; border-radius:5px;">⏳ À venir</span>'
 
         combos_html += f'''
         <div style="background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid #2563eb; border-radius:8px; padding:10px 12px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
@@ -2482,33 +2589,19 @@ def main():
         '''
 
     if not combos_html:
-        combos_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Pas assez de favoris retenus pour former un combiné de 2 matchs.</div>'
+        combos_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:16px; background:#fff; border-radius:8px;">⏳ Aucun combiné M1 à venir sur ce créneau (les sélections précédentes sont en direct ou terminées).</div>'
 
     # ── Section M2 : Combinés Méthode 2 ──────────────────────────────────────
     m2_combos_html = ""
-    for c in active_m2_combos:
-        c_num = c.get("email_ticket_num", c.get("ticket_num", 1))
+    for idx, c in enumerate(email_m2_combos, 1):
+        c_num = idx
         comb_odds = c.get("odds", 2.0)
-        pot_win = c.get("gain_eur", round(3.0 * comb_odds, 2))
+        pot_win = round(3.0 * comb_odds, 2)
         net_profit = round(pot_win - 3.0, 2)
         m1l = c["m1"]; m2l = c["m2"]
-        _ts = c.get("ticket_status", "PENDING")
-        if _ts == "LIVE":
-            m2_live_badge = '<span style="background:#fef3c7; color:#b45309; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fde68a;">🟢 EN DIRECT</span>'
-        elif _ts == "WON":
-            m2_live_badge = '<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #86efac;">✅ GAGNÉ</span>'
-        elif _ts == "LOST":
-            m2_live_badge = '<span style="background:#fee2e2; color:#b91c1c; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fca5a5;">❌ PERDU</span>'
-        else:
-            m2_live_badge = '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 7px; border-radius:5px;">⏳ À venir</span>'
+        m2_live_badge = '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 7px; border-radius:5px;">⏳ À venir</span>'
 
         def _m2_status(leg):
-            ss = leg.get("selection_status", "PENDING")
-            sc = leg.get("score_display", "")
-            if ss == "WON_LEAD2": return f'<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">👑 +2b GAGNÉ ({sc})</span>'
-            if ss == "WON_FINAL": return f'<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">✅ VICTOIRE ({sc})</span>'
-            if ss == "LOST":      return f'<span style="background:#fee2e2; color:#b91c1c; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">❌ PERDU ({sc})</span>'
-            if leg.get("status") == "LIVE": return f'<span style="background:#fef3c7; color:#b45309; font-weight:800; font-size:10px; padding:2px 6px; border-radius:4px;">🟢 {leg.get("minute","?")} ({sc})</span>'
             return '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 6px; border-radius:4px;">⏳ À venir</span>'
 
         o25_1 = m1l.get("over25"); u25_1 = m1l.get("under25")
@@ -2536,20 +2629,20 @@ def main():
         </div>
         '''
     if not m2_combos_html:
-        m2_combos_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Aucun combiné M2 disponible pour ce créneau.</div>'
+        m2_combos_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:16px; background:#fff; border-radius:8px;">⏳ Aucun combiné M2 à venir sur ce créneau (les sélections précédentes sont en direct ou terminées).</div>'
 
     # ── Section M3 : Paris Simples Méthode 3 PRO (2e MT la plus prolifique) ─
     m3_singles_html = ""
-    if active_m3_singles:
-        tot_m3_stake = sum(s.get("recommended_stake", 3.0) for s in active_m3_singles)
-        tot_m3_pot_win = sum(s.get("gain_eur", 0.0) for s in active_m3_singles)
+    if email_m3_singles:
+        tot_m3_stake = sum(s.get("recommended_stake", 3.0) for s in email_m3_singles)
+        tot_m3_pot_win = sum(s.get("gain_eur", round(s.get("odds", 1.95) * 3.0, 2)) for s in email_m3_singles)
         tot_m3_pot_profit = round(tot_m3_pot_win - tot_m3_stake, 2)
-        avg_m3_odds = sum(s.get("odds", 1.95) for s in active_m3_singles) / len(active_m3_singles)
+        avg_m3_odds = sum(s.get("odds", 1.95) for s in email_m3_singles) / len(email_m3_singles)
 
         m3_singles_html += f'''
         <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:10px 14px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
           <div style="font-size:12px; color:#92400e; font-weight:700;">
-            ⚡ <b>{len(active_m3_singles)} Paris Simples Qualifiés</b> &bull; Cote Moyenne : <b>@{avg_m3_odds:.2f}</b>
+            ⚡ <b>{len(email_m3_singles)} Paris Simples Qualifiés À Venir</b> &bull; Cote Moyenne : <b>@{avg_m3_odds:.2f}</b>
           </div>
           <div style="font-size:12px; color:#15803d; font-weight:800;">
             Mise Totale : <b>{tot_m3_stake:.2f} €</b> &bull; Gain Pot. : <b>{tot_m3_pot_win:.2f} €</b> (+{tot_m3_pot_profit:.2f} € net)
@@ -2557,8 +2650,8 @@ def main():
         </div>
         '''
 
-        for s in active_m3_singles:
-            s_num = s.get("email_ticket_num", s.get("ticket_num", 1))
+        for idx, s in enumerate(email_m3_singles, 1):
+            s_num = idx
             odds = s.get("odds", 1.95)
             stake = s.get("recommended_stake", 3.0)
             pot_win = s.get("gain_eur", round(stake * odds, 2))
@@ -2578,15 +2671,7 @@ def main():
             else:
                 badge_bg = "#fef3c7"; badge_col = "#b45309"; card_border = "#d97706"
 
-            _ts = s.get("ticket_status", "PENDING")
-            if _ts == "LIVE":
-                m3_live_badge = '<span style="background:#fef3c7; color:#b45309; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fde68a;">🟢 EN DIRECT</span>'
-            elif _ts == "WON":
-                m3_live_badge = '<span style="background:#dcfce7; color:#15803d; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #86efac;">✅ GAGNÉ</span>'
-            elif _ts == "LOST":
-                m3_live_badge = '<span style="background:#fee2e2; color:#b91c1c; font-weight:800; font-size:10px; padding:2px 7px; border-radius:5px; border:1px solid #fca5a5;">❌ PERDU</span>'
-            else:
-                m3_live_badge = '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 7px; border-radius:5px;">⏳ À venir</span>'
+            m3_live_badge = '<span style="background:#f1f5f9; color:#64748b; font-weight:700; font-size:10px; padding:2px 7px; border-radius:5px;">⏳ À venir</span>'
 
             m3_singles_html += f'''
             <div style="background:#ffffff; border:1px solid #cbd5e1; border-left:4px solid {card_border}; border-radius:8px; padding:10px 12px; margin-bottom:10px; box-shadow:0 1px 4px rgba(0,0,0,0.04);">
@@ -2613,11 +2698,12 @@ def main():
             </div>
             '''
     else:
-        m3_singles_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Aucun match ne valide les critères stricts M3 PRO aujourd’hui.</div>'
+        m3_singles_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:16px; background:#fff; border-radius:8px;">⏳ Aucun pari simple M3 PRO à venir sur ce créneau (les sélections précédentes sont en direct ou terminées).</div>'
 
+    email_m3_cards = [m for m in retained_m3 if is_match_upcoming(m, now_utc_filter)]
     m3_cards_html = ""
-    if retained_m3:
-        for m in retained_m3:
+    if email_m3_cards:
+        for m in email_m3_cards:
             fi3 = m.get("m3_info", {})
             sc3 = fi3.get("score_m3", 0)
             badge3 = fi3.get("badge", "🟡 OPPORTUNITÉ")
@@ -2655,29 +2741,29 @@ def main():
                 </div>
             </div>'''
     else:
-        m3_cards_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Aucun match M3 retenu sur ce créneau.</div>'
+        m3_cards_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Aucun match M3 à venir sur ce créneau.</div>'
 
     # ── Matchs en Réserve M1 (Score 50-54) ────────────────────────────────────
+    email_reserve_favs = [m for m in reserve_favs if is_match_upcoming(m, now_utc_filter)]
     m1_reserve_html = ""
-    if reserve_favs:
+    if email_reserve_favs:
         res_rows = ""
-        for m in reserve_favs:
+        for m in email_reserve_favs:
             fi = m.get("fav_info", {})
             sc = fi.get("fav_score", 0)
             res_rows += f'<li style="margin-bottom:4px;"><b>{m.get("date_str","")}</b> | {m.get("league","")} : <b>{m.get("dom","")} vs {m.get("ext","")}</b> &rarr; Favori <b>{fi.get("fav_team","")}</b> @{fi.get("fav_odds",1.5):.2f} — Score M1 : <b style="color:#0369a1;">{sc}/100</b> (🔵 Réserve : 50-54 non combiné)</li>'
         m1_reserve_html = f'''
         <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:10px 12px; margin-top:12px; font-size:11px; color:#0369a1;">
-          <b>🔵 MATCHS EN RÉSERVE M1 ({len(reserve_favs)} match(s) avec score 50–54) :</b>
+          <b>🔵 MATCHS EN RÉSERVE M1 ({len(email_reserve_favs)} match(s) avec score 50–54 à venir) :</b>
           <div style="color:#64748b; font-size:10px; margin:2px 0 6px 0;">Affichés et tracés avec leur score, mais exclus des combinés M1 (seuil officiel combo ≥ 55/100).</div>
           <ul style="margin:0; padding-left:16px;">{res_rows}</ul>
         </div>
         '''
 
+    email_retained_favs = [m for m in retained_favs if is_match_upcoming(m, now_utc_filter)]
     fav_cards_html = ""
-
-
-    if retained_favs:
-        for m in retained_favs:
+    if email_retained_favs:
+        for m in email_retained_favs:
             fi = m["fav_info"]
             sc = fi.get("fav_score", 0)
             sc_bg = "#1e40af" if sc >= 85 else ("#15803d" if sc >= 75 else ("#b45309" if sc >= 65 else "#64748b"))
@@ -2756,11 +2842,12 @@ def main():
                 {proof}
             </div>'''
     else:
-        fav_cards_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Aucun favori éligible sur ce créneau.</div>'
+        fav_cards_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:12px;">Aucun favori éligible à venir sur ce créneau.</div>'
 
-    # ── Section 3 : Tableau chronologique de tous les favoris analysés ───────
+    # ── Section 3 : Tableau chronologique des favoris analysés à venir ───────
+    email_all_favs_chrono = [m for m in all_favs_chrono if is_match_upcoming(m, now_utc_filter)]
     scan_rows_html = ""
-    for m in all_favs_chrono:
+    for m in email_all_favs_chrono:
         fi = m["fav_info"]
         retained = (fi["fav_score"] >= MIN_SCORE_FAV_RETAINED)
         bg_row = "#f0fdf4" if retained else "#ffffff"
@@ -2808,13 +2895,18 @@ def main():
             f'</tr>'
         )
 
+    if not scan_rows_html:
+        scan_rows_html = '<tr><td colspan="7" style="padding:16px; text-align:center; color:#64748b; font-style:italic;">⏳ Aucun favori à venir sur ce créneau (les matchs analysés sont en direct ou terminés).</td></tr>'
+
     # ── Email HTML Nouveau Design (100% Stratégie +2 Gagnant / Victoire) ──────
     now_local = datetime.now(timezone(timedelta(hours=2)))
     days_fr = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
     date_header = now_local.strftime(f"{days_fr[now_local.weekday()]} %d/%m/%Y · %Hh%M")
-    nb_retained = len(retained_favs)
-    nb_all_favs = len(all_favs_chrono)
-    nb_scanned  = len(scanned_results)
+    nb_upcoming_m1 = len(email_retained_favs)
+    nb_upcoming_m2 = len([m for m in retained_m2 if is_match_upcoming(m, now_utc_filter)])
+    nb_upcoming_m3 = len(email_m3_singles)
+    nb_upcoming_scanned = len([m for m in scanned_results if is_match_upcoming(m, now_utc_filter)])
+    nb_all_favs = len(email_all_favs_chrono)
 
     html_body = f"""
     <!DOCTYPE html>
@@ -2827,7 +2919,7 @@ def main():
           <div style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%); padding:22px 24px; text-align:center;">
             <div style="font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#38bdf8; font-weight:800; margin-bottom:6px;">⚽ STRATÉGIE OFFICIELLE UNIBET · +2 GAGNANT</div>
             <h1 style="margin:0; font-size:21px; font-weight:900; color:#ffffff;">{date_header}</h1>
-            <p style="margin:7px 0 0 0; font-size:12px; color:#cbd5e1;">Équipe mène de 2 buts à un moment OU gagne le match · Tri Chronologique Strict</p>
+            <p style="margin:7px 0 0 0; font-size:12px; color:#cbd5e1;">🎯 Sélections À Venir Strictement Pré-Match · Mène de 2 buts à un moment OU gagne le match · Tri Chronologique Strict</p>
           </div>
 
           <!-- ENCART RÈGLE OFFICIELLE GAGNANTE -->
@@ -2839,10 +2931,10 @@ def main():
           <div style="background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:14px 16px;">
             <table style="width:100%; border-collapse:collapse; text-align:center;">
               <tr>
-                <td style="padding:0 3px;"><div style="background:#dbeafe; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#1d4ed8;">{nb_retained}</div><div style="font-size:10px; font-weight:700; color:#1d4ed8;">M1 OPTIMISÉ</div><div style="font-size:9px; color:#3b82f6;">Score Dom ≥ 55</div></div></td>
-                <td style="padding:0 3px;"><div style="background:#ede9fe; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#6d28d9;">{len(retained_m2)}</div><div style="font-size:10px; font-weight:700; color:#6d28d9;">M2 MARCHÉ</div><div style="font-size:9px; color:#7c3aed;">Dom &lt; 2.00 &amp; O2.5</div></div></td>
-                <td style="padding:0 3px;"><div style="background:#fef3c7; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#b45309;">{len(retained_m3)}</div><div style="font-size:10px; font-weight:700; color:#b45309;">M3 2e MI-TEMPS</div><div style="font-size:9px; color:#d97706;">Diff &ge; +0.30b</div></div></td>
-                <td style="padding:0 3px;"><div style="background:#f0fdf4; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#15803d;">{nb_scanned}</div><div style="font-size:10px; font-weight:700; color:#15803d;">MATCHS SCANNÉS</div><div style="font-size:9px; color:#16a34a;">Unibet France</div></div></td>
+                <td style="padding:0 3px;"><div style="background:#dbeafe; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#1d4ed8;">{nb_upcoming_m1}</div><div style="font-size:10px; font-weight:700; color:#1d4ed8;">M1 À VENIR</div><div style="font-size:9px; color:#3b82f6;">Score Dom ≥ 55</div></div></td>
+                <td style="padding:0 3px;"><div style="background:#ede9fe; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#6d28d9;">{nb_upcoming_m2}</div><div style="font-size:10px; font-weight:700; color:#6d28d9;">M2 À VENIR</div><div style="font-size:9px; color:#7c3aed;">Dom &lt; 2.00 &amp; O2.5</div></div></td>
+                <td style="padding:0 3px;"><div style="background:#fef3c7; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#b45309;">{nb_upcoming_m3}</div><div style="font-size:10px; font-weight:700; color:#b45309;">M3 2e MT À VENIR</div><div style="font-size:9px; color:#d97706;">Diff &ge; +0.30b</div></div></td>
+                <td style="padding:0 3px;"><div style="background:#f0fdf4; border-radius:8px; padding:8px 4px;"><div style="font-size:22px; font-weight:900; color:#15803d;">{nb_upcoming_scanned}</div><div style="font-size:10px; font-weight:700; color:#15803d;">MATCHS À VENIR</div><div style="font-size:9px; color:#16a34a;">Unibet France</div></div></td>
               </tr>
             </table>
           </div>
@@ -2851,7 +2943,7 @@ def main():
           <div style="padding:16px 16px 8px 16px;">
             <div style="font-size:14px; font-weight:900; color:#0f172a; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
               <span>📅 CE QUE VOUS DEVEZ JOUER — HEURE PAR HEURE</span>
-              <span style="font-size:11px; background:#eff6ff; color:#1d4ed8; font-weight:700; padding:2px 8px; border-radius:6px;">{nb_retained} pari(s) chronologique(s)</span>
+              <span style="font-size:11px; background:#eff6ff; color:#1d4ed8; font-weight:700; padding:2px 8px; border-radius:6px;">{len(seen_plan_legs)} sélection(s) à venir</span>
             </div>
             <div style="border-radius:8px; overflow:hidden; border:1px solid #e2e8f0;">
               <table style="width:100%; border-collapse:collapse; font-size:12px;">
@@ -2911,7 +3003,7 @@ def main():
           <!-- SECTION 2 : FICHES D'ANALYSE DÉTAILLÉES -->
           <div style="padding:12px 16px 10px 16px; background:#f8fafc; border-top:2px solid #e2e8f0;">
             <div style="font-size:14px; font-weight:900; color:#0f172a; margin-bottom:10px;">
-              👑 FICHES D'ANALYSE DÉTAILLÉES DES FAVORIS RETENUS ({nb_retained})
+              👑 FICHES D'ANALYSE DÉTAILLÉES DES FAVORIS RETENUS ({len(email_retained_favs)})
               <div style="font-size:11px; font-weight:500; color:#64748b; margin-top:2px;">Historique 100% réel AdamChoi Token 0 &bull; Domicile vs Extérieur &bull; Pastilles de validation</div>
             </div>
             {fav_cards_html}
@@ -2920,7 +3012,7 @@ def main():
           <!-- SECTION FICHES D'ANALYSE M3 -->
           <div style="padding:12px 16px 10px 16px; background:#fffdf5; border-top:2px solid #fed7aa;">
             <div style="font-size:14px; font-weight:900; color:#0f172a; margin-bottom:10px;">
-              ⚡ FICHES D'ANALYSE M3 — 2e MI-TEMPS PROLIFIQUE ({len(retained_m3)})
+              ⚡ FICHES D'ANALYSE M3 — 2e MI-TEMPS PROLIFIQUE ({len(email_m3_cards)})
               <div style="font-size:11px; font-weight:500; color:#64748b; margin-top:2px;">Historique 15-20 matchs récents Dom/Ext AdamChoi Token 0 &bull; Détail MT1 vs MT2</div>
             </div>
             {m3_cards_html}
@@ -3277,6 +3369,95 @@ h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
         f.write(all_scores_html)
     print("📊 docs/all_scores.html généré")
 
+    # ── Page GitHub Pages calquée fidèlement sur l'email reçu (docs/email.html) ──
+    email_page_html = f"""<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="60">
+  <title>📧 Vue Email Reçu — Matchs à Venir ({date_header})</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📧</text></svg>">
+  <style>
+    body {{
+      margin: 0;
+      padding: 0;
+      background: #0b0f19;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }}
+    .email-topbar {{
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid #334155;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }}
+    .email-nav-links {{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }}
+    .email-btn {{
+      color: #38bdf8;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }}
+    .email-btn:hover {{
+      background: #334155;
+      color: #ffffff;
+      border-color: #38bdf8;
+    }}
+    .email-badge {{
+      color: #94a3b8;
+      font-size: 12px;
+    }}
+    .email-badge b {{
+      color: #f8fafc;
+    }}
+    .email-content-wrapper {{
+      max-width: 740px;
+      margin: 20px auto 40px auto;
+      padding: 0 10px;
+    }}
+  </style>
+</head>
+<body>
+  <div class="email-topbar">
+    <div class="email-nav-links">
+      <a href="index.html" class="email-btn">← 📊 Live Tracker</a>
+      <a href="all_scores.html" target="_blank" class="email-btn">📋 Rapport All Scores</a>
+    </div>
+    <div class="email-badge">
+      📧 <b>Vue Email Reçu (Matchs à Venir)</b> &bull; {date_header} &bull; <span style="color:#10b981; font-weight:700;">● Auto-refresh 60s</span>
+    </div>
+  </div>
+  <div class="email-content-wrapper">
+    {html_body}
+  </div>
+</body>
+</html>"""
+    with open("docs/email.html", "w", encoding="utf-8") as f_em:
+        f_em.write(email_page_html)
+    with open("docs/mail.html", "w", encoding="utf-8") as f_em2:
+        f_em2.write(email_page_html)
+    print("📧 docs/email.html et docs/mail.html générés avec succès")
 
     recipients     = [r.strip() for r in os.environ.get("EMAIL_TO", "gregory.langlet@sfr.fr, langlet.gregory@gmail.com").split(",") if r.strip()]
     gmail_email    = os.environ.get("GMAIL_EMAIL", "langlet.gregory@gmail.com")
@@ -3288,12 +3469,12 @@ h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
 
     now_dt = datetime.now(ZoneInfo("Europe/Paris")) if ZoneInfo else datetime.now(timezone.utc)
     subject_date = now_dt.strftime('%d/%m à %Hh%M')
-    raw_subject = f"⚽ Multi-Stratégies {subject_date} — {nb_retained} M1 (+2b) · {len(retained_m2)} M2 · {len(retained_m3)} M3 (2e MT)"
+    raw_subject = f"⚽ Matchs à Venir {subject_date} — {len(email_combos)} Combos M1 · {len(email_m2_combos)} M2 · {len(email_m3_singles)} M3 (Simples)"
     
     # Nettoyage ASCII du sujet pour compatibilité maximale MTA
     clean_subject = unicodedata.normalize('NFKD', raw_subject).encode('ASCII', 'ignore').decode('ASCII')
     if not clean_subject.strip():
-        clean_subject = f"Rapport Multi-Strategies du {subject_date} - {nb_retained} M1, {len(retained_m2)} M2, {len(retained_m3)} M3"
+        clean_subject = f"Matchs a Venir {subject_date} - {len(email_combos)} Combos M1, {len(email_m2_combos)} M2, {len(email_m3_singles)} M3"
 
     msg = MIMEMultipart('mixed')
     msg["Subject"] = clean_subject
@@ -3304,7 +3485,7 @@ h1{{font-size:16px;color:#0f172a;}}p{{font-size:12px;color:#64748b;}}
     msg["X-Mailer"] = "Python/smtplib"
 
     # Corps HTML + texte imbriqués dans une partie alternative
-    plain_fallback = f"Rapport Multi-Strategies du {subject_date} - {nb_retained} M1, {len(retained_m2)} M2, {len(retained_m3)} M3 retenus. Consultez la version HTML pour les details complets."
+    plain_fallback = f"Matchs a Venir du {subject_date} - {len(email_combos)} Combos M1, {len(email_m2_combos)} M2, {len(email_m3_singles)} M3 retenus. Consultez la version HTML ou https://mto-user84925.github.io/penalty/email.html pour les details complets."
     alt_part = MIMEMultipart('alternative')
     alt_part.attach(MIMEText(plain_fallback, 'plain', 'utf-8'))
     alt_part.attach(MIMEText(html_body, 'html', 'utf-8'))
