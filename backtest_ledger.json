@@ -29969,5 +29969,57 @@
     "result": null,
     "won_p2": null,
     "m3": null
+  },
+  {
+    "match_id": "3375921",
+    "timestamp_utc": "2026-09-16T08:04:42.993461+00:00",
+    "match": "Besiktas vs Marseille",
+    "league": "Coupes D Europe • Ligue Europa",
+    "date_str": "Jeu. 17/09 à 21h00",
+    "fav_team": "Besiktas",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 72,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.73,
+      "p2_fav_odds": null,
+      "cote_mt2": 1.9
+    },
+    "selected_markets": [
+      "FAV_1N2",
+      "HALF_MT2"
+    ],
+    "result": null,
+    "won_p2": null,
+    "m3": {
+      "score_m3": 60,
+      "badge": "🟢 SOLIDE",
+      "is_retained": true,
+      "n_dom": 10,
+      "n_ext": 10,
+      "mt2_dom_20": 50.0,
+      "mt2_ext_20": 60.0,
+      "mt2_comb": 55.0,
+      "mt2_dom_10": 50.0,
+      "mt2_ext_10": 60.0,
+      "trend_dom": 0.0,
+      "trend_ext": 0.0,
+      "trend": 0.0,
+      "pct_tie": 5.0,
+      "avg_mt1": 1.2,
+      "avg_mt2": 1.65,
+      "diff_mt": 0.45,
+      "cote_mt2": 1.9,
+      "reasons": [],
+      "ht_score": null,
+      "ft_score": null,
+      "goals_mt1": null,
+      "goals_mt2": null,
+      "won_half_mt2": null,
+      "profit_m3": null
+    }
   }
 ]

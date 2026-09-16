@@ -25,7 +25,7 @@
       "league": "Angleterre • Efl Cup",
       "date_str": "Mer. 16/09 à 21h00",
       "fav_team": "Man. United",
-      "fav_odds": 1.71,
+      "fav_odds": 1.68,
       "p2_fav_odds": null,
       "fav_score": 56,
       "fav_badge": "🥉 BRONZE+"
@@ -35,10 +35,20 @@
       "league": "Espagne • Laliga",
       "date_str": "Jeu. 17/09 à 19h00",
       "fav_team": "Betis Séville",
-      "fav_odds": 1.59,
+      "fav_odds": 1.57,
       "p2_fav_odds": null,
       "fav_score": 58,
       "fav_badge": "🥉 BRONZE+"
+    },
+    "3375921": {
+      "match": "Besiktas - Marseille",
+      "league": "Coupes D Europe • Ligue Europa",
+      "date_str": "Jeu. 17/09 à 21h00",
+      "fav_team": "Besiktas",
+      "fav_odds": 1.73,
+      "p2_fav_odds": null,
+      "fav_score": 72,
+      "fav_badge": "🥈 ARGENT"
     }
   }
 }
