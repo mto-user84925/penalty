@@ -141,33 +141,33 @@ def is_match_upcoming(item, now_utc_dt=None):
     Retourne True si le match est strictement À VENIR (non commencé, non en direct, non terminé).
     Exclut tout match dont le statut est LIVE/FINISHED, ou dont le coup d'envoi est passé.
     """
-    if not item:
+    if not item or not isinstance(item, dict):
         return False
-    # Statuts explicites de déroulement
-    if item.get("status") in ["LIVE", "FINISHED"]:
+    st = str(item.get("status", "")).upper()
+    if st in ("LIVE", "FINISHED", "CANCELLED", "POSTPONED"):
         return False
     if item.get("is_live") or item.get("is_finished"):
         return False
-    # Statuts de validation ou de ticket
-    if item.get("selection_status") not in [None, "", "PENDING"]:
+    sel_st = str(item.get("selection_status", "")).upper()
+    if sel_st in ("WON", "LOST", "WON_LEAD2", "WON_FINAL", "EXPIRED"):
         return False
-    if item.get("ticket_status") not in [None, "", "PENDING"]:
+    tick_st = str(item.get("ticket_status", "")).upper()
+    if tick_st in ("WON", "LOST", "LIVE", "EXPIRED"):
         return False
-    # Vérification minute de jeu
     min_str = str(item.get("minute", "")).lower()
     if any(k in min_str for k in ["'", "mi-temps", "mt", "en cours", "live", "term", "fin"]):
         return False
-    # Vérification temporelle start_iso
-    start_iso = item.get("start_iso") or ""
     ref_now = now_utc_dt or datetime.now(timezone.utc)
+    start_iso = item.get("start_iso") or ""
     if start_iso:
         try:
             dt = datetime.fromisoformat(start_iso.replace("Z", "+00:00"))
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=timezone.utc)
             if (ref_now - dt).total_seconds() >= -60:
                 return False
         except Exception:
             pass
-    # Vérification dt_obj
     dt_obj = item.get("dt_obj")
     if dt_obj:
         try:
@@ -1426,19 +1426,20 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
 
     now_utc_purge = datetime.now(timezone.utc)
     used_teams = set()
+    existing_match_keys = set()
     combos_today = []
     for c in existing_combos:
+        m1 = c.get("m1", {})
+        m2 = c.get("m2", {})
+        k1 = (_clean_team_key(m1.get("home", "")), _clean_team_key(m1.get("away", "")))
+        k2 = (_clean_team_key(m2.get("home", "")), _clean_team_key(m2.get("away", "")))
+        if k1[0] and k1[1]: existing_match_keys.add(k1)
+        if k2[0] and k2[1]: existing_match_keys.add(k2)
+
         # ponytail: Règle d'or — Un ticket déjà DÉCIDÉ (WON ou LOST) est figé à jamais dans l'historique !
         if c.get("ticket_status") in ["WON", "LOST"]:
             combos_today.append(c)
-            # Les équipes des combos terminés restent bloquées pour éviter les doublons
-            for _leg in [c.get("m1", {}), c.get("m2", {})]:
-                if _leg.get("home"): used_teams.add(_clean_team_key(_leg["home"]))
-                if _leg.get("away"): used_teams.add(_clean_team_key(_leg["away"]))
             continue
-
-        m1 = c.get("m1", {})
-        m2 = c.get("m2", {})
 
         # ponytail: Purge automatique des combinés PENDING dont les matchs sont terminés.
         # Si start_iso du premier leg est > 2h dans le passé et pas en LIVE → EXPIRED (non joué, ne biaise pas les stats).
@@ -1451,15 +1452,9 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
                     c["profit_unit"] = 0.0
                     c["profit_eur"] = 0.0
                     combos_today.append(c)
-                    for _leg in [m1, m2]:
-                        if _leg.get("home"): used_teams.add(_clean_team_key(_leg["home"]))
-                        if _leg.get("away"): used_teams.add(_clean_team_key(_leg["away"]))
                     continue
             except Exception:
                 pass
-
-        k1 = (_clean_team_key(m1.get("home", "")), _clean_team_key(m1.get("away", "")))
-        k2 = (_clean_team_key(m2.get("home", "")), _clean_team_key(m2.get("away", "")))
 
         if k1 in match_by_key:
             src = match_by_key[k1]
@@ -1503,7 +1498,7 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
         if not is_started and (is_subpar or is_cross_day or is_night):
             continue
 
-        # Déduplication stricte par nom d'équipe (home ET away, strings uniquement)
+        # Déduplication stricte par nom d'équipe uniquement pour les combinés actifs
         t1h = _clean_team_key(m1.get("home", ""))
         t1a = _clean_team_key(m1.get("away", ""))
         t2h = _clean_team_key(m2.get("home", ""))
@@ -1542,6 +1537,8 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
             continue
         k_dom = _clean_team_key(m.get("dom", ""))
         k_ext = _clean_team_key(m.get("ext", ""))
+        if (k_dom, k_ext) in existing_match_keys:
+            continue
         if k_dom not in used_teams and k_ext not in used_teams:
             unassigned_favs.append(m)
 
@@ -1553,7 +1550,11 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
         c_idx += 1
         k1 = _clean_team_key(m1_raw.get("dom", ""))
         k2 = _clean_team_key(m2_raw.get("dom", ""))
-        used_teams.update([k1, k2, _clean_team_key(m1_raw.get("ext","")), _clean_team_key(m2_raw.get("ext",""))])
+        k1e = _clean_team_key(m1_raw.get("ext", ""))
+        k2e = _clean_team_key(m2_raw.get("ext", ""))
+        used_teams.update([k1, k2, k1e, k2e])
+        existing_match_keys.add((k1, k1e))
+        existing_match_keys.add((k2, k2e))
 
         fi1 = m1_raw.get("fav_info", {})
         c1 = fi1.get("p2_fav_odds") or fi1.get("fav_odds") or 1.50
@@ -1693,6 +1694,7 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
 
     # Clés des équipes déjà en M2 (combinés actifs existants)
     used_m2 = set()  # dédup intra-M2 uniquement (M1 et M2 sont indépendantes)
+    existing_m2_matches = set()
     m2_today = []
 
     match_by_key = {
@@ -1701,18 +1703,18 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
     }
 
     for c in existing_m2:
-        if c.get("ticket_status") in ["WON", "LOST"]:
-            m2_today.append(c)
-            for leg in [c.get("m1", {}), c.get("m2", {})]:
-                if leg.get("home"): used_m2.add(_clean_team_key(leg["home"]))
-                if leg.get("away"): used_m2.add(_clean_team_key(leg["away"]))
-            continue
-
         m1l = c.get("m1", {}); m2l = c.get("m2", {})
-        comb_odds = c.get("odds", 2.0)
-
         k1 = (_clean_team_key(m1l.get("home", "")), _clean_team_key(m1l.get("away", "")))
         k2 = (_clean_team_key(m2l.get("home", "")), _clean_team_key(m2l.get("away", "")))
+        if k1[0] and k1[1]: existing_m2_matches.add(k1)
+        if k2[0] and k2[1]: existing_m2_matches.add(k2)
+
+        if c.get("ticket_status") in ["WON", "LOST", "EXPIRED"]:
+            m2_today.append(c)
+            continue
+
+        comb_odds = c.get("odds", 2.0)
+
         if k1 in match_by_key:
             src = match_by_key[k1]
             m1l["score_display"] = src.get("score_display", m1l.get("score_display"))
@@ -1739,9 +1741,6 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
                     c["profit_unit"] = -1.0
                     c["profit_eur"] = -(c.get("default_stake") or 3.0)
                     m2_today.append(c)
-                    for leg in [m1l, m2l]:
-                        if leg.get("home"): used_m2.add(_clean_team_key(leg["home"]))
-                        if leg.get("away"): used_m2.add(_clean_team_key(leg["away"]))
                     continue
             except Exception:
                 pass
@@ -1773,7 +1772,7 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
     pool = []
     for m in retained_m2:
         kd = _clean_team_key(m.get("dom", "")); ke = _clean_team_key(m.get("ext", ""))
-        if kd not in used_m2 and ke not in used_m2 and not is_night_match(m):
+        if (kd, ke) not in existing_m2_matches and kd not in used_m2 and ke not in used_m2 and not is_night_match(m):
             pool.append(m)
 
     c_idx_base = max([c.get("ticket_num", 0) for c in m2_today] or [0])
@@ -1849,6 +1848,7 @@ def sync_m3_singles(existing_docs, retained_m3):
     existing_m3 = existing_docs.get("methode3_singles", [])
     now_utc_purge = datetime.now(timezone.utc)
     used_m3 = set()
+    existing_m3_matches = set()
     m3_today = []
 
     match_by_key = {
@@ -1860,10 +1860,11 @@ def sync_m3_singles(existing_docs, retained_m3):
         home_k = _clean_team_key(s.get("home", ""))
         away_k = _clean_team_key(s.get("away", ""))
         match_k = (home_k, away_k)
+        if home_k and away_k:
+            existing_m3_matches.add(match_k)
 
-        if s.get("ticket_status") in ["WON", "LOST"]:
+        if s.get("ticket_status") in ["WON", "LOST", "EXPIRED"]:
             m3_today.append(s)
-            used_m3.add(home_k); used_m3.add(away_k)
             continue
 
         if match_k in match_by_key:
@@ -1885,7 +1886,6 @@ def sync_m3_singles(existing_docs, retained_m3):
                     s["profit_unit"] = 0.0
                     s["profit_eur"] = 0.0
                     m3_today.append(s)
-                    used_m3.add(home_k); used_m3.add(away_k)
                     continue
             except Exception:
                 pass
@@ -1923,6 +1923,8 @@ def sync_m3_singles(existing_docs, retained_m3):
             continue
         kd = _clean_team_key(m.get("dom", ""))
         ke = _clean_team_key(m.get("ext", ""))
+        if (kd, ke) in existing_m3_matches:
+            continue
         if kd in used_m3 or ke in used_m3:
             continue
 
@@ -1935,6 +1937,7 @@ def sync_m3_singles(existing_docs, retained_m3):
         pot_gain = round(stake * c_mt2, 2)
         pot_profit = round(pot_gain - stake, 2)
         s_idx_base += 1
+        existing_m3_matches.add((kd, ke))
         used_m3.add(kd); used_m3.add(ke)
 
         m3_today.append({
@@ -2395,41 +2398,6 @@ def main():
     # ponytail: Filtrage strict pour l'email — Uniquement les sélections pré-match À VENIR
     now_utc_filter = datetime.now(timezone.utc)
 
-    def is_match_upcoming(item, now_utc_dt=None):
-        """
-        ponytail: Vérifie si une sélection (match ou leg de combiné) est strictement À VENIR (pré-match).
-        Exclut les matchs LIVE, terminés (FINISHED, WON, LOST, EXPIRED), ou dont le coup d'envoi est passé.
-        """
-        if not item or not isinstance(item, dict):
-            return False
-        st = str(item.get("status", "")).upper()
-        if st in ("LIVE", "FINISHED", "CANCELLED", "POSTPONED"):
-            return False
-        sel_st = str(item.get("selection_status", "")).upper()
-        if sel_st in ("WON", "LOST", "WON_LEAD2", "WON_FINAL", "EXPIRED"):
-            return False
-        tick_st = str(item.get("ticket_status", "")).upper()
-        if tick_st in ("WON", "LOST", "LIVE", "EXPIRED"):
-            return False
-        minute = str(item.get("minute", "")).strip().lower()
-        if minute and minute not in ("à venir", "a venir", "", "vs"):
-            return False
-        if item.get("is_live") or item.get("is_finished"):
-            return False
-        if now_utc_dt is None:
-            now_utc_dt = datetime.now(timezone.utc)
-        start_iso = item.get("start_iso")
-        if start_iso:
-            try:
-                iso_clean = start_iso.replace("Z", "+00:00")
-                match_dt = datetime.fromisoformat(iso_clean)
-                if match_dt.tzinfo is None:
-                    match_dt = match_dt.replace(tzinfo=timezone.utc)
-                if match_dt < (now_utc_dt - timedelta(seconds=60)):
-                    return False
-            except Exception:
-                pass
-        return True
     email_combos = [
         c for c in active_combos
         if c.get("ticket_status") == "PENDING"
