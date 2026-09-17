@@ -5,9 +5,9 @@
       "league": "Espagne • Laliga",
       "date_str": "Jeu. 17/09 à 19h00",
       "fav_team": "Betis Séville",
-      "fav_odds": 1.53,
-      "p2_fav_odds": 1.5,
-      "fav_score": 58,
+      "fav_odds": 1.49,
+      "p2_fav_odds": 1.46,
+      "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"
     },
     "3373244": {
@@ -19,6 +19,16 @@
       "p2_fav_odds": 1.4,
       "fav_score": 65,
       "fav_badge": "🥈 ARGENT"
+    },
+    "3378472": {
+      "match": "Pafos FC - AEL Limassol",
+      "league": "Chypre • D1 Chypre",
+      "date_str": "Ven. 18/09 à 19h00",
+      "fav_team": "Pafos FC",
+      "fav_odds": 1.35,
+      "p2_fav_odds": 1.35,
+      "fav_score": 61,
+      "fav_badge": "🥉 BRONZE+"
     },
     "3373280": {
       "match": "Wisla Cracovie - Slask Wroclaw",
