@@ -37,7 +37,12 @@
             "selection": "Étoile Rouge (+2 Gagnant)",
             "odds": 1.36,
             "domination_score": 74,
-            "analysis": "Champion de Serbie, 5 victoires sur les 6 derniers H2H (7-1, 3-0, 3-1), break très fréquent avant la mi-temps."
+            "analysis": "Champion de Serbie, 5 victoires sur les 6 derniers H2H (7-1, 3-0, 3-1), break très fréquent avant la mi-temps.",
+            "web_intelligence": {
+              "coach_directive": "Albert Riera réclame une efficacité maximale dès le début",
+              "key_players": "Marko Arnautović et armada offensive opérationnels",
+              "context": "Match en retard J5 SuperLiga, Étoile Rouge invaincue face à Pancevo (5V, 1N)"
+            }
           },
           {
             "match": "Lillestrøm vs Torreense",
@@ -46,7 +51,12 @@
             "selection": "Lillestrøm (+2 Gagnant)",
             "odds": 1.52,
             "domination_score": 68,
-            "analysis": "Avantage Åråsen Stadion, Torreense novice absolu en Coupe d'Europe, intensité norvégienne supérieure."
+            "analysis": "Avantage Åråsen Stadion, Torreense novice absolu en Coupe d'Europe, intensité norvégienne supérieure.",
+            "web_intelligence": {
+              "absents_lillestrom": "Garnas, Alperud, Jebara (blessures habituelles, ossature titulaire intacte)",
+              "absents_torreense": "Manu Pozo forfait côté portugais (perte majeure en animation offensive)",
+              "context": "1er match européen de l histoire pour Torreense en Norvège à Åråsen Stadion"
+            }
           }
         ]
       },
