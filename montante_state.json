@@ -1,0 +1,93 @@
+{
+  "last_updated": "2026-09-17T18:59:00+02:00",
+  "active_cycle": {
+    "cycle_id": 1,
+    "status": "IN_PROGRESS",
+    "current_step": 1,
+    "max_steps": 3,
+    "initial_stake": 10.0,
+    "current_stake": 10.0,
+    "target_cashout": 74.0,
+    "strategy_mode": "OPTION_A_PLUS2_GAGNANT",
+    "market_type": "+2 Gagnant (Early Payout Unibet)",
+    "rules": {
+      "selection_criteria": "Top 2 équipes du jour selon Score de Domination /100",
+      "odds_range": [
+        1.35,
+        1.6
+      ],
+      "market_priority": "+2 Gagnant Unibet prioritaire",
+      "web_search_required": true,
+      "max_steps_hard_limit": 3,
+      "cashout_rule": "Retrait ou arrêt obligatoire après le Palier 3"
+    },
+    "history": [
+      {
+        "step": 1,
+        "date": "Jeudi 17/09/2026",
+        "stake": 10.0,
+        "status": "PENDING",
+        "combined_odds": 2.07,
+        "target_payout": 20.67,
+        "matches": [
+          {
+            "match": "FK Zeleznicar vs Étoile Rouge de Belgrade",
+            "kickoff": "20h00",
+            "league": "Serbie • SuperLiga",
+            "selection": "Étoile Rouge (+2 Gagnant)",
+            "odds": 1.36,
+            "domination_score": 74,
+            "analysis": "Champion de Serbie, 5 victoires sur les 6 derniers H2H (7-1, 3-0, 3-1), break très fréquent avant la mi-temps."
+          },
+          {
+            "match": "Lillestrøm vs Torreense",
+            "kickoff": "21h00",
+            "league": "Coupes d'Europe • Ligue Europa",
+            "selection": "Lillestrøm (+2 Gagnant)",
+            "odds": 1.52,
+            "domination_score": 68,
+            "analysis": "Avantage Åråsen Stadion, Torreense novice absolu en Coupe d'Europe, intensité norvégienne supérieure."
+          }
+        ]
+      },
+      {
+        "step": 2,
+        "date": "Vendredi 18/09/2026",
+        "stake": 20.67,
+        "status": "PLANNED",
+        "combined_odds": 1.93,
+        "target_payout": 39.89,
+        "matches": [
+          {
+            "match": "Als Omonia vs AEK Larnaca",
+            "kickoff": "19h00",
+            "league": "Chypre • D1 Chypre",
+            "selection": "AEK Larnaca (+2 Gagnant)",
+            "odds": 1.36,
+            "domination_score": 74,
+            "analysis": "Top 1 absolu de la journée de vendredi. Supériorité nette dans la ligue chypriote."
+          },
+          {
+            "match": "Strasbourg F vs Paris FC F",
+            "kickoff": "19h00",
+            "league": "France • D1 Arkema Féminine",
+            "selection": "Paris FC (+2 Gagnant)",
+            "odds": 1.42,
+            "domination_score": 70,
+            "analysis": "Top 2 de vendredi. Paris FC F parmi le top 3 français, niveau offensif très au-dessus de Strasbourg."
+          }
+        ]
+      },
+      {
+        "step": 3,
+        "date": "Samedi 19/09/2026",
+        "stake": 39.89,
+        "status": "UPCOMING",
+        "combined_odds": 1.9,
+        "target_payout": 75.0,
+        "matches": [],
+        "note": "À déterminer parmi le Top 2 de samedi. Clôture du cycle avec encaissement des gains."
+      }
+    ]
+  }
+}
