@@ -30203,5 +30203,28 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3371159",
+    "timestamp_utc": "2026-09-17T10:04:12.799600+00:00",
+    "match": "Nac.Asuncion vs Club 2 De Mayo",
+    "league": "Paraguay • D1 Paraguay",
+    "date_str": "Ven. 18/09 à 23h30",
+    "fav_team": "Nac.Asuncion",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 57,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.66,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
