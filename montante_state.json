@@ -42,7 +42,25 @@
               "coach_directive": "Albert Riera réclame une efficacité maximale dès le début",
               "key_players": "Marko Arnautović et armada offensive opérationnels",
               "context": "Match en retard J5 SuperLiga, Étoile Rouge invaincue face à Pancevo (5V, 1N)"
-            }
+            },
+            "sources": [
+              {
+                "name": "Site Officiel FK Crvena Zvezda",
+                "url": "https://www.crvenazvezdafk.com"
+              },
+              {
+                "name": "Sofascore Match & Lineup",
+                "url": "https://www.sofascore.com/crvena-zvezda-fk-zeleznicar-pancevo/kSsbw"
+              },
+              {
+                "name": "AIScore Head-to-Head Historique",
+                "url": "https://www.aiscore.com/match-fk-zeleznicar-pancevo-fk-crvena-zvezda/kssbw"
+              },
+              {
+                "name": "Flashscore Live Tracker",
+                "url": "https://www.flashscore.com/match/fk-zeleznicar-crvena-zvezda/"
+              }
+            ]
           },
           {
             "match": "Lillestrøm vs Torreense",
@@ -56,7 +74,25 @@
               "absents_lillestrom": "Garnas, Alperud, Jebara (blessures habituelles, ossature titulaire intacte)",
               "absents_torreense": "Manu Pozo forfait côté portugais (perte majeure en animation offensive)",
               "context": "1er match européen de l histoire pour Torreense en Norvège à Åråsen Stadion"
-            }
+            },
+            "sources": [
+              {
+                "name": "Oddschecker Team News & Injuries",
+                "url": "https://www.oddschecker.com"
+              },
+              {
+                "name": "Sofascore Lillestrom vs Torreense",
+                "url": "https://www.sofascore.com/lillestrom-sk-sc-uniao-torreense/"
+              },
+              {
+                "name": "Flashscore Fiche de Match",
+                "url": "https://www.flashscore.fr/match/lillestrom-torreense/"
+              },
+              {
+                "name": "Eurosport Europa League Phase de Ligue",
+                "url": "https://www.eurosport.fr"
+              }
+            ]
           }
         ]
       },
