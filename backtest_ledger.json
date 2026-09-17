@@ -30046,5 +30046,26 @@
     "result": null,
     "won_p2": null,
     "m3": null
+  },
+  {
+    "match_id": "3376072",
+    "timestamp_utc": "2026-09-17T02:04:43.861433+00:00",
+    "match": "Zhytomyr vs Kryvbas",
+    "league": "Ukraine • D1 Ukraine",
+    "date_str": "Ven. 18/09 à 14h30",
+    "fav_team": "Zhytomyr",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 51,
+      "pct_fav_success": 55,
+      "pct_fav_lead2": 45
+    },
+    "odds": {
+      "fav_odds": 1.32,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
   }
 ]

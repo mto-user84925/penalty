@@ -9,7 +9,7 @@
     "win_rate": 56.5,
     "profit_units": -24.55,
     "roi_pct": -6.22,
-    "last_updated": "2026-09-17T00:03:36.721237+00:00"
+    "last_updated": "2026-09-17T02:04:41.423182+00:00"
   },
   "matches_today": [
     {
@@ -9534,8 +9534,8 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.56,
-      "domination_score": 63,
+      "odds": 1.57,
+      "domination_score": 58,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 60,
       "status": "UPCOMING",
@@ -9547,7 +9547,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.2
+      "away_odds": 5.3
     },
     {
       "id": "3375921",
@@ -9668,7 +9668,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.47,
+      "odds": 1.48,
       "domination_score": 65,
       "badge_tier": "🥈 ARGENT",
       "win_pct_historical": 60,
@@ -9681,7 +9681,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.85
+      "away_odds": 4.9
     },
     {
       "id": "3375917",
@@ -16308,11 +16308,76 @@
         "is_finished": false,
         "profit": 0.0
       }
+    },
+    {
+      "id": "m5_combo_15",
+      "ticket_num": 15,
+      "email_ticket_num": 4,
+      "odds": 2.26,
+      "default_stake": 3.0,
+      "ticket_status": "PENDING",
+      "profit_unit": 0.0,
+      "profit_eur": 0.0,
+      "gain_eur": 6.78,
+      "m1": {
+        "id": "3379254",
+        "time": "Ven. 18/09 à 13h35",
+        "start_iso": "2026-09-18T11:35:00.000Z",
+        "league": "Chine • D1 Chine",
+        "home": "Zhejiang FC",
+        "away": "Wuhan Th.Towns",
+        "fav_team": "Zhejiang FC",
+        "fav_side": "dom",
+        "market": "FAV_1N2",
+        "market_label": "👑 Favori (+2b)",
+        "odds": 1.74,
+        "dog_odds": 3.4,
+        "odds_diff": 1.66,
+        "domination_score": 58,
+        "badge_tier": "🔥 M5",
+        "win_pct_historical": 58,
+        "status": "UPCOMING",
+        "selection_status": "PENDING",
+        "score_display": "VS",
+        "home_score": 0,
+        "away_score": 0,
+        "minute": "À venir",
+        "is_live": false,
+        "is_finished": false,
+        "profit": 0.0
+      },
+      "m2": {
+        "id": "3380329",
+        "time": "Ven. 18/09 à 14h45",
+        "start_iso": "2026-09-18T12:45:00.000Z",
+        "league": "Israel • D1 Israel",
+        "home": "Hap.Tel Aviv",
+        "away": "Hap.PetachTikv",
+        "fav_team": "Hap.Tel Aviv",
+        "fav_side": "dom",
+        "market": "FAV_1N2",
+        "market_label": "👑 Favori (Victoire)",
+        "odds": 1.3,
+        "dog_odds": 6.9,
+        "odds_diff": 5.6,
+        "domination_score": 77,
+        "badge_tier": "🔥 M5",
+        "win_pct_historical": 77,
+        "status": "UPCOMING",
+        "selection_status": "PENDING",
+        "score_display": "VS",
+        "home_score": 0,
+        "away_score": 0,
+        "minute": "À venir",
+        "is_live": false,
+        "is_finished": false,
+        "profit": 0.0
+      }
     }
   ],
   "methode5_summary": {
-    "total": 8,
-    "active": 3,
+    "total": 9,
+    "active": 4,
     "won": 1,
     "lost": 4
   }
