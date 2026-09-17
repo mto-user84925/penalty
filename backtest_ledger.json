@@ -30136,5 +30136,72 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3373280",
+    "timestamp_utc": "2026-09-17T08:04:54.577897+00:00",
+    "match": "Wisla Cracovie vs Slask Wroclaw",
+    "league": "Pologne • D1 Pologne",
+    "date_str": "Ven. 18/09 à 20h30",
+    "fav_team": "Wisla Cracovie",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 65,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.57,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3378612",
+    "timestamp_utc": "2026-09-17T08:04:54.577897+00:00",
+    "match": "Monaco vs Lens",
+    "league": "France • Ligue 1 Mcdonalds",
+    "date_str": "Ven. 18/09 à 20h45",
+    "fav_team": "Monaco",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 51,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.96,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3379424",
+    "timestamp_utc": "2026-09-17T08:04:54.577897+00:00",
+    "match": "Shamrock vs Waterford",
+    "league": "Irlande • D1 Irlande",
+    "date_str": "Ven. 18/09 à 21h00",
+    "fav_team": "Shamrock",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 65,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.4,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]

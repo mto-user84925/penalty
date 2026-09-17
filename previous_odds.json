@@ -5,7 +5,7 @@
       "league": "Espagne • Laliga",
       "date_str": "Jeu. 17/09 à 19h00",
       "fav_team": "Betis Séville",
-      "fav_odds": 1.56,
+      "fav_odds": 1.58,
       "p2_fav_odds": null,
       "fav_score": 58,
       "fav_badge": "🥉 BRONZE+"
@@ -25,7 +25,7 @@
       "league": "Coupes D Europe • Ligue Europa",
       "date_str": "Jeu. 17/09 à 21h00",
       "fav_team": "Besiktas",
-      "fav_odds": 1.76,
+      "fav_odds": 1.77,
       "p2_fav_odds": null,
       "fav_score": 71,
       "fav_badge": "🥈 ARGENT"
@@ -59,6 +59,26 @@
       "p2_fav_odds": null,
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"
+    },
+    "3373280": {
+      "match": "Wisla Cracovie - Slask Wroclaw",
+      "league": "Pologne • D1 Pologne",
+      "date_str": "Ven. 18/09 à 20h30",
+      "fav_team": "Wisla Cracovie",
+      "fav_odds": 1.57,
+      "p2_fav_odds": null,
+      "fav_score": 65,
+      "fav_badge": "🥈 ARGENT"
+    },
+    "3379424": {
+      "match": "Shamrock - Waterford",
+      "league": "Irlande • D1 Irlande",
+      "date_str": "Ven. 18/09 à 21h00",
+      "fav_team": "Shamrock",
+      "fav_odds": 1.4,
+      "p2_fav_odds": null,
+      "fav_score": 65,
+      "fav_badge": "🥈 ARGENT"
     }
   }
 }
