@@ -5,9 +5,19 @@
       "league": "Espagne • Laliga",
       "date_str": "Jeu. 17/09 à 19h00",
       "fav_team": "Betis Séville",
-      "fav_odds": 1.55,
+      "fav_odds": 1.56,
       "p2_fav_odds": null,
       "fav_score": 58,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3369472": {
+      "match": "Orlando Pir. - Durban City",
+      "league": "Afrique Du Sud • D1 Afrique Du Sud",
+      "date_str": "Jeu. 17/09 à 19h30",
+      "fav_team": "Orlando Pir.",
+      "fav_odds": 1.3,
+      "p2_fav_odds": null,
+      "fav_score": 64,
       "fav_badge": "🥉 BRONZE+"
     },
     "3375921": {
@@ -15,9 +25,9 @@
       "league": "Coupes D Europe • Ligue Europa",
       "date_str": "Jeu. 17/09 à 21h00",
       "fav_team": "Besiktas",
-      "fav_odds": 1.73,
+      "fav_odds": 1.76,
       "p2_fav_odds": null,
-      "fav_score": 72,
+      "fav_score": 71,
       "fav_badge": "🥈 ARGENT"
     },
     "3373244": {
@@ -25,10 +35,30 @@
       "league": "Amerique • Copa Sudamericana",
       "date_str": "Ven. 18/09 à 02h30",
       "fav_team": "Torque",
-      "fav_odds": 1.48,
+      "fav_odds": 1.44,
       "p2_fav_odds": null,
       "fav_score": 65,
       "fav_badge": "🥈 ARGENT"
+    },
+    "3378472": {
+      "match": "Pafos FC - AEL Limassol",
+      "league": "Chypre • D1 Chypre",
+      "date_str": "Ven. 18/09 à 19h00",
+      "fav_team": "Pafos FC",
+      "fav_odds": 1.36,
+      "p2_fav_odds": null,
+      "fav_score": 61,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3371825": {
+      "match": "Rapid Vienne - WSG Tirol",
+      "league": "Autriche • D1 Autriche",
+      "date_str": "Ven. 18/09 à 19h30",
+      "fav_team": "Rapid Vienne",
+      "fav_odds": 1.31,
+      "p2_fav_odds": null,
+      "fav_score": 59,
+      "fav_badge": "🥉 BRONZE+"
     }
   }
 }

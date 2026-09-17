@@ -30067,5 +30067,74 @@
     "selected_markets": [],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3369472",
+    "timestamp_utc": "2026-09-17T06:03:32.320938+00:00",
+    "match": "Orlando Pir. vs Durban City",
+    "league": "Afrique Du Sud • D1 Afrique Du Sud",
+    "date_str": "Jeu. 17/09 à 19h30",
+    "fav_team": "Orlando Pir.",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 64,
+      "pct_fav_success": 65,
+      "pct_fav_lead2": 50
+    },
+    "odds": {
+      "fav_odds": 1.3,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3378472",
+    "timestamp_utc": "2026-09-17T06:03:32.320938+00:00",
+    "match": "Pafos FC vs AEL Limassol",
+    "league": "Chypre • D1 Chypre",
+    "date_str": "Ven. 18/09 à 19h00",
+    "fav_team": "Pafos FC",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 61,
+      "pct_fav_success": 58,
+      "pct_fav_lead2": 42
+    },
+    "odds": {
+      "fav_odds": 1.36,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3371825",
+    "timestamp_utc": "2026-09-17T06:03:32.320938+00:00",
+    "match": "Rapid Vienne vs WSG Tirol",
+    "league": "Autriche • D1 Autriche",
+    "date_str": "Ven. 18/09 à 19h30",
+    "fav_team": "Rapid Vienne",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 59,
+      "pct_fav_success": 55,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.31,
+      "p2_fav_odds": null
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
