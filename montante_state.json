@@ -45,20 +45,24 @@
             },
             "sources": [
               {
-                "name": "Site Officiel FK Crvena Zvezda",
-                "url": "https://www.crvenazvezdafk.com"
+                "name": "Unibet Paris Match & Cotes",
+                "url": "https://www.unibet.fr/paris-football/serbie/d1-serbie/3378695/fk-zeleznicar-vs-etoile-rouge"
               },
               {
-                "name": "Sofascore Match & Lineup",
-                "url": "https://www.sofascore.com/crvena-zvezda-fk-zeleznicar-pancevo/kSsbw"
+                "name": "Sofascore Fiche Match & Compos",
+                "url": "https://www.sofascore.com/sr/football/match/fk-zeleznicar-pancevo-fk-crvena-zvezda/ZccsdUmc"
               },
               {
-                "name": "AIScore Head-to-Head Historique",
-                "url": "https://www.aiscore.com/match-fk-zeleznicar-pancevo-fk-crvena-zvezda/kssbw"
+                "name": "Flashscore Match Tracker",
+                "url": "https://www.flashscore.com/match/football/crvena-zvezda-ncRzHK14/zeleznicar-pancevo-jmmBWFML/"
               },
               {
-                "name": "Flashscore Live Tracker",
-                "url": "https://www.flashscore.com/match/fk-zeleznicar-crvena-zvezda/"
+                "name": "AIScore Historique Confrontations (H2H)",
+                "url": "https://m.aiscore.com/head-to-head/soccer-crvena-zvezda-vs-fk-zeleznicar-pancevo"
+              },
+              {
+                "name": "Site Officiel FK Crvena Zvezda Actualités",
+                "url": "https://www.crvenazvezdafk.com/en/vesti"
               }
             ]
           },
@@ -77,20 +81,24 @@
             },
             "sources": [
               {
-                "name": "Oddschecker Team News & Injuries",
-                "url": "https://www.oddschecker.com"
+                "name": "Unibet Paris Match & Cotes",
+                "url": "https://www.unibet.fr/paris-football/coupes-d-europe/ligue-europa/3375932/lillestrom-vs-torreense"
               },
               {
-                "name": "Sofascore Lillestrom vs Torreense",
-                "url": "https://www.sofascore.com/lillestrom-sk-sc-uniao-torreense/"
+                "name": "Oddschecker Rapport Absents & Blessés",
+                "url": "https://www.oddschecker.com/us/picks-parlays/soccer/20260917-lillestrom-vs-torreense-lineups-prediction-betting-picks-odds"
               },
               {
-                "name": "Flashscore Fiche de Match",
-                "url": "https://www.flashscore.fr/match/lillestrom-torreense/"
+                "name": "Eurosport Live Europa League",
+                "url": "https://www.eurosport.fr/football/ligue-europa/2026-2027/live-lillestrom-sk-scu-torreense_mtc21878721/live.shtml"
               },
               {
-                "name": "Eurosport Europa League Phase de Ligue",
-                "url": "https://www.eurosport.fr"
+                "name": "Flashscore Fiche Match Lillestrom vs Torreense",
+                "url": "https://www.flashscore.fr/match/football/lillestrom-xYWBZlwN/torreense-8jQErKhN/"
+              },
+              {
+                "name": "Sofascore Fiche Match & Compos",
+                "url": "https://www.sofascore.com/football/match/torreense-lillestrom-sk/onsMpk"
               }
             ]
           }
