@@ -1,85 +1,259 @@
 {
-  "last_updated": "2026-09-18T11:30:00+02:00",
-  "active_cycle": {
-    "cycle_id": 2,
-    "status": "IN_PROGRESS",
-    "current_step": 1,
-    "max_steps": 3,
-    "initial_stake": 10.0,
-    "current_stake": 10.0,
-    "target_cashout": 74.0,
-    "strategy_mode": "OPTION_A_PLUS2_GAGNANT_DOMICILE_ONLY",
-    "market_type": "+2 Gagnant (Early Payout Unibet)",
-    "rules": {
-      "selection_criteria": "Top 2 équipes du jour à DOMICILE UNIQUEMENT selon Score de Domination /100",
-      "odds_range": [
-        1.4,
-        1.5
-      ],
-      "side_filter": "DOMICILE UNIQUEMENT (fav_side == 'dom')",
-      "market_priority": "+2 Gagnant Unibet prioritaire",
-      "web_search_required": true,
-      "max_steps_hard_limit": 3,
-      "cashout_rule": "Retrait ou arrêt obligatoire après le Palier 3"
+  "last_updated": "2026-09-18T12:05:54.271866",
+  "strategy": "MULTI_MONTANTES_5_PISTES",
+  "initial_stake_per_montante": 3.0,
+  "total_initial_bankroll": 15.0,
+  "max_steps": 3,
+  "rules": {
+    "side_filter": "DOMICILE UNIQUEMENT (100% fav_side == 'dom')",
+    "odds_range": [
+      1.4,
+      1.5
+    ],
+    "market_priority": "+2 Gagnant (Early Payout Unibet) prioritaire, sinon Victoire 1N2",
+    "stopping_condition": "Arrêt strict au Palier 3 (Dimanche soir) et encaissement des bénéfices"
+  },
+  "montantes": [
+    {
+      "id": "M1",
+      "name": "Montante 1 (Piste Eredivisie / LaLiga 2 / Eliteserien)",
+      "palier_actuel": 1,
+      "mise_p1": 3.0,
+      "gain_cible_p1": 4.2,
+      "paliers": [
+        {
+          "palier": 1,
+          "jour": "Vendredi 18/09",
+          "match": "Groningen vs Zwolle",
+          "heure": "20h00",
+          "ligue": "Pays-Bas • Eredivisie",
+          "pari": "Groningen (+2 Gagnant)",
+          "cote": 1.4,
+          "statut": "PENDING",
+          "unibet_url": "https://www.unibet.fr/paris-football/pays-bas/d1-pays-bas/3369926/groningen-vs-zwolle"
+        },
+        {
+          "palier": 2,
+          "jour": "Samedi 19/09",
+          "match": "Castellon vs Tenerife",
+          "heure": "18h30",
+          "ligue": "Espagne • LaLiga 2",
+          "pari": "Castellon (+2 Gagnant)",
+          "cote": 1.4,
+          "statut": "UPCOMING",
+          "unibet_url": "https://www.unibet.fr/paris-football/espagne/laliga-2/3360639/castellon-vs-tenerife"
+        },
+        {
+          "palier": 3,
+          "jour": "Dimanche 20/09",
+          "match": "Tromsø vs HamKam",
+          "heure": "17h00",
+          "ligue": "Norvège • Eliteserien",
+          "pari": "Tromsø (Victoire 1N2)",
+          "cote": 1.4,
+          "statut": "UPCOMING",
+          "unibet_url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370510/tromso-vs-hamkam"
+        }
+      ]
     },
-    "history": [
+    {
+      "id": "M2",
+      "name": "Montante 2 (Piste Veikkausliiga / Süper Lig / Liga Portugal)",
+      "palier_actuel": 1,
+      "mise_p1": 3.0,
+      "gain_cible_p1": 4.26,
+      "paliers": [
+        {
+          "palier": 1,
+          "jour": "Vendredi 18/09",
+          "match": "FC Lahti vs FF Jaro",
+          "heure": "17h00",
+          "ligue": "Finlande • Veikkausliiga",
+          "pari": "FC Lahti (+2 Gagnant)",
+          "cote": 1.42,
+          "statut": "PENDING",
+          "unibet_url": "https://www.unibet.fr/paris-football/finlande/d1-finlande/3377657/fc-lahti-vs-ff-jaro"
+        },
+        {
+          "palier": 2,
+          "jour": "Samedi 19/09",
+          "match": "Basaksehir vs Genclerbirligi",
+          "heure": "19h00",
+          "ligue": "Turquie • Süper Lig",
+          "pari": "Basaksehir (Victoire 1N2)",
+          "cote": 1.42,
+          "statut": "UPCOMING",
+          "unibet_url": "https://www.unibet.fr/paris-football/turquie/d1-turquie/3363783/basaksehir-vs-genclerbirligi"
+        },
+        {
+          "palier": 3,
+          "jour": "Dimanche 20/09",
+          "match": "Vitoria Guimarães vs Moreirense",
+          "heure": "16h30",
+          "ligue": "Portugal • Liga Portugal",
+          "pari": "Vitoria Guimarães (Victoire 1N2)",
+          "cote": 1.42,
+          "statut": "UPCOMING",
+          "unibet_url": "https://www.unibet.fr/paris-football/portugal/liga-portugal/3379862/guimaraes-vs-moreirense"
+        }
+      ]
+    },
+    {
+      "id": "M3",
+      "name": "Montante 3 (Piste Eliteserien / Serie B / LaLiga)",
+      "palier_actuel": 1,
+      "mise_p1": 3.0,
+      "gain_cible_p1": 4.32,
+      "paliers": [
+        {
+          "palier": 1,
+          "jour": "Vendredi 18/09",
+          "match": "Sarpsborg 08 vs KFUM Oslo",
+          "heure": "19h00",
+          "ligue": "Norvège • Eliteserien",
+          "pari": "Sarpsborg 08 (+2 Gagnant)",
+          "cote": 1.44,
+          "statut": "PENDING",
+          "unibet_url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3369928/sarpsborg-08-vs-kfum-oslo"
+        },
+        {
+          "palier": 2,
+          "jour": "Samedi 19/09",
+          "match": "Palerme vs Padoue",
+          "heure": "15h00",
+          "ligue": "Italie • Serie B",
+          "pari": "Palerme (+2 Gagnant)",
+          "cote": 1.42,
+          "statut": "UPCOMING",
+          "unibet_url": "https://www.unibet.fr/paris-football/italie/serie-b/3369069/palerme-vs-padoue"
+        },
+        {
+          "palier": 3,
+          "jour": "Dimanche 20/09",
+          "match": "Villarreal vs Levante",
+          "heure": "18h30",
+          "ligue": "Espagne • LaLiga",
+          "pari": "Villarreal (+2 Gagnant)",
+          "cote": 1.42,
+          "statut": "UPCOMING",
+          "unibet_url": "https://www.unibet.fr/paris-football/espagne/laliga/3360734/villarreal-vs-levante"
+        }
+      ]
+    },
+    {
+      "id": "M4",
+      "name": "Montante 4 (Piste Liga 1 / Super League / Jupiler Pro)",
+      "palier_actuel": 1,
+      "mise_p1": 3.0,
+      "gain_cible_p1": 4.38,
+      "paliers": [
+        {
+          "palier": 1,
+          "jour": "Vendredi 18/09",
+          "match": "Rapid Bucarest vs FC Arges",
+          "heure": "20h00",
+          "ligue": "Roumanie • Liga 1",
+          "pari": "Rapid Bucarest (+2 Gagnant)",
+          "cote": 1.46,
+          "statut": "PENDING",
+          "unibet_url": "https://www.unibet.fr/paris-football/roumanie/d1-roumanie/3370165/rapid-bucarest-vs-fc-arges"
+        },
+        {
+          "palier": 2,
+          "jour": "Samedi 19/09",
+          "match": "Aris Salonique vs POT Iraklis",
+          "heure": "18h30",
+          "ligue": "Grèce • Super League",
+          "pari": "Aris Salonique (+2 Gagnant)",
+          "cote": 1.5,
+          "statut": "UPCOMING",
+          "unibet_url": "https://www.unibet.fr/paris-football/grece/d1-grece/3380238/aris-salonique-vs-pot-iraklis"
+        },
+        {
+          "palier": 3,
+          "jour": "Dimanche 20/09",
+          "match": "Club Bruges vs RC Genk",
+          "heure": "18h30",
+          "ligue": "Belgique • Jupiler Pro",
+          "pari": "Club Bruges (Victoire 1N2)",
+          "cote": 1.4,
+          "statut": "UPCOMING",
+          "unibet_url": "https://www.unibet.fr/paris-football/belgique/d1-belgique/3370523/club-bruges-vs-rc-genk"
+        }
+      ]
+    },
+    {
+      "id": "M5",
+      "name": "Montante 5 (Piste I Liga / Premier League ISR / 1. Liga TCH)",
+      "palier_actuel": 1,
+      "mise_p1": 3.0,
+      "gain_cible_p1": 4.44,
+      "paliers": [
+        {
+          "palier": 1,
+          "jour": "Vendredi 18/09",
+          "match": "Wisla Cracovie vs Slask Wroclaw",
+          "heure": "20h30",
+          "ligue": "Pologne • I Liga",
+          "pari": "Wisla Cracovie (+2 Gagnant)",
+          "cote": 1.48,
+          "statut": "PENDING",
+          "unibet_url": "https://www.unibet.fr/paris-football/pologne/d1-pologne/3373280/wisla-cracovie-vs-slask-wroclaw"
+        },
+        {
+          "palier": 2,
+          "jour": "Samedi 19/09",
+          "match": "Beitar Jerusalem vs Hapoel Haifa",
+          "heure": "19h30",
+          "ligue": "Israël • Premier League",
+          "pari": "Beitar Jerusalem (+2 Gagnant)",
+          "cote": 1.48,
+          "statut": "UPCOMING",
+          "unibet_url": "https://www.unibet.fr/paris-football/israel/d1-israel/3380387/beit-jerusalem-vs-hapoel-haifa"
+        },
+        {
+          "palier": 3,
+          "jour": "Dimanche 20/09",
+          "match": "Slavia Prague vs Viktoria Plzen",
+          "heure": "18h00",
+          "ligue": "Rép. Tchèque • 1. Liga",
+          "pari": "Slavia Prague (Victoire 1N2)",
+          "cote": 1.42,
+          "statut": "UPCOMING",
+          "unibet_url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370204/slavia-prague-vs-viktoria-plzen"
+        }
+      ]
+    }
+  ],
+  "reserves": {
+    "Vendredi": [
       {
-        "step": 1,
-        "date": "Vendredi 18/09/2026",
-        "stake": 10.0,
-        "status": "PENDING",
-        "combined_odds": 2.04,
-        "target_payout": 20.45,
-        "matches": [
-          {
-            "match": "Wolfsburg vs SV Darmstadt",
-            "kickoff": "18h30",
-            "league": "Allemagne • Bundesliga 2",
-            "selection": "Wolfsburg (+2 Gagnant)",
-            "fav_side": "dom",
-            "odds": 1.42,
-            "domination_score": 69,
-            "analysis": "Top 1 Domicile du jour. Wolfsburg 5e, Darmstadt en difficulté (16e). Cadres offensifs présents à la Volkswagen Arena.",
-            "sources": [
-              {
-                "name": "Sofascore Fiche Match & Compos",
-                "url": "https://www.sofascore.com/football/match/vfl-wolfsburg-sv-darmstadt-98/kbsrB"
-              },
-              {
-                "name": "Flashscore Match Tracker",
-                "url": "https://www.flashscore.com/match/football/wolfsburg-darmstadt/"
-              }
-            ]
-          },
-          {
-            "match": "FC Lahti vs FF Jaro",
-            "kickoff": "17h00",
-            "league": "Finlande • Veikkausliiga",
-            "selection": "FC Lahti (+2 Gagnant)",
-            "fav_side": "dom",
-            "odds": 1.44,
-            "domination_score": 68,
-            "analysis": "Top 2 Domicile du jour. FC Lahti à domicile au Lahden Stadion, dynamique supérieure face à Jaro en difficulté.",
-            "sources": [
-              {
-                "name": "Sofascore FC Lahti vs FF Jaro",
-                "url": "https://www.sofascore.com/football/match/fc-lahti-ff-jaro/HOJi4KH"
-              },
-              {
-                "name": "Flashscore Fiche Match",
-                "url": "https://www.flashscore.com/match/football/fc-lahti-ff-jaro/"
-              }
-            ]
-          }
-        ]
+        "match": "Wolfsburg vs SV Darmstadt",
+        "heure": "18h30",
+        "pari": "Victoire 1N2 @ 1.40",
+        "unibet_url": "https://www.unibet.fr/paris-football/allemagne/bundesliga-2/3369906/wolfsburg-vs-sv-darmstadt"
       }
     ],
-    "previous_cycle_summary": {
-      "cycle_id": 1,
-      "ended_at": "2026-09-17T22:55:00+02:00",
-      "step_reached": 1,
-      "outcome": "LOST (Lillestrøm 1-2)",
-      "learning": "Application stricte de la nouvelle règle utilisateur : 100% DOMICILE UNIQUEMENT et cotes resserrées [1.40, 1.50]."
-    }
+    "Samedi": [],
+    "Dimanche": [
+      {
+        "match": "Shakhtar Donetsk vs LNZ Cherkasy",
+        "heure": "17h00",
+        "pari": "+2 Gagnant @ 1.42",
+        "unibet_url": "https://www.unibet.fr/paris-football/ukraine/d1-ukraine/3376070/shakht-donetsk-vs-lnz-cherkasy"
+      },
+      {
+        "match": "Norwich vs Bolton",
+        "heure": "14h30",
+        "pari": "+2 Gagnant @ 1.40",
+        "unibet_url": "https://www.unibet.fr/paris-football/angleterre/championship/3380053/norwich-vs-bolton"
+      },
+      {
+        "match": "Djurgårdens vs Elfsborg",
+        "heure": "14h00",
+        "pari": "+2 Gagnant @ 1.44",
+        "unibet_url": "https://www.unibet.fr/paris-football/suede/d1-suede/3370529/djurgardens-vs-elfsborg"
+      }
+    ]
   }
 }
