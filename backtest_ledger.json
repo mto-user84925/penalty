@@ -30456,5 +30456,51 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3381119",
+    "timestamp_utc": "2026-09-18T16:05:40.808891+00:00",
+    "match": "Caernarfon vs Cambrian Utd",
+    "league": "Pays De Galles • D1 P Degalles",
+    "date_str": "Ven. 18/09 à 20h45",
+    "fav_team": "Caernarfon",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 64,
+      "pct_fav_success": 80,
+      "pct_fav_lead2": 50
+    },
+    "odds": {
+      "fav_odds": 1.41,
+      "p2_fav_odds": 1.41
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3369940",
+    "timestamp_utc": "2026-09-18T16:05:40.808891+00:00",
+    "match": "Briton Ferry L vs Trefelin BGC",
+    "league": "Pays De Galles • D1 P Degalles",
+    "date_str": "Ven. 18/09 à 20h45",
+    "fav_team": "Briton Ferry L",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 73,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 45
+    },
+    "odds": {
+      "fav_odds": 1.44,
+      "p2_fav_odds": 1.4
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]

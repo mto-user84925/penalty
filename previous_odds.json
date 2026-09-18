@@ -1,15 +1,5 @@
 {
   "favs": {
-    "3377657": {
-      "match": "FC Lahti - FF Jaro",
-      "league": "Finlande • D1 Finlande",
-      "date_str": "Ven. 18/09 à 17h00",
-      "fav_team": "FC Lahti",
-      "fav_odds": 1.45,
-      "p2_fav_odds": 1.42,
-      "fav_score": 59,
-      "fav_badge": "🥉 BRONZE+"
-    },
     "3373280": {
       "match": "Wisla Cracovie - Slask Wroclaw",
       "league": "Pologne • D1 Pologne",
@@ -19,6 +9,26 @@
       "p2_fav_odds": 1.46,
       "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"
+    },
+    "3381119": {
+      "match": "Caernarfon - Cambrian Utd",
+      "league": "Pays De Galles • D1 P Degalles",
+      "date_str": "Ven. 18/09 à 20h45",
+      "fav_team": "Caernarfon",
+      "fav_odds": 1.41,
+      "p2_fav_odds": 1.41,
+      "fav_score": 64,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3369940": {
+      "match": "Briton Ferry L - Trefelin BGC",
+      "league": "Pays De Galles • D1 P Degalles",
+      "date_str": "Ven. 18/09 à 20h45",
+      "fav_team": "Briton Ferry L",
+      "fav_odds": 1.44,
+      "p2_fav_odds": 1.4,
+      "fav_score": 73,
+      "fav_badge": "🥈 ARGENT"
     },
     "3369069": {
       "match": "Palerme - Padoue",
