@@ -30249,5 +30249,51 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3380779",
+    "timestamp_utc": "2026-09-18T04:04:22.136446+00:00",
+    "match": "Vojvodina vs IMT N.Belgrade",
+    "league": "Serbie • D1 Serbie",
+    "date_str": "Sam. 19/09 à 17h00",
+    "fav_team": "Vojvodina",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 63,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.6,
+      "p2_fav_odds": 1.56
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3373779",
+    "timestamp_utc": "2026-09-18T04:04:22.136446+00:00",
+    "match": "FK Kosice vs MFK Ruzomberok",
+    "league": "Slovaquie • D1 Slovaquie",
+    "date_str": "Sam. 19/09 à 18h00",
+    "fav_team": "FK Kosice",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 63,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 50
+    },
+    "odds": {
+      "fav_odds": 1.36,
+      "p2_fav_odds": 1.36
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]

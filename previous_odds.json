@@ -39,6 +39,26 @@
       "p2_fav_odds": 1.4,
       "fav_score": 69,
       "fav_badge": "🥈 ARGENT"
+    },
+    "3380779": {
+      "match": "Vojvodina - IMT N.Belgrade",
+      "league": "Serbie • D1 Serbie",
+      "date_str": "Sam. 19/09 à 17h00",
+      "fav_team": "Vojvodina",
+      "fav_odds": 1.6,
+      "p2_fav_odds": 1.56,
+      "fav_score": 63,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3373779": {
+      "match": "FK Kosice - MFK Ruzomberok",
+      "league": "Slovaquie • D1 Slovaquie",
+      "date_str": "Sam. 19/09 à 18h00",
+      "fav_team": "FK Kosice",
+      "fav_odds": 1.36,
+      "p2_fav_odds": 1.36,
+      "fav_score": 63,
+      "fav_badge": "🥉 BRONZE+"
     }
   }
 }
