@@ -30387,5 +30387,74 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3377657",
+    "timestamp_utc": "2026-09-18T14:05:57.186130+00:00",
+    "match": "FC Lahti vs FF Jaro",
+    "league": "Finlande • D1 Finlande",
+    "date_str": "Ven. 18/09 à 17h00",
+    "fav_team": "FC Lahti",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 59,
+      "pct_fav_success": 50,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.45,
+      "p2_fav_odds": 1.42
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3380238",
+    "timestamp_utc": "2026-09-18T14:05:57.186130+00:00",
+    "match": "Aris Salonique vs POT Iraklis",
+    "league": "Grece • D1 Grece",
+    "date_str": "Sam. 19/09 à 18h30",
+    "fav_team": "Aris Salonique",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 55,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.53,
+      "p2_fav_odds": 1.5
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3363783",
+    "timestamp_utc": "2026-09-18T14:05:57.186130+00:00",
+    "match": "Basaksehir vs Genclerbirligi",
+    "league": "Turquie • D1 Turquie",
+    "date_str": "Sam. 19/09 à 19h00",
+    "fav_team": "Basaksehir",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 57,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 50
+    },
+    "odds": {
+      "fav_odds": 1.42,
+      "p2_fav_odds": 1.42
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
