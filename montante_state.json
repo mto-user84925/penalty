@@ -1,7 +1,7 @@
 {
-  "last_updated": "2026-09-18T12:40:41.206877",
+  "last_updated": "2026-09-18T12:52:49.481671",
   "strategy": "MULTI_MONTANTES_5_COMBINES_WEEKEND",
-  "ticket_type": "COMBINÉ_2_MATCHS",
+  "rule_cote_min_combo": 2.0,
   "progression": "4€ (Vendredi P1) ➔ 6€ (Samedi P2) ➔ 9€ (Dimanche P3)",
   "cashout_rule": "Arrêt strict au Palier 3 dimanche soir",
   "capital_initial": 20.0,
@@ -10,53 +10,10 @@
       "palier": 1,
       "mise_unitaire": 4.0,
       "mise_totale": 20.0,
-      "gain_cible_unitaire": 8.0,
       "combines": [
         {
           "id": "C1_VEN",
           "nom": "Combiné 1",
-          "m1": {
-            "equipes": "FC Lahti vs FF Jaro",
-            "heure": "17h00",
-            "pari": "FC Lahti (+2b)",
-            "cote": 1.42,
-            "url": "https://www.unibet.fr/paris-football/finlande/d1-finlande/3377657/fc-lahti-vs-ff-jaro"
-          },
-          "m2": {
-            "equipes": "Groningen vs Zwolle",
-            "heure": "20h00",
-            "pari": "Groningen (+2b)",
-            "cote": 1.4,
-            "url": "https://www.unibet.fr/paris-football/pays-bas/d1-pays-bas/3369926/groningen-vs-zwolle"
-          },
-          "cote_totale": 1.99,
-          "mise": 4.0,
-          "gain_estime": 7.96
-        },
-        {
-          "id": "C2_VEN",
-          "nom": "Combiné 2",
-          "m1": {
-            "equipes": "Wolfsburg vs SV Darmstadt",
-            "heure": "18h30",
-            "pari": "Wolfsburg (1N2)",
-            "cote": 1.4,
-            "url": "https://www.unibet.fr/paris-football/allemagne/bundesliga-2/3369906/wolfsburg-vs-sv-darmstadt"
-          },
-          "m2": {
-            "equipes": "Sarpsborg 08 vs KFUM Oslo",
-            "heure": "19h00",
-            "pari": "Sarpsborg 08 (+2b)",
-            "cote": 1.44,
-            "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3369928/sarpsborg-08-vs-kfum-oslo"
-          },
-          "cote_totale": 2.02,
-          "mise": 4.0,
-          "gain_estime": 8.08
-        },
-        {
-          "id": "C3_VEN",
-          "nom": "Combiné 3",
           "m1": {
             "equipes": "Groningen vs Zwolle",
             "heure": "20h00",
@@ -73,7 +30,49 @@
           },
           "cote_totale": 2.04,
           "mise": 4.0,
-          "gain_estime": 8.16
+          "gain_estime": 8.18
+        },
+        {
+          "id": "C2_VEN",
+          "nom": "Combiné 2",
+          "m1": {
+            "equipes": "Wolfsburg vs SV Darmstadt",
+            "heure": "18h30",
+            "pari": "Wolfsburg (1N2)",
+            "cote": 1.4,
+            "url": "https://www.unibet.fr/paris-football/allemagne/bundesliga-2/3369906/wolfsburg-vs-sv-darmstadt"
+          },
+          "m2": {
+            "equipes": "Wisla Cracovie vs Slask Wroclaw",
+            "heure": "20h30",
+            "pari": "Wisla Cracovie (+2b)",
+            "cote": 1.48,
+            "url": "https://www.unibet.fr/paris-football/pologne/d1-pologne/3373280/wisla-cracovie-vs-slask-wroclaw"
+          },
+          "cote_totale": 2.07,
+          "mise": 4.0,
+          "gain_estime": 8.29
+        },
+        {
+          "id": "C3_VEN",
+          "nom": "Combiné 3",
+          "m1": {
+            "equipes": "FC Lahti vs FF Jaro",
+            "heure": "17h00",
+            "pari": "FC Lahti (+2b)",
+            "cote": 1.42,
+            "url": "https://www.unibet.fr/paris-football/finlande/d1-finlande/3377657/fc-lahti-vs-ff-jaro"
+          },
+          "m2": {
+            "equipes": "Sarpsborg 08 vs KFUM Oslo",
+            "heure": "19h00",
+            "pari": "Sarpsborg 08 (+2b)",
+            "cote": 1.44,
+            "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3369928/sarpsborg-08-vs-kfum-oslo"
+          },
+          "cote_totale": 2.04,
+          "mise": 4.0,
+          "gain_estime": 8.18
         },
         {
           "id": "C4_VEN",
@@ -94,7 +93,7 @@
           },
           "cote_totale": 2.1,
           "mise": 4.0,
-          "gain_estime": 8.4
+          "gain_estime": 8.41
         },
         {
           "id": "C5_VEN",
@@ -115,84 +114,44 @@
           },
           "cote_totale": 2.1,
           "mise": 4.0,
-          "gain_estime": 8.4
+          "gain_estime": 8.41
         }
       ]
     },
     "SAMEDI_19_09": {
       "palier": 2,
       "mise_unitaire": 6.0,
-      "gain_cible_unitaire": 12.0,
       "combines": [
         {
           "id": "C1_SAM",
           "nom": "Combiné 1",
           "m1": {
-            "equipes": "Palerme vs Padoue",
-            "heure": "15h00",
-            "pari": "Palerme (+2b)",
-            "cote": 1.42,
-            "url": "https://www.unibet.fr/paris-football/italie/serie-b/3369069/palerme-vs-padoue"
-          },
-          "m2": {
             "equipes": "Castellon vs Tenerife",
             "heure": "18h30",
             "pari": "Castellon (+2b)",
             "cote": 1.4,
             "url": "https://www.unibet.fr/paris-football/espagne/laliga-2/3360639/castellon-vs-tenerife"
           },
-          "cote_totale": 1.99,
-          "gain_estime": 11.94
+          "m2": {
+            "equipes": "Athletic Bilbao vs Alaves",
+            "heure": "21h00",
+            "pari": "Bilbao (+2b)",
+            "cote": 1.52,
+            "url": "https://www.unibet.fr/paris-football/espagne/laliga/3360742/athletic-bilbao-vs-alaves"
+          },
+          "cote_totale": 2.13,
+          "mise": 6.0,
+          "gain_estime": 12.77
         },
         {
           "id": "C2_SAM",
           "nom": "Combiné 2",
           "m1": {
-            "equipes": "Castellon vs Tenerife",
-            "heure": "18h30",
-            "pari": "Castellon (+2b)",
-            "cote": 1.4,
-            "url": "https://www.unibet.fr/paris-football/espagne/laliga-2/3360639/castellon-vs-tenerife"
-          },
-          "m2": {
-            "equipes": "Basaksehir vs Genclerbirligi",
-            "heure": "19h00",
-            "pari": "Basaksehir (1N2)",
-            "cote": 1.42,
-            "url": "https://www.unibet.fr/paris-football/turquie/d1-turquie/3363783/basaksehir-vs-genclerbirligi"
-          },
-          "cote_totale": 1.99,
-          "gain_estime": 11.94
-        },
-        {
-          "id": "C3_SAM",
-          "nom": "Combiné 3",
-          "m1": {
             "equipes": "Palerme vs Padoue",
             "heure": "15h00",
             "pari": "Palerme (+2b)",
             "cote": 1.42,
             "url": "https://www.unibet.fr/paris-football/italie/serie-b/3369069/palerme-vs-padoue"
-          },
-          "m2": {
-            "equipes": "Beitar Jerusalem vs Hapoel Haifa",
-            "heure": "19h30",
-            "pari": "Beitar Jerusalem (+2b)",
-            "cote": 1.48,
-            "url": "https://www.unibet.fr/paris-football/israel/d1-israel/3380387/beit-jerusalem-vs-hapoel-haifa"
-          },
-          "cote_totale": 2.1,
-          "gain_estime": 12.6
-        },
-        {
-          "id": "C4_SAM",
-          "nom": "Combiné 4",
-          "m1": {
-            "equipes": "Basaksehir vs Genclerbirligi",
-            "heure": "19h00",
-            "pari": "Basaksehir (1N2)",
-            "cote": 1.42,
-            "url": "https://www.unibet.fr/paris-football/turquie/d1-turquie/3363783/basaksehir-vs-genclerbirligi"
           },
           "m2": {
             "equipes": "Aris Salonique vs POT Iraklis",
@@ -202,17 +161,18 @@
             "url": "https://www.unibet.fr/paris-football/grece/d1-grece/3380238/aris-salonique-vs-pot-iraklis"
           },
           "cote_totale": 2.13,
+          "mise": 6.0,
           "gain_estime": 12.78
         },
         {
-          "id": "C5_SAM",
-          "nom": "Combiné 5",
+          "id": "C3_SAM",
+          "nom": "Combiné 3",
           "m1": {
-            "equipes": "Aris Salonique vs POT Iraklis",
-            "heure": "18h30",
-            "pari": "Aris Salonique (+2b)",
-            "cote": 1.5,
-            "url": "https://www.unibet.fr/paris-football/grece/d1-grece/3380238/aris-salonique-vs-pot-iraklis"
+            "equipes": "Basaksehir vs Genclerbirligi",
+            "heure": "19h00",
+            "pari": "Basaksehir (1N2)",
+            "cote": 1.42,
+            "url": "https://www.unibet.fr/paris-football/turquie/d1-turquie/3363783/basaksehir-vs-genclerbirligi"
           },
           "m2": {
             "equipes": "Beitar Jerusalem vs Hapoel Haifa",
@@ -221,15 +181,57 @@
             "cote": 1.48,
             "url": "https://www.unibet.fr/paris-football/israel/d1-israel/3380387/beit-jerusalem-vs-hapoel-haifa"
           },
-          "cote_totale": 2.22,
-          "gain_estime": 13.32
+          "cote_totale": 2.1,
+          "mise": 6.0,
+          "gain_estime": 12.61
+        },
+        {
+          "id": "C4_SAM",
+          "nom": "Combiné 4",
+          "m1": {
+            "equipes": "Castellon vs Tenerife",
+            "heure": "18h30",
+            "pari": "Castellon (+2b)",
+            "cote": 1.4,
+            "url": "https://www.unibet.fr/paris-football/espagne/laliga-2/3360639/castellon-vs-tenerife"
+          },
+          "m2": {
+            "equipes": "Newcastle vs Hull City",
+            "heure": "16h00",
+            "pari": "Newcastle (+2b)",
+            "cote": 1.52,
+            "url": "https://www.unibet.fr/paris-football/angleterre/premier-league/3371800/newcastle-vs-hull-city"
+          },
+          "cote_totale": 2.13,
+          "mise": 6.0,
+          "gain_estime": 12.77
+        },
+        {
+          "id": "C5_SAM",
+          "nom": "Combiné 5",
+          "m1": {
+            "equipes": "Palerme vs Padoue",
+            "heure": "15h00",
+            "pari": "Palerme (+2b)",
+            "cote": 1.42,
+            "url": "https://www.unibet.fr/paris-football/italie/serie-b/3369069/palerme-vs-padoue"
+          },
+          "m2": {
+            "equipes": "Athletic Bilbao vs Alaves",
+            "heure": "21h00",
+            "pari": "Bilbao (+2b)",
+            "cote": 1.52,
+            "url": "https://www.unibet.fr/paris-football/espagne/laliga/3360742/athletic-bilbao-vs-alaves"
+          },
+          "cote_totale": 2.16,
+          "mise": 6.0,
+          "gain_estime": 12.95
         }
       ]
     },
     "DIMANCHE_20_09": {
       "palier": 3,
       "mise_unitaire": 9.0,
-      "gain_cible_unitaire": 18.0,
       "combines": [
         {
           "id": "C1_DIM",
@@ -242,24 +244,67 @@
             "url": "https://www.unibet.fr/paris-football/angleterre/championship/3380053/norwich-vs-bolton"
           },
           "m2": {
+            "equipes": "Modène vs Empoli",
+            "heure": "19h30",
+            "pari": "Modène (+2b)",
+            "cote": 1.46,
+            "url": "https://www.unibet.fr/paris-football/italie/serie-b/3369084/modene-vs-empoli"
+          },
+          "cote_totale": 2.04,
+          "mise": 9.0,
+          "gain_estime": 18.4
+        },
+        {
+          "id": "C2_DIM",
+          "nom": "Combiné 2",
+          "m1": {
             "equipes": "Tromsø vs HamKam",
             "heure": "17h00",
             "pari": "Tromsø (1N2)",
             "cote": 1.4,
             "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370510/tromso-vs-hamkam"
           },
-          "cote_totale": 1.96,
-          "gain_estime": 17.64
+          "m2": {
+            "equipes": "Salzbourg vs Sturm Graz",
+            "heure": "17h00",
+            "pari": "Salzbourg (+2b)",
+            "cote": 1.5,
+            "url": "https://www.unibet.fr/paris-football/autriche/d1-autriche/3371824/salzbourg-vs-sturm-graz"
+          },
+          "cote_totale": 2.1,
+          "mise": 9.0,
+          "gain_estime": 18.9
         },
         {
-          "id": "C2_DIM",
-          "nom": "Combiné 2",
+          "id": "C3_DIM",
+          "nom": "Combiné 3",
           "m1": {
-            "equipes": "Vitoria Guimarães vs Moreirense",
+            "equipes": "Guimarães vs Moreirense",
             "heure": "16h30",
             "pari": "Guimarães (1N2)",
             "cote": 1.42,
             "url": "https://www.unibet.fr/paris-football/portugal/liga-portugal/3379862/guimaraes-vs-moreirense"
+          },
+          "m2": {
+            "equipes": "Dinamo Bucarest vs FC Constanta",
+            "heure": "19h30",
+            "pari": "Dinamo (+2b)",
+            "cote": 1.5,
+            "url": "https://www.unibet.fr/paris-football/roumanie/d1-roumanie/3370159/dinamobucarest-vs-fc-constanta"
+          },
+          "cote_totale": 2.13,
+          "mise": 9.0,
+          "gain_estime": 19.17
+        },
+        {
+          "id": "C4_DIM",
+          "nom": "Combiné 4",
+          "m1": {
+            "equipes": "Villarreal vs Levante",
+            "heure": "18h30",
+            "pari": "Villarreal (+2b)",
+            "cote": 1.42,
+            "url": "https://www.unibet.fr/paris-football/espagne/laliga/3360734/villarreal-vs-levante"
           },
           "m2": {
             "equipes": "Slavia Prague vs Viktoria Plzen",
@@ -269,11 +314,12 @@
             "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370204/slavia-prague-vs-viktoria-plzen"
           },
           "cote_totale": 2.02,
-          "gain_estime": 18.18
+          "mise": 9.0,
+          "gain_estime": 18.15
         },
         {
-          "id": "C3_DIM",
-          "nom": "Combiné 3",
+          "id": "C5_DIM",
+          "nom": "Combiné 5",
           "m1": {
             "equipes": "Shakhtar Donetsk vs LNZ Cherkasy",
             "heure": "17h00",
@@ -282,54 +328,15 @@
             "url": "https://www.unibet.fr/paris-football/ukraine/d1-ukraine/3376070/shakht-donetsk-vs-lnz-cherkasy"
           },
           "m2": {
-            "equipes": "Villarreal vs Levante",
-            "heure": "18h30",
-            "pari": "Villarreal (+2b)",
-            "cote": 1.42,
-            "url": "https://www.unibet.fr/paris-football/espagne/laliga/3360734/villarreal-vs-levante"
-          },
-          "cote_totale": 2.02,
-          "gain_estime": 18.18
-        },
-        {
-          "id": "C4_DIM",
-          "nom": "Combiné 4",
-          "m1": {
             "equipes": "Djurgårdens vs Elfsborg",
             "heure": "14h00",
             "pari": "Djurgårdens (+2b)",
             "cote": 1.44,
             "url": "https://www.unibet.fr/paris-football/suede/d1-suede/3370529/djurgardens-vs-elfsborg"
           },
-          "m2": {
-            "equipes": "Club Bruges vs RC Genk",
-            "heure": "18h30",
-            "pari": "Club Bruges (1N2)",
-            "cote": 1.4,
-            "url": "https://www.unibet.fr/paris-football/belgique/d1-belgique/3370523/club-bruges-vs-rc-genk"
-          },
-          "cote_totale": 2.02,
-          "gain_estime": 18.18
-        },
-        {
-          "id": "C5_DIM",
-          "nom": "Combiné 5",
-          "m1": {
-            "equipes": "FC Flora vs Pärnu Vaprus",
-            "heure": "18h00",
-            "pari": "FC Flora (1N2)",
-            "cote": 1.4,
-            "url": "https://www.unibet.fr/paris-football/estonie/d1-estonie/3378804/fc-flora-vs-parnu-jk-vapru"
-          },
-          "m2": {
-            "equipes": "Modène vs Empoli",
-            "heure": "19h30",
-            "pari": "Modène (+2b)",
-            "cote": 1.46,
-            "url": "https://www.unibet.fr/paris-football/italie/serie-b/3369084/modene-vs-empoli"
-          },
           "cote_totale": 2.04,
-          "gain_estime": 18.36
+          "mise": 9.0,
+          "gain_estime": 18.4
         }
       ]
     }
