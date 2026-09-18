@@ -14,36 +14,37 @@ except Exception:
     ZoneInfo = None
 
 # ── Seuils Globaux de Cotes pour TOUTES les Méthodes (M1, M2, M5) ─────────────
-# ponytail: Harmonisation stricte demandée par l'utilisateur : cotes unitaires [1.35, 1.60]
-GLOBAL_MIN_ODDS         = 1.35  # Cote minimale unitaire par match
-GLOBAL_MAX_ODDS         = 1.60  # Cote maximale unitaire par match
-SWEET_SPOT_COMBO_MIN    = 1.82  # Borne basse combiné 2 matchs (1.35 * 1.35 = 1.8225)
-SWEET_SPOT_COMBO_MAX    = 2.60  # Borne haute combiné 2 matchs (1.60 * 1.60 = 2.56)
+# ponytail: Harmonisation stricte demandée par l'utilisateur : cotes unitaires [1.40, 1.50], Domicile uniquement
+GLOBAL_MIN_ODDS         = 1.40  # Cote minimale unitaire par match
+GLOBAL_MAX_ODDS         = 1.50  # Cote maximale unitaire par match
+SWEET_SPOT_COMBO_MIN    = 1.96  # Borne basse combiné 2 matchs (1.40 * 1.40 = 1.96)
+SWEET_SPOT_COMBO_MAX    = 2.25  # Borne haute combiné 2 matchs (1.50 * 1.50 = 2.25)
 
 # ── Seuils Stratégie M1 (Favoris Domicile Win & +2 Buts d'Avance) ─────────────
-MAX_COTE_FAV           = GLOBAL_MAX_ODDS  # 1.60
-MIN_COTE_FAV           = GLOBAL_MIN_ODDS  # 1.35
+MAX_COTE_FAV           = GLOBAL_MAX_ODDS  # 1.50
+MIN_COTE_FAV           = GLOBAL_MIN_ODDS  # 1.40
 MIN_SCORE_FAV_COMBO    = 55    # Score Domination minimal pour ENTRER DANS UN COMBINÉ M1
 MIN_SCORE_FAV_RESERVE  = 50    # Seuil pour les matchs en RÉSERVE M1 (50-54)
 MIN_SCORE_FAV_RETAINED = 50    # Seuil minimal global pour analyse/affichage
 MIN_SCORE_FAV_SOLID    = 75    # Score AdamChoi pour être qualifié Favori Solide (Or / Platine)
 MIN_PCT_FAV_SUCCESS    = 50    # Filtre dur : Win ou +2b d'avance historique >= 50%
-SWEET_SPOT_M1_MIN       = SWEET_SPOT_COMBO_MIN  # 1.82
-SWEET_SPOT_M1_MAX       = SWEET_SPOT_COMBO_MAX  # 2.60
+SWEET_SPOT_M1_MIN       = SWEET_SPOT_COMBO_MIN  # 1.96
+SWEET_SPOT_M1_MAX       = SWEET_SPOT_COMBO_MAX  # 2.25
 
 # ── Seuils Méthode 2 (Marché Bookmaker Dom < Under/Over) ──────────────────────
-M2_MIN_ODDS            = GLOBAL_MIN_ODDS  # 1.35
-M2_MAX_ODDS            = GLOBAL_MAX_ODDS  # 1.60
-SWEET_SPOT_M2_MIN      = SWEET_SPOT_COMBO_MIN  # 1.82
-SWEET_SPOT_M2_MAX      = SWEET_SPOT_COMBO_MAX  # 2.60
+M2_MIN_ODDS            = GLOBAL_MIN_ODDS  # 1.40
+M2_MAX_ODDS            = GLOBAL_MAX_ODDS  # 1.50
+SWEET_SPOT_M2_MIN      = SWEET_SPOT_COMBO_MIN  # 1.96
+SWEET_SPOT_M2_MAX      = SWEET_SPOT_COMBO_MAX  # 2.25
 
-# ── Méthode 5 : Combinés 2 Matchs Tendance Pure Bookmaker (Dom & Ext) ────────
-M5_MIN_ODDS            = GLOBAL_MIN_ODDS  # 1.35
-M5_MAX_ODDS            = GLOBAL_MAX_ODDS  # 1.60
+# ── Méthode 5 : Combinés 2 Matchs Tendance Pure Bookmaker (DOMICILE UNIQUEMENT) ──
+M5_MIN_ODDS            = GLOBAL_MIN_ODDS  # 1.40
+M5_MAX_ODDS            = GLOBAL_MAX_ODDS  # 1.50
 M5_MIN_DIFF_DOG        = 0.40  # Écart minimum avec l'outsider
-SWEET_SPOT_M5_MIN      = SWEET_SPOT_COMBO_MIN  # 1.82
-SWEET_SPOT_M5_MAX      = SWEET_SPOT_COMBO_MAX  # 2.60
+SWEET_SPOT_M5_MIN      = SWEET_SPOT_COMBO_MIN  # 1.96
+SWEET_SPOT_M5_MAX      = SWEET_SPOT_COMBO_MAX  # 2.25
 DEFAULT_STAKE_M5       = 3.0   # Mise fixe 3,00 € par combiné
+
 
 
 
@@ -189,7 +190,7 @@ def evaluate_favorite_domination(m, scoring_only=False):
     fav_odds = c1 if is_dom else c2
     dog_odds = c2 if is_dom else c1
 
-    # ponytail: cote min 1.35 et max 1.60 — filtre strict M1
+    # ponytail: cote min 1.40 et max 1.50, Domicile uniquement — filtre strict M1
     if not scoring_only and (fav_odds < MIN_COTE_FAV or fav_odds > MAX_COTE_FAV):
         return None
 
@@ -265,8 +266,8 @@ def evaluate_favorite_domination(m, scoring_only=False):
 
     # Filtres stricts M1 — ignorés en mode scoring_only
     if not scoring_only:
-        # 1. Verrou Domicile : 96% des gagnants +2b jouent à domicile
-        if fav_side != "dom" and total_score < 75:
+        # 1. Verrou Domicile : Exigence absolue utilisateur : Domicile uniquement
+        if fav_side != "dom":
             return None
         # 2. Plancher offensif AdamChoi
         if avg_fav_gf < 1.20:
@@ -438,7 +439,7 @@ def evaluate_favorite_m2(m):
     if c1 >= c2:
         return None
 
-    # Exigence stricte : cote domicile comprise entre 1.35 et 1.60
+    # Exigence stricte : cote domicile comprise entre 1.40 et 1.50
     if c1 < M2_MIN_ODDS or c1 > M2_MAX_ODDS:
         return None
 
@@ -497,7 +498,7 @@ def evaluate_favorite_m2(m):
 
 def evaluate_favorite_m5(m):
     """
-    Méthode 5 — Tendance Pure Bookmaker (Dom & Ext).
+    Méthode 5 — Tendance Pure Bookmaker (DOMICILE UNIQUEMENT).
     Conditions :
       1. Favori net désigné par le marché 1N2 (c1 < c2 ou c2 < c1)
       2. Cote unitaire du favori comprise entre 1.30 et 1.85 (exigence utilisateur)
@@ -512,28 +513,23 @@ def evaluate_favorite_m5(m):
     if not c1 or not c2 or c1 <= 1.0 or c2 <= 1.0:
         return None
 
-    # Détection du favori
-    if c1 < c2:
-        fav_side = "dom"
-        fav_team = m.get("dom", "")
-        dog_team = m.get("ext", "")
-        fav_odds = c1
-        dog_odds = c2
-        p2_fav_odds = p2_c1 if (p2_c1 and p2_c1 > 1.0) else c1
-    else:
-        fav_side = "ext"
-        fav_team = m.get("ext", "")
-        dog_team = m.get("dom", "")
-        fav_odds = c2
-        dog_odds = c1
-        p2_fav_odds = p2_c2 if (p2_c2 and p2_c2 > 1.0) else c2
+    # Détection du favori : Exigence stricte utilisateur — Équipe DOMICILE uniquement
+    if c1 >= c2:
+        return None
+
+    fav_side = "dom"
+    fav_team = m.get("dom", "")
+    dog_team = m.get("ext", "")
+    fav_odds = c1
+    dog_odds = c2
+    p2_fav_odds = p2_c1 if (p2_c1 and p2_c1 > 1.0) else c1
 
     # Écart net avec l'outsider (>= 0.40 pour éviter les faux favoris)
     if (dog_odds - fav_odds) < M5_MIN_DIFF_DOG:
         return None
 
-    # Règle d'or : La cote unitaire retenue doit être strictement >= 1.35 et <= 1.60 (exigence absolue utilisateur)
-    # On privilégie +2 Gagnant si dans [1.35, 1.60], sinon 1N2 classique si dans [1.35, 1.60]
+    # Règle d'or : La cote unitaire retenue doit être strictement >= 1.40 et <= 1.50 (exigence absolue utilisateur)
+    # On privilégie +2 Gagnant si dans [1.40, 1.50], sinon 1N2 classique si dans [1.40, 1.50]
     if p2_fav_odds and M5_MIN_ODDS <= p2_fav_odds <= M5_MAX_ODDS:
         odds_for_combo = p2_fav_odds
         market_label = "👑 Favori (+2b)"
@@ -1313,7 +1309,7 @@ def sync_and_update_docs_data(retained_favs, rejected_favs, all_scanned=None):
         # Purge des combinés non conformes créés avant les nouvelles règles
         is_started = (st1 == "LIVE" or st2 == "LIVE" or s1 != "PENDING" or s2 != "PENDING")
         is_corrupted = (m1.get("fav_team") not in [m1.get("home"), m1.get("away")]) or (m2.get("fav_team") not in [m2.get("home"), m2.get("away")])
-        is_subpar = (comb_odds < SWEET_SPOT_M1_MIN) or (comb_odds > SWEET_SPOT_M1_MAX) or (m1.get("market", "FAV_1N2") != "FAV_1N2") or (m2.get("market", "FAV_1N2") != "FAV_1N2") or (m1.get("odds", 2.0) < MIN_COTE_FAV) or (m2.get("odds", 2.0) < MIN_COTE_FAV) or (m1.get("odds", 2.0) > MAX_COTE_FAV) or (m2.get("odds", 2.0) > MAX_COTE_FAV) or is_corrupted
+        is_subpar = (comb_odds < SWEET_SPOT_M1_MIN) or (comb_odds > SWEET_SPOT_M1_MAX) or (m1.get("market", "FAV_1N2") != "FAV_1N2") or (m2.get("market", "FAV_1N2") != "FAV_1N2") or (m1.get("odds", 2.0) < MIN_COTE_FAV) or (m2.get("odds", 2.0) < MIN_COTE_FAV) or (m1.get("odds", 2.0) > MAX_COTE_FAV) or (m2.get("odds", 2.0) > MAX_COTE_FAV) or (m1.get("fav_side") != "dom") or (m2.get("fav_side") != "dom") or is_corrupted
         d1 = _get_session_day(m1)
         d2 = _get_session_day(m2)
         is_cross_day = False
@@ -1576,10 +1572,12 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
             except Exception:
                 pass
 
-        # Purge si hors Sweet Spot ou cote unitaire hors [1.35, 1.60] et non commencé
+        # Purge si hors Sweet Spot ou cote unitaire hors [1.40, 1.50] ou favori extérieur et non commencé
         if not is_started and (comb_odds < SWEET_SPOT_M2_MIN or comb_odds > SWEET_SPOT_M2_MAX):
             continue
         if not is_started and (m1l.get("odds", 0) < M2_MIN_ODDS or m1l.get("odds", 0) > M2_MAX_ODDS or m2l.get("odds", 0) < M2_MIN_ODDS or m2l.get("odds", 0) > M2_MAX_ODDS):
+            continue
+        if not is_started and (m1l.get("fav_side") != "dom" or m2l.get("fav_side") != "dom"):
             continue
 
         t1h = _clean_team_key(m1l.get("home", "")); t1a = _clean_team_key(m1l.get("away", ""))
@@ -1676,7 +1674,7 @@ def sync_m2_combos(existing_docs, retained_m2, m1_used_teams=None, combo_stake=3
 
 def sync_m5_combos(existing_docs, retained_m5, used_teams=None, combo_stake=DEFAULT_STAKE_M5):
     """
-    Méthode 5 — Combinés 2 Matchs Tendance Pure Bookmaker (Dom & Ext).
+    Méthode 5 — Combinés 2 Matchs Tendance Pure Bookmaker (DOMICILE UNIQUEMENT).
     Conditions :
       - Appairage par session sportive quotidienne (06h - 06h).
       - Sweet Spot de cote combinée [1.80, 2.65] (favoris unitaires entre 1.30 et 1.85).
@@ -1737,10 +1735,12 @@ def sync_m5_combos(existing_docs, retained_m5, used_teams=None, combo_stake=DEFA
             except Exception:
                 pass
 
-        # Purge si hors Sweet Spot ou cote unitaire hors [1.35, 1.60] et non commencé
+        # Purge si hors Sweet Spot ou cote unitaire hors [1.40, 1.50] ou favori extérieur et non commencé
         if not is_started and (comb_odds < SWEET_SPOT_M5_MIN or comb_odds > SWEET_SPOT_M5_MAX):
             continue
         if not is_started and (m1l.get("odds", 0) < M5_MIN_ODDS or m1l.get("odds", 0) > M5_MAX_ODDS or m2l.get("odds", 0) < M5_MIN_ODDS or m2l.get("odds", 0) > M5_MAX_ODDS):
+            continue
+        if not is_started and (m1l.get("fav_side") != "dom" or m2l.get("fav_side") != "dom"):
             continue
 
         t1h = _clean_team_key(m1l.get("home", "")); t1a = _clean_team_key(m1l.get("away", ""))
@@ -2052,9 +2052,9 @@ def main():
             seen_m2_matches.add(match_key)
 
     retained_m2.sort(key=lambda x: x.get("dt_obj", now_utc))
-    print(f"🎯 M2 Sélections Retenues (Favori dom [1.35, 1.60] + Over2.5 < Under2.5 + Anti-Piège BTTS) : {len(retained_m2)}")
+    print(f"🎯 M2 Sélections Retenues (Favori dom [1.40, 1.50] + Over2.5 < Under2.5 + Anti-Piège BTTS) : {len(retained_m2)}")
 
-    # ── Méthode 5 : Tendance Pure Bookmaker (Dom & Ext [1.35, 1.60]) ─────────
+    # ── Méthode 5 : Tendance Pure Bookmaker (DOMICILE UNIQUEMENT [1.40, 1.50]) ───
     retained_m5 = []
     seen_m5_matches = set()
     for m in scanned_results:
@@ -2068,7 +2068,7 @@ def main():
             seen_m5_matches.add(match_key)
 
     retained_m5.sort(key=lambda x: x.get("dt_obj", now_utc))
-    print(f"🔥 M5 Sélections Retenues (Tendance Bookmaker Dom & Ext [1.35, 1.60]) : {len(retained_m5)}")
+    print(f"🔥 M5 Sélections Retenues (Tendance Bookmaker Domicile [1.40, 1.50]) : {len(retained_m5)}")
 
 
 
@@ -2428,7 +2428,7 @@ def main():
     if not m2_combos_html:
         m2_combos_html = '<div style="color:#64748b; font-style:italic; text-align:center; padding:16px; background:#fff; border-radius:8px;">⏳ Aucun combiné M2 à venir sur ce créneau (les sélections précédentes sont en direct ou terminées).</div>'
 
-    # ── Section M5 : Combinés Méthode 5 (Tendance Pure Bookmaker Dom & Ext) ───
+    # ── Section M5 : Combinés Méthode 5 (Tendance Pure Bookmaker Domicile) ──────
     m5_combos_html = ""
     for idx, c in enumerate(email_m5_combos, 1):
         c_num = idx
@@ -2658,9 +2658,9 @@ def main():
           <div style="background:#f8fafc; border-bottom:1px solid #e2e8f0; padding:14px 16px;">
             <table style="width:100%; border-collapse:collapse; text-align:center;">
               <tr>
-                <td style="padding:0 2px;"><div style="background:#dbeafe; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#1d4ed8;">{nb_upcoming_m1}</div><div style="font-size:10px; font-weight:700; color:#1d4ed8;">M1 À VENIR</div><div style="font-size:9px; color:#3b82f6;">[1.35 - 1.60]</div></div></td>
-                <td style="padding:0 2px;"><div style="background:#ede9fe; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#6d28d9;">{nb_upcoming_m2}</div><div style="font-size:10px; font-weight:700; color:#6d28d9;">M2 À VENIR</div><div style="font-size:9px; color:#7c3aed;">[1.35 - 1.60]</div></div></td>
-                <td style="padding:0 2px;"><div style="background:#ffedd5; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#c2410c;">{nb_upcoming_m5}</div><div style="font-size:10px; font-weight:700; color:#c2410c;">M5 TENDANCE</div><div style="font-size:9px; color:#ea580c;">[1.35 - 1.60]</div></div></td>
+                <td style="padding:0 2px;"><div style="background:#dbeafe; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#1d4ed8;">{nb_upcoming_m1}</div><div style="font-size:10px; font-weight:700; color:#1d4ed8;">M1 À VENIR</div><div style="font-size:9px; color:#3b82f6;">[1.40 - 1.50]</div></div></td>
+                <td style="padding:0 2px;"><div style="background:#ede9fe; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#6d28d9;">{nb_upcoming_m2}</div><div style="font-size:10px; font-weight:700; color:#6d28d9;">M2 À VENIR</div><div style="font-size:9px; color:#7c3aed;">[1.40 - 1.50]</div></div></td>
+                <td style="padding:0 2px;"><div style="background:#ffedd5; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#c2410c;">{nb_upcoming_m5}</div><div style="font-size:10px; font-weight:700; color:#c2410c;">M5 TENDANCE</div><div style="font-size:9px; color:#ea580c;">[1.40 - 1.50]</div></div></td>
                 <td style="padding:0 2px;"><div style="background:#f0fdf4; border-radius:8px; padding:8px 3px;"><div style="font-size:20px; font-weight:900; color:#15803d;">{nb_upcoming_scanned}</div><div style="font-size:10px; font-weight:700; color:#15803d;">MATCHS</div><div style="font-size:9px; color:#16a34a;">Unibet France</div></div></td>
               </tr>
             </table>
@@ -2697,20 +2697,20 @@ def main():
               <span style="font-size:11px; background:#2563eb; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mise : 3,00 € par ticket</span>
             </div>
             <div style="font-size:11px; color:#64748b; margin-bottom:10px;">
-              Paires optimisées maximisant la somme des scores sous cote combinée Sweet Spot [1.82 - 2.60] (seuil combo ≥ 55/100, cotes unitaires [1.35 - 1.60]). Dès qu'une équipe mène de 2 buts, sa sélection est payée immédiatement.
+              Paires optimisées maximisant la somme des scores sous cote combinée Sweet Spot [1.96 - 2.25] (seuil combo ≥ 55/100, cotes unitaires [1.40 - 1.50]). Dès qu'une équipe mène de 2 buts, sa sélection est payée immédiatement.
             </div>
             {combos_html}
             {m1_reserve_html}
           </div>
 
-          <!-- SECTION COMBINÉS M2 (FAVORI DOM [1.35 - 1.60] + OVER2.5) -->
+          <!-- SECTION COMBINÉS M2 (FAVORI DOM [1.40 - 1.50] + OVER2.5) -->
           <div style="padding:14px 16px 8px 16px; background:#faf5ff; border-top:2px solid #e9d5ff;">
             <div style="font-size:14px; font-weight:900; color:#0f172a; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
               <span>🎯 COMBINÉS M2 — MÉTHODE MARCHÉ BOOKMAKER</span>
               <span style="font-size:11px; background:#7c3aed; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mise : 3,00 € par ticket</span>
             </div>
             <div style="font-size:11px; color:#64748b; margin-bottom:10px;">
-              Favori domicile (cote [1.35 - 1.60]) <b>&amp;</b> marché Over 2.5 &lt; Under 2.5 (match offensif attendu).
+              Favori domicile (cote [1.40 - 1.50]) <b>&amp;</b> marché Over 2.5 &lt; Under 2.5 (match offensif attendu).
             </div>
             {m2_combos_html}
           </div>
@@ -2723,7 +2723,7 @@ def main():
               <span style="font-size:11px; background:#ea580c; color:#ffffff; font-weight:700; padding:2px 8px; border-radius:6px;">Mise : 3,00 € par ticket</span>
             </div>
             <div style="font-size:11px; color:#64748b; margin-bottom:10px;">
-              Favoris purs désignés par le bookmaker (à domicile ou à l'extérieur) avec cote unitaire comprise entre <b>1.35 et 1.60</b> et écart net avec l'outsider. Règle Unibet +2 Gagnant (Early Payout).
+              Favoris purs désignés par le bookmaker (à domicile uniquement) avec cote unitaire comprise entre <b>1.40 et 1.50</b> et écart net avec l'outsider. Règle Unibet +2 Gagnant (Early Payout).
             </div>
             {m5_combos_html}
           </div>

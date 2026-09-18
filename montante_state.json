@@ -1,21 +1,22 @@
 {
-  "last_updated": "2026-09-17T18:59:00+02:00",
+  "last_updated": "2026-09-18T11:30:00+02:00",
   "active_cycle": {
-    "cycle_id": 1,
+    "cycle_id": 2,
     "status": "IN_PROGRESS",
     "current_step": 1,
     "max_steps": 3,
     "initial_stake": 10.0,
     "current_stake": 10.0,
     "target_cashout": 74.0,
-    "strategy_mode": "OPTION_A_PLUS2_GAGNANT",
+    "strategy_mode": "OPTION_A_PLUS2_GAGNANT_DOMICILE_ONLY",
     "market_type": "+2 Gagnant (Early Payout Unibet)",
     "rules": {
-      "selection_criteria": "Top 2 équipes du jour selon Score de Domination /100",
+      "selection_criteria": "Top 2 équipes du jour à DOMICILE UNIQUEMENT selon Score de Domination /100",
       "odds_range": [
-        1.35,
-        1.6
+        1.4,
+        1.5
       ],
+      "side_filter": "DOMICILE UNIQUEMENT (fav_side == 'dom')",
       "market_priority": "+2 Gagnant Unibet prioritaire",
       "web_search_required": true,
       "max_steps_hard_limit": 3,
@@ -24,124 +25,61 @@
     "history": [
       {
         "step": 1,
-        "date": "Jeudi 17/09/2026",
+        "date": "Vendredi 18/09/2026",
         "stake": 10.0,
         "status": "PENDING",
-        "combined_odds": 2.07,
-        "target_payout": 20.67,
+        "combined_odds": 2.04,
+        "target_payout": 20.45,
         "matches": [
           {
-            "match": "FK Zeleznicar vs Étoile Rouge de Belgrade",
-            "kickoff": "20h00",
-            "league": "Serbie • SuperLiga",
-            "selection": "Étoile Rouge (+2 Gagnant)",
-            "odds": 1.36,
-            "domination_score": 74,
-            "analysis": "Champion de Serbie, 5 victoires sur les 6 derniers H2H (7-1, 3-0, 3-1), break très fréquent avant la mi-temps.",
-            "web_intelligence": {
-              "coach_directive": "Albert Riera réclame une efficacité maximale dès le début",
-              "key_players": "Marko Arnautović et armada offensive opérationnels",
-              "context": "Match en retard J5 SuperLiga, Étoile Rouge invaincue face à Pancevo (5V, 1N)"
-            },
+            "match": "Wolfsburg vs SV Darmstadt",
+            "kickoff": "18h30",
+            "league": "Allemagne • Bundesliga 2",
+            "selection": "Wolfsburg (+2 Gagnant)",
+            "fav_side": "dom",
+            "odds": 1.42,
+            "domination_score": 69,
+            "analysis": "Top 1 Domicile du jour. Wolfsburg 5e, Darmstadt en difficulté (16e). Cadres offensifs présents à la Volkswagen Arena.",
             "sources": [
               {
-                "name": "Unibet Paris Match & Cotes",
-                "url": "https://www.unibet.fr/paris-football/serbie/d1-serbie/3378695/fk-zeleznicar-vs-etoile-rouge"
-              },
-              {
                 "name": "Sofascore Fiche Match & Compos",
-                "url": "https://www.sofascore.com/sr/football/match/fk-zeleznicar-pancevo-fk-crvena-zvezda/ZccsdUmc"
+                "url": "https://www.sofascore.com/football/match/vfl-wolfsburg-sv-darmstadt-98/kbsrB"
               },
               {
                 "name": "Flashscore Match Tracker",
-                "url": "https://www.flashscore.com/match/football/crvena-zvezda-ncRzHK14/zeleznicar-pancevo-jmmBWFML/"
-              },
-              {
-                "name": "AIScore Historique Confrontations (H2H)",
-                "url": "https://m.aiscore.com/head-to-head/soccer-crvena-zvezda-vs-fk-zeleznicar-pancevo"
-              },
-              {
-                "name": "Site Officiel FK Crvena Zvezda Actualités",
-                "url": "https://www.crvenazvezdafk.com/en/vesti"
+                "url": "https://www.flashscore.com/match/football/wolfsburg-darmstadt/"
               }
             ]
           },
           {
-            "match": "Lillestrøm vs Torreense",
-            "kickoff": "21h00",
-            "league": "Coupes d'Europe • Ligue Europa",
-            "selection": "Lillestrøm (+2 Gagnant)",
-            "odds": 1.52,
+            "match": "FC Lahti vs FF Jaro",
+            "kickoff": "17h00",
+            "league": "Finlande • Veikkausliiga",
+            "selection": "FC Lahti (+2 Gagnant)",
+            "fav_side": "dom",
+            "odds": 1.44,
             "domination_score": 68,
-            "analysis": "Avantage Åråsen Stadion, Torreense novice absolu en Coupe d'Europe, intensité norvégienne supérieure.",
-            "web_intelligence": {
-              "absents_lillestrom": "Garnas, Alperud, Jebara (blessures habituelles, ossature titulaire intacte)",
-              "absents_torreense": "Manu Pozo forfait côté portugais (perte majeure en animation offensive)",
-              "context": "1er match européen de l histoire pour Torreense en Norvège à Åråsen Stadion"
-            },
+            "analysis": "Top 2 Domicile du jour. FC Lahti à domicile au Lahden Stadion, dynamique supérieure face à Jaro en difficulté.",
             "sources": [
               {
-                "name": "Unibet Paris Match & Cotes",
-                "url": "https://www.unibet.fr/paris-football/coupes-d-europe/ligue-europa/3375932/lillestrom-vs-torreense"
+                "name": "Sofascore FC Lahti vs FF Jaro",
+                "url": "https://www.sofascore.com/football/match/fc-lahti-ff-jaro/HOJi4KH"
               },
               {
-                "name": "Oddschecker Rapport Absents & Blessés",
-                "url": "https://www.oddschecker.com/us/picks-parlays/soccer/20260917-lillestrom-vs-torreense-lineups-prediction-betting-picks-odds"
-              },
-              {
-                "name": "Eurosport Live Europa League",
-                "url": "https://www.eurosport.fr/football/ligue-europa/2026-2027/live-lillestrom-sk-scu-torreense_mtc21878721/live.shtml"
-              },
-              {
-                "name": "Flashscore Fiche Match Lillestrom vs Torreense",
-                "url": "https://www.flashscore.fr/match/football/lillestrom-xYWBZlwN/torreense-8jQErKhN/"
-              },
-              {
-                "name": "Sofascore Fiche Match & Compos",
-                "url": "https://www.sofascore.com/football/match/torreense-lillestrom-sk/onsMpk"
+                "name": "Flashscore Fiche Match",
+                "url": "https://www.flashscore.com/match/football/fc-lahti-ff-jaro/"
               }
             ]
           }
         ]
-      },
-      {
-        "step": 2,
-        "date": "Vendredi 18/09/2026",
-        "stake": 20.67,
-        "status": "PLANNED",
-        "combined_odds": 1.93,
-        "target_payout": 39.89,
-        "matches": [
-          {
-            "match": "Als Omonia vs AEK Larnaca",
-            "kickoff": "19h00",
-            "league": "Chypre • D1 Chypre",
-            "selection": "AEK Larnaca (+2 Gagnant)",
-            "odds": 1.36,
-            "domination_score": 74,
-            "analysis": "Top 1 absolu de la journée de vendredi. Supériorité nette dans la ligue chypriote."
-          },
-          {
-            "match": "Strasbourg F vs Paris FC F",
-            "kickoff": "19h00",
-            "league": "France • D1 Arkema Féminine",
-            "selection": "Paris FC (+2 Gagnant)",
-            "odds": 1.42,
-            "domination_score": 70,
-            "analysis": "Top 2 de vendredi. Paris FC F parmi le top 3 français, niveau offensif très au-dessus de Strasbourg."
-          }
-        ]
-      },
-      {
-        "step": 3,
-        "date": "Samedi 19/09/2026",
-        "stake": 39.89,
-        "status": "UPCOMING",
-        "combined_odds": 1.9,
-        "target_payout": 75.0,
-        "matches": [],
-        "note": "À déterminer parmi le Top 2 de samedi. Clôture du cycle avec encaissement des gains."
       }
-    ]
+    ],
+    "previous_cycle_summary": {
+      "cycle_id": 1,
+      "ended_at": "2026-09-17T22:55:00+02:00",
+      "step_reached": 1,
+      "outcome": "LOST (Lillestrøm 1-2)",
+      "learning": "Application stricte de la nouvelle règle utilisateur : 100% DOMICILE UNIQUEMENT et cotes resserrées [1.40, 1.50]."
+    }
   }
 }
