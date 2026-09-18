@@ -30295,5 +30295,74 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3360639",
+    "timestamp_utc": "2026-09-18T06:05:24.118961+00:00",
+    "match": "Castellon vs Tenerife",
+    "league": "Espagne • Laliga 2",
+    "date_str": "Sam. 19/09 à 18h30",
+    "fav_team": "Castellon",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 64,
+      "pct_fav_success": 65,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.44,
+      "p2_fav_odds": 1.4
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3380565",
+    "timestamp_utc": "2026-09-18T06:05:24.118961+00:00",
+    "match": "Hap.Beer Sheva vs Hapoel Kiryat",
+    "league": "Israel • D1 Israel",
+    "date_str": "Sam. 19/09 à 19h15",
+    "fav_team": "Hap.Beer Sheva",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 60,
+      "pct_fav_success": 65,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.35,
+      "p2_fav_odds": 1.35
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3380387",
+    "timestamp_utc": "2026-09-18T06:05:24.118961+00:00",
+    "match": "Beit.Jerusalem vs Hapoel Haifa",
+    "league": "Israel • D1 Israel",
+    "date_str": "Sam. 19/09 à 19h30",
+    "fav_team": "Beit.Jerusalem",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 59,
+      "pct_fav_success": 65,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.52,
+      "p2_fav_odds": 1.48
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]

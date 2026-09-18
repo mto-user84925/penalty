@@ -15,9 +15,9 @@
       "league": "Pologne • D1 Pologne",
       "date_str": "Ven. 18/09 à 20h30",
       "fav_team": "Wisla Cracovie",
-      "fav_odds": 1.58,
-      "p2_fav_odds": 1.55,
-      "fav_score": 65,
+      "fav_odds": 1.52,
+      "p2_fav_odds": 1.48,
+      "fav_score": 66,
       "fav_badge": "🥈 ARGENT"
     },
     "3379424": {
@@ -58,6 +58,36 @@
       "fav_odds": 1.36,
       "p2_fav_odds": 1.36,
       "fav_score": 63,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3360639": {
+      "match": "Castellon - Tenerife",
+      "league": "Espagne • Laliga 2",
+      "date_str": "Sam. 19/09 à 18h30",
+      "fav_team": "Castellon",
+      "fav_odds": 1.44,
+      "p2_fav_odds": 1.4,
+      "fav_score": 64,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3380565": {
+      "match": "Hap.Beer Sheva - Hapoel Kiryat",
+      "league": "Israel • D1 Israel",
+      "date_str": "Sam. 19/09 à 19h15",
+      "fav_team": "Hap.Beer Sheva",
+      "fav_odds": 1.35,
+      "p2_fav_odds": 1.35,
+      "fav_score": 60,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3380387": {
+      "match": "Beit.Jerusalem - Hapoel Haifa",
+      "league": "Israel • D1 Israel",
+      "date_str": "Sam. 19/09 à 19h30",
+      "fav_team": "Beit.Jerusalem",
+      "fav_odds": 1.52,
+      "p2_fav_odds": 1.48,
+      "fav_score": 59,
       "fav_badge": "🥉 BRONZE+"
     }
   }
