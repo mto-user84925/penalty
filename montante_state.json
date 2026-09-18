@@ -135,11 +135,11 @@
     },
     "SAMEDI_19_09": {
       "palier": 2,
-      "mise_unitaire": 6.0,
+      "mise_unitaire": 8.0,
       "combines": [
         {
-          "id": "C1_SAM",
-          "nom": "Combiné 1",
+          "id": "T1_SAM",
+          "nom": "Ticket 1 (Palerme / Newcastle)",
           "m1": {
             "equipes": "Palerme vs Padoue",
             "heure": "15h00",
@@ -155,54 +155,33 @@
             "url": "https://www.unibet.fr/paris-football/angleterre/premier-league/3378329/newcastle-vs-hull-city"
           },
           "cote_totale": 2.2,
-          "mise": 6.0,
-          "gain_estime": 13.2
+          "mise": 8.0,
+          "gain_estime": 17.6
         },
         {
-          "id": "C2_SAM",
-          "nom": "Combiné 2",
+          "id": "T2_SAM",
+          "nom": "Ticket 2 (Castellon / QPR)",
           "m1": {
-            "equipes": "Queens Park Rangers vs Preston",
-            "heure": "16h00",
-            "pari": "QPR (+2b)",
-            "cote": 1.6,
-            "url": "https://www.unibet.fr/paris-football/angleterre/championship/3380025/queens-park-r-vs-preston"
-          },
-          "m2": {
             "equipes": "Castellon vs Tenerife",
             "heure": "18h30",
             "pari": "Castellon (+2b)",
             "cote": 1.4,
             "url": "https://www.unibet.fr/paris-football/espagne/laliga-2/3360639/castellon-vs-tenerife"
           },
-          "cote_totale": 2.24,
-          "mise": 6.0,
-          "gain_estime": 13.44
-        },
-        {
-          "id": "C3_SAM",
-          "nom": "Combiné 3",
-          "m1": {
-            "equipes": "Aris Salonique vs POT Iraklis",
-            "heure": "18h30",
-            "pari": "Aris (+2b)",
-            "cote": 1.5,
-            "url": "https://www.unibet.fr/paris-football/grece/d1-grece/3380238/aris-salonique-vs-pot-iraklis"
-          },
           "m2": {
-            "equipes": "Young Boys vs Servette FC",
-            "heure": "18h00",
-            "pari": "Young Boys (+2b)",
-            "cote": 1.56,
-            "url": "https://www.unibet.fr/paris-football/suisse/d1-suisse/3370194/young-boys-vs-servette-fc"
+            "equipes": "Queens Park Rangers vs Preston",
+            "heure": "16h00",
+            "pari": "QPR (+2b)",
+            "cote": 1.6,
+            "url": "https://www.unibet.fr/paris-football/angleterre/championship/3380025/queens-park-r-vs-preston"
           },
-          "cote_totale": 2.34,
-          "mise": 6.0,
-          "gain_estime": 14.04
+          "cote_totale": 2.24,
+          "mise": 8.0,
+          "gain_estime": 17.92
         },
         {
-          "id": "C4_SAM",
-          "nom": "Combiné 4",
+          "id": "T3_SAM",
+          "nom": "Ticket 3 (Beitar / Athletic Bilbao)",
           "m1": {
             "equipes": "Beitar Jerusalem vs Hapoel Haifa",
             "heure": "19h30",
@@ -218,31 +197,13 @@
             "url": "https://www.unibet.fr/paris-football/espagne/laliga/3360728/ath-bilbao-vs-alaves"
           },
           "cote_totale": 2.25,
-          "mise": 6.0,
-          "gain_estime": 13.5
-        },
-        {
-          "id": "C5_SAM",
-          "nom": "Combiné 5",
-          "m1": {
-            "equipes": "Basaksehir vs Genclerbirligi",
-            "heure": "19h00",
-            "pari": "Basaksehir (1N2)",
-            "cote": 1.42,
-            "url": "https://www.unibet.fr/paris-football/turquie/d1-turquie/3363783/basaksehir-vs-genclerbirligi"
-          },
-          "m2": {
-            "equipes": "Toulouse vs Le Havre",
-            "heure": "19h00",
-            "pari": "Toulouse (+2b)",
-            "cote": 1.65,
-            "url": "https://www.unibet.fr/paris-football/france/ligue-1-mcdonalds/3378609/toulouse-vs-le-havre"
-          },
-          "cote_totale": 2.34,
-          "mise": 6.0,
-          "gain_estime": 14.04
+          "mise": 8.0,
+          "gain_estime": 18.0
         }
-      ]
+      ],
+      "nb_combines_actifs": 3,
+      "mise_totale": 24.0,
+      "gain_potentiel_total": 53.52
     },
     "DIMANCHE_20_09": {
       "palier": 3,
@@ -360,5 +321,8 @@
     "C2",
     "C4",
     "C5"
-  ]
+  ],
+  "progression_active": "4€ (Vendredi P1) ➔ 8€ (Samedi P2 Boosté) ➔ 12€ (Dimanche P3)",
+  "capital_actuel_liquide": 27.28,
+  "cash_reserve_poche": 3.28
 }
