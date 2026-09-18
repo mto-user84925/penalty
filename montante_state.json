@@ -37,11 +37,11 @@
           "id": "C2_VEN",
           "nom": "Combiné 2",
           "m1": {
-            "equipes": "Wolfsburg vs SV Darmstadt",
-            "heure": "18h30",
-            "pari": "Wolfsburg (1N2)",
-            "cote": 1.4,
-            "url": "https://www.unibet.fr/paris-football/allemagne/bundesliga-2/3369906/wolfsburg-vs-sv-darmstadt"
+            "equipes": "Shamrock vs Waterford",
+            "heure": "21h00",
+            "pari": "Shamrock (1N2)",
+            "cote": 1.38,
+            "url": "https://www.unibet.fr/paris-football/irlande/d1-irlande/3369920/shamrock-vs-waterford"
           },
           "m2": {
             "equipes": "Bristol City vs Watford",
@@ -50,9 +50,9 @@
             "cote": 1.58,
             "url": "https://www.unibet.fr/paris-football/angleterre/championship/3379865/bristol-city-vs-watford"
           },
-          "cote_totale": 2.21,
+          "cote_totale": 2.18,
           "mise": 4.0,
-          "gain_estime": 8.84
+          "gain_estime": 8.72
         },
         {
           "id": "C3_VEN",
