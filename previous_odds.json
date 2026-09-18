@@ -5,28 +5,18 @@
       "league": "Pologne • D1 Pologne",
       "date_str": "Ven. 18/09 à 20h30",
       "fav_team": "Wisla Cracovie",
-      "fav_odds": 1.5,
-      "p2_fav_odds": 1.46,
-      "fav_score": 59,
-      "fav_badge": "🥉 BRONZE+"
-    },
-    "3381119": {
-      "match": "Caernarfon - Cambrian Utd",
-      "league": "Pays De Galles • D1 P Degalles",
-      "date_str": "Ven. 18/09 à 20h45",
-      "fav_team": "Caernarfon",
-      "fav_odds": 1.41,
-      "p2_fav_odds": 1.41,
-      "fav_score": 64,
-      "fav_badge": "🥉 BRONZE+"
+      "fav_odds": 1.47,
+      "p2_fav_odds": 1.44,
+      "fav_score": 66,
+      "fav_badge": "🥈 ARGENT"
     },
     "3369940": {
       "match": "Briton Ferry L - Trefelin BGC",
       "league": "Pays De Galles • D1 P Degalles",
       "date_str": "Ven. 18/09 à 20h45",
       "fav_team": "Briton Ferry L",
-      "fav_odds": 1.44,
-      "p2_fav_odds": 1.4,
+      "fav_odds": 1.42,
+      "p2_fav_odds": 1.42,
       "fav_score": 73,
       "fav_badge": "🥈 ARGENT"
     },
@@ -37,27 +27,27 @@
       "fav_team": "Palerme",
       "fav_odds": 1.46,
       "p2_fav_odds": 1.42,
-      "fav_score": 66,
+      "fav_score": 69,
       "fav_badge": "🥈 ARGENT"
     },
-    "3380238": {
-      "match": "Aris Salonique - POT Iraklis",
-      "league": "Grece • D1 Grece",
-      "date_str": "Sam. 19/09 à 18h30",
-      "fav_team": "Aris Salonique",
-      "fav_odds": 1.53,
-      "p2_fav_odds": 1.5,
-      "fav_score": 55,
+    "3370197": {
+      "match": "Sion - FC Zurich",
+      "league": "Suisse • D1 Suisse",
+      "date_str": "Sam. 19/09 à 18h00",
+      "fav_team": "Sion",
+      "fav_odds": 1.41,
+      "p2_fav_odds": 1.41,
+      "fav_score": 62,
       "fav_badge": "🥉 BRONZE+"
     },
-    "3363783": {
-      "match": "Basaksehir - Genclerbirligi",
-      "league": "Turquie • D1 Turquie",
-      "date_str": "Sam. 19/09 à 19h00",
-      "fav_team": "Basaksehir",
-      "fav_odds": 1.42,
-      "p2_fav_odds": 1.42,
-      "fav_score": 57,
+    "3360639": {
+      "match": "Castellon - Tenerife",
+      "league": "Espagne • Laliga 2",
+      "date_str": "Sam. 19/09 à 18h30",
+      "fav_team": "Castellon",
+      "fav_odds": 1.43,
+      "p2_fav_odds": 1.4,
+      "fav_score": 64,
       "fav_badge": "🥉 BRONZE+"
     },
     "3380387": {
@@ -65,10 +55,10 @@
       "league": "Israel • D1 Israel",
       "date_str": "Sam. 19/09 à 19h30",
       "fav_team": "Beit.Jerusalem",
-      "fav_odds": 1.52,
-      "p2_fav_odds": 1.48,
-      "fav_score": 74,
-      "fav_badge": "🥈 ARGENT"
+      "fav_odds": 1.53,
+      "p2_fav_odds": 1.5,
+      "fav_score": 58,
+      "fav_badge": "🥉 BRONZE+"
     }
   }
 }
