@@ -14,11 +14,11 @@ except Exception:
     ZoneInfo = None
 
 # ── Seuils Globaux de Cotes pour TOUTES les Méthodes (M1, M2, M5) ─────────────
-# ponytail: Harmonisation stricte demandée par l'utilisateur : cotes unitaires [1.40, 1.50], Domicile uniquement
+# ponytail: Plafond relevé à 1.55 à la demande de l'utilisateur pour compenser la décote bookmaker de 0.03-0.05 sur le marché '+2 Gagnant'
 GLOBAL_MIN_ODDS         = 1.40  # Cote minimale unitaire par match
-GLOBAL_MAX_ODDS         = 1.50  # Cote maximale unitaire par match
+GLOBAL_MAX_ODDS         = 1.55  # Cote maximale unitaire par match (permet aux cotes +2b d'atterrir pile à 1.45-1.50)
 SWEET_SPOT_COMBO_MIN    = 1.96  # Borne basse combiné 2 matchs (1.40 * 1.40 = 1.96)
-SWEET_SPOT_COMBO_MAX    = 2.25  # Borne haute combiné 2 matchs (1.50 * 1.50 = 2.25)
+SWEET_SPOT_COMBO_MAX    = 2.40  # Borne haute combiné 2 matchs (1.55 * 1.55 = 2.40)
 
 # ── Seuils Stratégie M1 (Favoris Domicile Win & +2 Buts d'Avance) ─────────────
 MAX_COTE_FAV           = GLOBAL_MAX_ODDS  # 1.50
