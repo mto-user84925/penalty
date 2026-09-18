@@ -31,7 +31,9 @@
           },
           "cote_totale": 2.32,
           "mise": 4.0,
-          "gain_estime": 9.28
+          "gain_estime": 9.28,
+          "status": "PERDU",
+          "gain_reel": 0.0
         },
         {
           "id": "C2_VEN",
@@ -52,7 +54,9 @@
           },
           "cote_totale": 2.18,
           "mise": 4.0,
-          "gain_estime": 8.72
+          "gain_estime": 8.72,
+          "status": "GAGNE",
+          "gain_reel": 8.72
         },
         {
           "id": "C3_VEN",
@@ -73,7 +77,9 @@
           },
           "cote_totale": 2.13,
           "mise": 4.0,
-          "gain_estime": 8.52
+          "gain_estime": 8.52,
+          "status": "PERDU",
+          "gain_reel": 0.0
         },
         {
           "id": "C4_VEN",
@@ -94,7 +100,9 @@
           },
           "cote_totale": 2.19,
           "mise": 4.0,
-          "gain_estime": 8.76
+          "gain_estime": 8.76,
+          "status": "GAGNE",
+          "gain_reel": 8.76
         },
         {
           "id": "C5_VEN",
@@ -115,9 +123,15 @@
           },
           "cote_totale": 2.45,
           "mise": 4.0,
-          "gain_estime": 9.8
+          "gain_estime": 9.8,
+          "status": "GAGNE",
+          "gain_reel": 9.8
         }
-      ]
+      ],
+      "statut_journee": "TERMINE",
+      "combines_gagnes": 3,
+      "total_gains_reels": 27.28,
+      "benefice_net_vendredi": 7.28
     },
     "SAMEDI_19_09": {
       "palier": 2,
@@ -341,5 +355,10 @@
         }
       ]
     }
-  }
+  },
+  "qualifies_samedi": [
+    "C2",
+    "C4",
+    "C5"
+  ]
 }
