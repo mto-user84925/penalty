@@ -1,16 +1,16 @@
 {
-  "last_updated": "2026-09-18T12:25:15.467545",
+  "last_updated": "2026-09-18T12:40:41.206877",
   "strategy": "MULTI_MONTANTES_5_COMBINES_WEEKEND",
   "ticket_type": "COMBINÉ_2_MATCHS",
-  "progression": "3€ (Vendredi P1) ➔ 6€ (Samedi P2) ➔ 9€ (Dimanche P3)",
+  "progression": "4€ (Vendredi P1) ➔ 6€ (Samedi P2) ➔ 9€ (Dimanche P3)",
   "cashout_rule": "Arrêt strict au Palier 3 dimanche soir",
-  "capital_initial": 15.0,
+  "capital_initial": 20.0,
   "combines_par_jour": {
     "VENDREDI_18_09": {
       "palier": 1,
-      "mise_unitaire": 3.0,
-      "mise_totale": 15.0,
-      "gain_cible_unitaire": 6.0,
+      "mise_unitaire": 4.0,
+      "mise_totale": 20.0,
+      "gain_cible_unitaire": 8.0,
       "combines": [
         {
           "id": "C1_VEN",
@@ -30,7 +30,8 @@
             "url": "https://www.unibet.fr/paris-football/pays-bas/d1-pays-bas/3369926/groningen-vs-zwolle"
           },
           "cote_totale": 1.99,
-          "gain_estime": 5.97
+          "mise": 4.0,
+          "gain_estime": 7.96
         },
         {
           "id": "C2_VEN",
@@ -50,7 +51,8 @@
             "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3369928/sarpsborg-08-vs-kfum-oslo"
           },
           "cote_totale": 2.02,
-          "gain_estime": 6.06
+          "mise": 4.0,
+          "gain_estime": 8.08
         },
         {
           "id": "C3_VEN",
@@ -70,7 +72,8 @@
             "url": "https://www.unibet.fr/paris-football/roumanie/d1-roumanie/3370165/rapid-bucarest-vs-fc-arges"
           },
           "cote_totale": 2.04,
-          "gain_estime": 6.12
+          "mise": 4.0,
+          "gain_estime": 8.16
         },
         {
           "id": "C4_VEN",
@@ -90,7 +93,8 @@
             "url": "https://www.unibet.fr/paris-football/pologne/d1-pologne/3373280/wisla-cracovie-vs-slask-wroclaw"
           },
           "cote_totale": 2.1,
-          "gain_estime": 6.3
+          "mise": 4.0,
+          "gain_estime": 8.4
         },
         {
           "id": "C5_VEN",
@@ -110,7 +114,8 @@
             "url": "https://www.unibet.fr/paris-football/roumanie/d1-roumanie/3370165/rapid-bucarest-vs-fc-arges"
           },
           "cote_totale": 2.1,
-          "gain_estime": 6.3
+          "mise": 4.0,
+          "gain_estime": 8.4
         }
       ]
     },
@@ -225,7 +230,6 @@
       "palier": 3,
       "mise_unitaire": 9.0,
       "gain_cible_unitaire": 18.0,
-      "capital_securise_en_poche": 3.0,
       "combines": [
         {
           "id": "C1_DIM",
