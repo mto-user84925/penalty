@@ -1,32 +1,12 @@
 {
   "favs": {
-    "3373280": {
-      "match": "Wisla Cracovie - Slask Wroclaw",
-      "league": "Pologne • D1 Pologne",
-      "date_str": "Ven. 18/09 à 20h30",
-      "fav_team": "Wisla Cracovie",
-      "fav_odds": 1.47,
-      "p2_fav_odds": 1.44,
-      "fav_score": 66,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3369940": {
-      "match": "Briton Ferry L - Trefelin BGC",
-      "league": "Pays De Galles • D1 P Degalles",
-      "date_str": "Ven. 18/09 à 20h45",
-      "fav_team": "Briton Ferry L",
-      "fav_odds": 1.42,
-      "p2_fav_odds": 1.42,
-      "fav_score": 73,
-      "fav_badge": "🥈 ARGENT"
-    },
     "3369069": {
       "match": "Palerme - Padoue",
       "league": "Italie • Serie B",
       "date_str": "Sam. 19/09 à 15h00",
       "fav_team": "Palerme",
-      "fav_odds": 1.46,
-      "p2_fav_odds": 1.42,
+      "fav_odds": 1.4,
+      "p2_fav_odds": 1.4,
       "fav_score": 69,
       "fav_badge": "🥈 ARGENT"
     },
