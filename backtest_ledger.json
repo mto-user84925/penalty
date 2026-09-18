@@ -30226,5 +30226,28 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3369069",
+    "timestamp_utc": "2026-09-18T02:04:11.799330+00:00",
+    "match": "Palerme vs Padoue",
+    "league": "Italie • Serie B",
+    "date_str": "Sam. 19/09 à 15h00",
+    "fav_team": "Palerme",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 69,
+      "pct_fav_success": 80,
+      "pct_fav_lead2": 50
+    },
+    "odds": {
+      "fav_odds": 1.43,
+      "p2_fav_odds": 1.4
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]

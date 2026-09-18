@@ -1,22 +1,12 @@
 {
   "favs": {
-    "3373244": {
-      "match": "Torque - Cienciano",
-      "league": "Amerique • Copa Sudamericana",
-      "date_str": "Ven. 18/09 à 02h30",
-      "fav_team": "Torque",
-      "fav_odds": 1.42,
-      "p2_fav_odds": 1.38,
-      "fav_score": 65,
-      "fav_badge": "🥈 ARGENT"
-    },
     "3378472": {
       "match": "Pafos FC - AEL Limassol",
       "league": "Chypre • D1 Chypre",
       "date_str": "Ven. 18/09 à 19h00",
       "fav_team": "Pafos FC",
-      "fav_odds": 1.36,
-      "p2_fav_odds": 1.36,
+      "fav_odds": 1.35,
+      "p2_fav_odds": 1.35,
       "fav_score": 61,
       "fav_badge": "🥉 BRONZE+"
     },
@@ -35,9 +25,19 @@
       "league": "Irlande • D1 Irlande",
       "date_str": "Ven. 18/09 à 21h00",
       "fav_team": "Shamrock",
-      "fav_odds": 1.44,
-      "p2_fav_odds": 1.4,
+      "fav_odds": 1.39,
+      "p2_fav_odds": 1.36,
       "fav_score": 65,
+      "fav_badge": "🥈 ARGENT"
+    },
+    "3369069": {
+      "match": "Palerme - Padoue",
+      "league": "Italie • Serie B",
+      "date_str": "Sam. 19/09 à 15h00",
+      "fav_team": "Palerme",
+      "fav_odds": 1.43,
+      "p2_fav_odds": 1.4,
+      "fav_score": 69,
       "fav_badge": "🥈 ARGENT"
     }
   }
