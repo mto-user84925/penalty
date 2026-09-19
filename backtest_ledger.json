@@ -30776,5 +30776,49 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3371160",
+    "timestamp_utc": "2026-09-19T18:04:08.032624+00:00",
+    "match": "Libertad vs Ameliano",
+    "league": "Paraguay • D1 Paraguay",
+    "date_str": "Sam. 19/09 à 21h00",
+    "fav_team": "Libertad",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 52,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.55,
+      "p2_fav_odds": 1.52
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3379862",
+    "timestamp_utc": "2026-09-19T18:04:08.032624+00:00",
+    "match": "Guimaraes vs Moreirense",
+    "league": "Portugal • Liga Portugal",
+    "date_str": "Dim. 20/09 à 16h30",
+    "fav_team": "Guimaraes",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 67,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.44,
+      "p2_fav_odds": 1.4
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
