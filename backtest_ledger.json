@@ -30820,5 +30820,28 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3370204",
+    "timestamp_utc": "2026-09-19T22:03:39.526766+00:00",
+    "match": "Slavia Prague vs Viktoria Plzen",
+    "league": "Rep Tcheque • D1 Rep Tcheque",
+    "date_str": "Dim. 20/09 à 18h00",
+    "fav_team": "Slavia Prague",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 66,
+      "pct_fav_success": 85,
+      "pct_fav_lead2": 60
+    },
+    "odds": {
+      "fav_odds": 1.4,
+      "p2_fav_odds": 1.4
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]

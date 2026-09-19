@@ -1,13 +1,13 @@
 {
   "favs": {
-    "3380436": {
-      "match": "Cerro Porteno - Rubio Nu",
-      "league": "Paraguay • D1 Paraguay",
-      "date_str": "Sam. 19/09 à 23h30",
-      "fav_team": "Cerro Porteno",
-      "fav_odds": 1.51,
-      "p2_fav_odds": 1.48,
-      "fav_score": 59,
+    "3370529": {
+      "match": "Djurgårdens - Elfsborg",
+      "league": "Suede • D1 Suede",
+      "date_str": "Dim. 20/09 à 14h00",
+      "fav_team": "Djurgårdens",
+      "fav_odds": 1.46,
+      "p2_fav_odds": 1.42,
+      "fav_score": 60,
       "fav_badge": "🥉 BRONZE+"
     },
     "3380053": {
@@ -17,17 +17,47 @@
       "fav_team": "Norwich",
       "fav_odds": 1.41,
       "p2_fav_odds": 1.41,
-      "fav_score": 64,
+      "fav_score": 56,
       "fav_badge": "🥉 BRONZE+"
     },
-    "3379862": {
-      "match": "Guimaraes - Moreirense",
-      "league": "Portugal • Liga Portugal",
-      "date_str": "Dim. 20/09 à 16h30",
-      "fav_team": "Guimaraes",
-      "fav_odds": 1.44,
+    "3370510": {
+      "match": "Tromsø - HamKam",
+      "league": "Norvege • D1 Norvege",
+      "date_str": "Dim. 20/09 à 17h00",
+      "fav_team": "Tromsø",
+      "fav_odds": 1.42,
+      "p2_fav_odds": 1.42,
+      "fav_score": 66,
+      "fav_badge": "🥈 ARGENT"
+    },
+    "3376070": {
+      "match": "Shakht.Donetsk - LNZ Cherkasy",
+      "league": "Ukraine • D1 Ukraine",
+      "date_str": "Dim. 20/09 à 17h00",
+      "fav_team": "Shakht.Donetsk",
+      "fav_odds": 1.5,
+      "p2_fav_odds": 1.46,
+      "fav_score": 58,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3370204": {
+      "match": "Slavia Prague - Viktoria Plzen",
+      "league": "Rep Tcheque • D1 Rep Tcheque",
+      "date_str": "Dim. 20/09 à 18h00",
+      "fav_team": "Slavia Prague",
+      "fav_odds": 1.4,
       "p2_fav_odds": 1.4,
-      "fav_score": 67,
+      "fav_score": 66,
+      "fav_badge": "🥈 ARGENT"
+    },
+    "3360734": {
+      "match": "Villarreal - Levante",
+      "league": "Espagne • Laliga",
+      "date_str": "Dim. 20/09 à 18h30",
+      "fav_team": "Villarreal",
+      "fav_odds": 1.45,
+      "p2_fav_odds": 1.42,
+      "fav_score": 65,
       "fav_badge": "🥈 ARGENT"
     },
     "3370523": {
@@ -37,7 +67,17 @@
       "fav_team": "Club Bruges",
       "fav_odds": 1.43,
       "p2_fav_odds": 1.4,
-      "fav_score": 60,
+      "fav_score": 65,
+      "fav_badge": "🥈 ARGENT"
+    },
+    "3370159": {
+      "match": "DinamoBucarest - FC Constanta",
+      "league": "Roumanie • D1 Roumanie",
+      "date_str": "Dim. 20/09 à 19h30",
+      "fav_team": "DinamoBucarest",
+      "fav_odds": 1.55,
+      "p2_fav_odds": 1.52,
+      "fav_score": 58,
       "fav_badge": "🥉 BRONZE+"
     }
   }
