@@ -59,6 +59,16 @@
       "p2_fav_odds": 1.44,
       "fav_score": 60,
       "fav_badge": "🥉 BRONZE+"
+    },
+    "3380053": {
+      "match": "Norwich - Bolton",
+      "league": "Angleterre • Championship",
+      "date_str": "Dim. 20/09 à 14h30",
+      "fav_team": "Norwich",
+      "fav_odds": 1.4,
+      "p2_fav_odds": 1.4,
+      "fav_score": 56,
+      "fav_badge": "🥉 BRONZE+"
     }
   }
 }
