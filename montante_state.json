@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-19T18:45:29.842659",
+  "last_updated": "2026-09-19T18:53:20.702918",
   "strategy": "MULTI_MONTANTES_5_COMBINES_10_MATCHS_UNIQUES",
   "rule_zero_doublons": "10 matchs distincts par jour, aucun match répété, indépendance totale",
   "rule_cote_min_combo": 2.13,
@@ -215,42 +215,43 @@
     },
     "DIMANCHE_20_09": {
       "palier": 3,
-      "mise_unitaire": 7.0,
-      "mise_totale": 35.0,
-      "strategie_safe": "SAFE_V2_10_MATCHS_UNIQUES",
+      "format": "3_COMBINES_ELITE_SAFE",
+      "mise_unitaire": 11.5,
+      "mise_totale": 34.5,
+      "strategie_safe": "SAFE_3_COMBINES_6_EQUIPES_UNIQUES",
       "combines": [
         {
           "id": "C1_DIM",
-          "nom": "Combiné 1 - Axe Norvège / Belgique",
+          "nom": "Combiné 1 - L'Axe Scandinave & Liga",
           "m1": {
             "equipes": "Viking FK vs Lillestrøm",
             "heure": "17h00",
-            "pari": "Viking FK (1N2)",
+            "pari": "Viking FK (Gagne ou Mène 2b)",
             "cote": 1.33,
             "score_safe": 92,
             "classement": "2e (43 pts, +18) vs 14e (20 pts, -14)",
             "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370516/viking-fk-vs-lillestrom"
           },
           "m2": {
-            "equipes": "Saint-Trond vs Westerlo",
-            "heure": "16h00",
-            "pari": "Saint-Trond (+2b)",
-            "cote": 1.52,
-            "score_safe": 80,
-            "classement": "8e (11 pts) vs 13e (7 pts)",
-            "url": "https://www.unibet.fr/paris-football/belgique/d1-belgique/3370521/st-trond-vs-westerlo"
+            "equipes": "Villarreal vs Levante",
+            "heure": "18h30",
+            "pari": "Villarreal (Gagne ou Mène 2b)",
+            "cote": 1.46,
+            "score_safe": 82,
+            "classement": "5e (11 pts, +4) vs 16e (4 pts, -5)",
+            "url": "https://www.unibet.fr/paris-football/espagne/laliga/3360734/villarreal-vs-levante"
           },
           "cote_totale": 2.02,
-          "mise": 7.0,
-          "gain_estime": 14.14
+          "mise": 11.5,
+          "gain_estime": 23.23
         },
         {
           "id": "C2_DIM",
-          "nom": "Combiné 2 - Duo des Titans",
+          "nom": "Combiné 2 - Le Choc des Titans & Forteresse Polaire",
           "m1": {
             "equipes": "Shakhtar Donetsk vs LNZ Cherkasy",
             "heure": "17h00",
-            "pari": "Shakhtar Donetsk (1N2)",
+            "pari": "Shakhtar Donetsk (Gagne ou Mène 2b)",
             "cote": 1.45,
             "score_safe": 88,
             "classement": "2e (15 pts, +12) vs 8e (7 pts, -2)",
@@ -259,90 +260,40 @@
           "m2": {
             "equipes": "Tromsø vs HamKam",
             "heure": "17h00",
-            "pari": "Tromsø (1N2)",
+            "pari": "Tromsø (Gagne ou Mène 2b)",
             "cote": 1.4,
             "score_safe": 85,
             "classement": "10e (25 pts) vs 12e (21 pts)",
             "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370510/tromso-vs-hamkam"
           },
           "cote_totale": 2.03,
-          "mise": 7.0,
-          "gain_estime": 14.21
+          "mise": 11.5,
+          "gain_estime": 23.35
         },
         {
           "id": "C3_DIM",
-          "nom": "Combiné 3 - Axe Baltique / Liga",
+          "nom": "Combiné 3 - L'Axe Baltique & Bohème",
           "m1": {
             "equipes": "FC Flora vs Pärnu JK Vaprus",
             "heure": "18h00",
-            "pari": "FC Flora (1N2)",
+            "pari": "FC Flora (Gagne ou Mène 2b)",
             "cote": 1.4,
             "score_safe": 87,
             "classement": "3e (52 pts, +24) vs 9e (21 pts, -21)",
             "url": "https://www.unibet.fr/paris-football/estonie/d1-estonie/3370525/fc-flora-vs-parnu-jk-vapru"
           },
           "m2": {
-            "equipes": "Villarreal vs Levante",
-            "heure": "18h30",
-            "pari": "Villarreal (+2b)",
-            "cote": 1.46,
-            "score_safe": 82,
-            "classement": "5e (11 pts, +4) vs 16e (4 pts, -5)",
-            "url": "https://www.unibet.fr/paris-football/espagne/laliga/3360734/villarreal-vs-levante"
-          },
-          "cote_totale": 2.04,
-          "mise": 7.0,
-          "gain_estime": 14.28
-        },
-        {
-          "id": "C4_DIM",
-          "nom": "Combiné 4 - Bloc Bohème",
-          "m1": {
             "equipes": "FK Jablonec vs FC Fastav Zlin",
             "heure": "15h00",
-            "pari": "FK Jablonec (1N2)",
+            "pari": "FK Jablonec (Gagne ou Mène 2b)",
             "cote": 1.33,
             "score_safe": 82,
             "classement": "5e (14 pts, +5) vs 15e (5 pts, -9)",
             "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370198/fk-jablonec-vs-fc-fastav-zlin"
           },
-          "m2": {
-            "equipes": "Hradec Kralové vs Teplice",
-            "heure": "13h00",
-            "pari": "Hradec Kralové (+2b)",
-            "cote": 1.58,
-            "score_safe": 80,
-            "classement": "8e (10 pts) vs 14e (4 pts)",
-            "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370200/hradec-kralove-vs-teplice"
-          },
-          "cote_totale": 2.1,
-          "mise": 7.0,
-          "gain_estime": 14.7
-        },
-        {
-          "id": "C5_DIM",
-          "nom": "Combiné 5 - Bastions Suède / Flandres",
-          "m1": {
-            "equipes": "Djurgårdens vs Elfsborg",
-            "heure": "14h00",
-            "pari": "Djurgårdens (+2b)",
-            "cote": 1.44,
-            "score_safe": 81,
-            "classement": "2e (41 pts, +16) vs 5e (35 pts)",
-            "url": "https://www.unibet.fr/paris-football/suede/d1-suede/3370529/djurgardens-vs-elfsborg"
-          },
-          "m2": {
-            "equipes": "Club Bruges vs RC Genk",
-            "heure": "18h30",
-            "pari": "Club Bruges (+2b)",
-            "cote": 1.4,
-            "score_safe": 81,
-            "classement": "2e (13 pts) vs 1er (16 pts)",
-            "url": "https://www.unibet.fr/paris-football/belgique/d1-belgique/3370519/club-bruges-vs-rc-genk"
-          },
-          "cote_totale": 2.02,
-          "mise": 7.0,
-          "gain_estime": 14.14
+          "cote_totale": 1.86,
+          "mise": 11.5,
+          "gain_estime": 21.39
         }
       ]
     }
