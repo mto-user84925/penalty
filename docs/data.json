@@ -1,15 +1,15 @@
 {
   "summary": {
-    "total_matches": 504,
+    "total_matches": 506,
     "decided_matches": 433,
     "won": 249,
     "lost": 184,
     "live": 0,
-    "upcoming": 71,
+    "upcoming": 73,
     "win_rate": 57.5,
     "profit_units": -24.7,
     "roi_pct": -5.7,
-    "last_updated": "2026-09-19T06:05:02.234765+00:00"
+    "last_updated": "2026-09-19T08:03:37.170428+00:00"
   },
   "matches_today": [
     {
@@ -10776,7 +10776,7 @@
       "fav_side": "ext",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.55,
+      "odds": 1.58,
       "dog_odds": 4.45,
       "odds_diff": 2.89,
       "domination_score": 64,
@@ -10791,7 +10791,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.5
+      "away_odds": 4.4
     },
     {
       "id": "3376558",
@@ -10804,7 +10804,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.96,
+      "odds": 1.7,
       "dog_odds": 4.5,
       "odds_diff": 2.92,
       "domination_score": 63,
@@ -10819,7 +10819,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 3.15
+      "away_odds": 3.85
     },
     {
       "id": "3369069",
@@ -10831,7 +10831,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.4,
+      "odds": 1.41,
       "domination_score": 69,
       "badge_tier": "🥈 ARGENT",
       "win_pct_historical": 80,
@@ -10844,7 +10844,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.2
+      "away_odds": 5.0
     },
     {
       "id": "3378329",
@@ -10902,7 +10902,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.7
+      "away_odds": 4.55
     },
     {
       "id": "3370199",
@@ -10971,7 +10971,7 @@
       "fav_side": "ext",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.38,
+      "odds": 1.4,
       "dog_odds": 4.85,
       "odds_diff": 3.45,
       "domination_score": 71,
@@ -10986,7 +10986,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.1
+      "away_odds": 4.9
     },
     {
       "id": "3369072",
@@ -11027,7 +11027,7 @@
       "fav_side": "ext",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.48,
+      "odds": 1.52,
       "dog_odds": 4.0,
       "odds_diff": 2.48,
       "domination_score": 66,
@@ -11042,7 +11042,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.15
+      "away_odds": 4.0
     },
     {
       "id": "3377217",
@@ -11139,7 +11139,7 @@
       "fav_side": "ext",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.6,
+      "odds": 1.58,
       "dog_odds": 4.6,
       "odds_diff": 3.02,
       "domination_score": 63,
@@ -11292,7 +11292,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.2
+      "away_odds": 5.1
     },
     {
       "id": "3370190",
@@ -11305,7 +11305,7 @@
       "fav_side": "ext",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.38,
+      "odds": 1.36,
       "dog_odds": 4.75,
       "odds_diff": 3.35,
       "domination_score": 71,
@@ -11320,7 +11320,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.1
+      "away_odds": 5.4
     },
     {
       "id": "3360639",
@@ -11332,7 +11332,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.42,
+      "odds": 1.3,
       "domination_score": 64,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 65,
@@ -11345,7 +11345,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.0
+      "away_odds": 5.9
     },
     {
       "id": "3380565",
@@ -11522,7 +11522,7 @@
       "fav_side": "ext",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.52,
+      "odds": 1.56,
       "dog_odds": 4.4,
       "odds_diff": 2.88,
       "domination_score": 66,
@@ -11537,7 +11537,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.4
+      "away_odds": 4.3
     },
     {
       "id": "3381730",
@@ -11578,7 +11578,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.48,
+      "odds": 1.5,
       "dog_odds": 4.8,
       "odds_diff": 3.3,
       "domination_score": 55,
@@ -11593,7 +11593,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.65
+      "away_odds": 4.55
     },
     {
       "id": "3375660",
@@ -11659,7 +11659,7 @@
       "fav_side": "ext",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.44,
+      "odds": 1.45,
       "dog_odds": 4.05,
       "odds_diff": 2.55,
       "domination_score": 67,
@@ -11674,7 +11674,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.45
+      "away_odds": 4.5
     },
     {
       "id": "3369922",
@@ -11743,7 +11743,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (Victoire)",
-      "odds": 1.4,
+      "odds": 1.38,
       "dog_odds": 6.6,
       "odds_diff": 5.19,
       "domination_score": 71,
@@ -11758,7 +11758,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 6.4
+      "away_odds": 6.5
     },
     {
       "id": "3380436",
@@ -12101,7 +12101,8 @@
       "minute": "Dim. 20/09 à 18h30",
       "is_live": false,
       "is_finished": false,
-      "profit": 0.0
+      "profit": 0.0,
+      "away_odds": 5.4
     },
     {
       "id": "3370523",
@@ -12125,7 +12126,8 @@
       "minute": "Dim. 20/09 à 18h30",
       "is_live": false,
       "is_finished": false,
-      "profit": 0.0
+      "profit": 0.0,
+      "away_odds": 5.2
     },
     {
       "id": "3370159",
@@ -12149,7 +12151,66 @@
       "minute": "Dim. 20/09 à 19h30",
       "is_live": false,
       "is_finished": false,
-      "profit": 0.0
+      "profit": 0.0,
+      "away_odds": 4.5
+    },
+    {
+      "id": "3377957",
+      "time": "Sam. 19/09 à 12h00",
+      "start_iso": "2026-09-19T10:00:00.000Z",
+      "league": "Japon • D1 Japon",
+      "home": "FC Tokyo",
+      "away": "Nagoya Grampus",
+      "fav_team": "FC Tokyo",
+      "fav_side": "dom",
+      "market": "FAV_1N2",
+      "market_label": "👑 Favori (+2b)",
+      "odds": 1.38,
+      "domination_score": 68,
+      "badge_tier": "🎯 M2",
+      "win_pct_historical": 68,
+      "over25": 1.6,
+      "under25": 1.95,
+      "btts_oui": 1.65,
+      "away_over05": 1.45,
+      "status": "UPCOMING",
+      "selection_status": "PENDING",
+      "score_display": "VS",
+      "home_score": 0,
+      "away_score": 0,
+      "minute": "À venir",
+      "is_live": false,
+      "is_finished": false,
+      "profit": 0.0,
+      "away_odds": 5.6
+    },
+    {
+      "id": "3369084",
+      "time": "Dim. 20/09 à 19h30",
+      "start_iso": "2026-09-20T17:30:00.000Z",
+      "league": "Italie • Serie B",
+      "home": "Modène",
+      "away": "Empoli",
+      "fav_team": "Modène",
+      "fav_side": "dom",
+      "market": "FAV_1N2",
+      "market_label": "👑 Favori (+2b)",
+      "odds": 1.48,
+      "dog_odds": 4.55,
+      "odds_diff": 3.07,
+      "domination_score": 68,
+      "badge_tier": "🔥 M5",
+      "win_pct_historical": 68,
+      "status": "UPCOMING",
+      "selection_status": "PENDING",
+      "score_display": "VS",
+      "home_score": 0,
+      "away_score": 0,
+      "minute": "À venir",
+      "is_live": false,
+      "is_finished": false,
+      "profit": 0.0,
+      "away_odds": 4.55
     }
   ],
   "history": [],
@@ -12159,7 +12220,7 @@
     "won": 33,
     "lost": 46,
     "live": 0,
-    "upcoming": 7,
+    "upcoming": 6,
     "default_stake": 3.0,
     "win_rate": 41.8,
     "profit_units": -1.4,
@@ -16542,7 +16603,7 @@
       "email_ticket_num": 2,
       "odds": 2.19,
       "default_stake": 3.0,
-      "ticket_status": "PENDING",
+      "ticket_status": "EXPIRED",
       "profit_unit": 0.0,
       "gain_eur": 6.57,
       "profit_eur": 0.0,
@@ -16722,7 +16783,7 @@
     {
       "id": "combo_97",
       "ticket_num": 97,
-      "email_ticket_num": 3,
+      "email_ticket_num": 2,
       "odds": 1.99,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -16783,7 +16844,7 @@
     {
       "id": "combo_98",
       "ticket_num": 98,
-      "email_ticket_num": 4,
+      "email_ticket_num": 3,
       "odds": 2.02,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -16844,7 +16905,7 @@
     {
       "id": "combo_99",
       "ticket_num": 99,
-      "email_ticket_num": 5,
+      "email_ticket_num": 4,
       "odds": 1.97,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -16905,7 +16966,7 @@
     {
       "id": "combo_100",
       "ticket_num": 100,
-      "email_ticket_num": 6,
+      "email_ticket_num": 5,
       "odds": 2.02,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -16932,7 +16993,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 18h30",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -16957,7 +17018,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 18h30",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -16966,7 +17027,7 @@
     {
       "id": "combo_101",
       "ticket_num": 101,
-      "email_ticket_num": 7,
+      "email_ticket_num": 6,
       "odds": 2.13,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -16993,7 +17054,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 17h00",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -17018,7 +17079,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 19h30",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -17027,8 +17088,8 @@
   ],
   "matches_discarded": [],
   "methode2_summary": {
-    "total": 30,
-    "active": 10,
+    "total": 29,
+    "active": 9,
     "won": 7,
     "lost": 13
   },
@@ -18852,78 +18913,9 @@
       }
     },
     {
-      "id": "m2_combo_36",
-      "ticket_num": 36,
-      "email_ticket_num": 8,
-      "odds": 2.1,
-      "default_stake": 3.0,
-      "ticket_status": "PENDING",
-      "profit_unit": 0.0,
-      "profit_eur": 0.0,
-      "gain_eur": 6.3,
-      "m1": {
-        "id": "3377957",
-        "time": "Sam. 19/09 à 12h00",
-        "start_iso": "2026-09-19T10:00:00.000Z",
-        "league": "Japon • D1 Japon",
-        "home": "FC Tokyo",
-        "away": "Nagoya Grampus",
-        "fav_team": "FC Tokyo",
-        "fav_side": "dom",
-        "market": "FAV_1N2",
-        "market_label": "👑 Favori (+2b)",
-        "odds": 1.44,
-        "domination_score": 68,
-        "badge_tier": "🎯 M2",
-        "win_pct_historical": 68,
-        "over25": 1.6,
-        "under25": 1.95,
-        "btts_oui": 1.65,
-        "away_over05": 1.45,
-        "status": "UPCOMING",
-        "selection_status": "PENDING",
-        "score_display": "VS",
-        "home_score": 0,
-        "away_score": 0,
-        "minute": "À venir",
-        "is_live": false,
-        "is_finished": false,
-        "profit": 0.0
-      },
-      "m2": {
-        "id": "3370194",
-        "time": "Sam. 19/09 à 18h00",
-        "start_iso": "2026-09-19T16:00:00.000Z",
-        "league": "Suisse • D1 Suisse",
-        "home": "Young Boys",
-        "away": "Servette FC",
-        "fav_team": "Young Boys",
-        "fav_side": "dom",
-        "market": "FAV_1N2",
-        "market_label": "👑 Favori (+2b)",
-        "odds": 1.46,
-        "domination_score": 67,
-        "badge_tier": "🎯 M2",
-        "win_pct_historical": 67,
-        "over25": 1.3,
-        "under25": 2.7,
-        "btts_oui": 1.35,
-        "away_over05": 1.28,
-        "status": "UPCOMING",
-        "selection_status": "PENDING",
-        "score_display": "VS",
-        "home_score": 0,
-        "away_score": 0,
-        "minute": "À venir",
-        "is_live": false,
-        "is_finished": false,
-        "profit": 0.0
-      }
-    },
-    {
       "id": "m2_combo_37",
       "ticket_num": 37,
-      "email_ticket_num": 9,
+      "email_ticket_num": 8,
       "odds": 2.13,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -18954,7 +18946,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 18h30",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -18983,7 +18975,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 19h30",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -18992,7 +18984,7 @@
     {
       "id": "m2_combo_38",
       "ticket_num": 38,
-      "email_ticket_num": 10,
+      "email_ticket_num": 9,
       "odds": 1.99,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -19023,7 +19015,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 18h00",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -19052,7 +19044,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 18h30",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -20858,7 +20850,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 18h30",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -20885,7 +20877,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 19h30",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -20923,7 +20915,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 18h30",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -20953,7 +20945,8 @@
         "minute": "À venir",
         "is_live": false,
         "is_finished": false,
-        "profit": 0.0
+        "profit": 0.0,
+        "away_odds": 4.55
       }
     }
   ],
