@@ -30707,5 +30707,51 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3380232",
+    "timestamp_utc": "2026-09-19T14:04:39.716788+00:00",
+    "match": "FC Koper vs Nafta Lendava",
+    "league": "Slovenie • D1 Slovenie",
+    "date_str": "Sam. 19/09 à 17h30",
+    "fav_team": "FC Koper",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 65,
+      "pct_fav_success": 65,
+      "pct_fav_lead2": 30
+    },
+    "odds": {
+      "fav_odds": 1.44,
+      "p2_fav_odds": 1.4
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3370160",
+    "timestamp_utc": "2026-09-19T14:04:39.716788+00:00",
+    "match": "Uni.Craiova vs FCSB",
+    "league": "Roumanie • D1 Roumanie",
+    "date_str": "Sam. 19/09 à 19h30",
+    "fav_team": "Uni.Craiova",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 60,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 45
+    },
+    "odds": {
+      "fav_odds": 1.51,
+      "p2_fav_odds": 1.51
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
