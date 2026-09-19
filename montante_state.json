@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-19T18:53:20.702918",
+  "last_updated": "2026-09-19T18:56:24.278423",
   "strategy": "MULTI_MONTANTES_5_COMBINES_10_MATCHS_UNIQUES",
   "rule_zero_doublons": "10 matchs distincts par jour, aucun match répété, indépendance totale",
   "rule_cote_min_combo": 2.13,
@@ -218,43 +218,43 @@
       "format": "3_COMBINES_ELITE_SAFE",
       "mise_unitaire": 11.5,
       "mise_totale": 34.5,
-      "strategie_safe": "SAFE_3_COMBINES_6_EQUIPES_UNIQUES",
+      "strategie_safe": "SAFE_3_COMBINES_6_EQUIPES_WEB_VERIFIEES",
       "combines": [
         {
           "id": "C1_DIM",
-          "nom": "Combiné 1 - L'Axe Scandinave & Liga",
+          "nom": "Combiné 1 - Les Cadors Scandinave & Tchèque",
           "m1": {
             "equipes": "Viking FK vs Lillestrøm",
             "heure": "17h00",
             "pari": "Viking FK (Gagne ou Mène 2b)",
             "cote": 1.33,
             "score_safe": 92,
-            "classement": "2e (43 pts, +18) vs 14e (20 pts, -14)",
+            "classement_verifie": "2e (47 pts) vs 5e (32 pts) - +15 pts d'écart",
             "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370516/viking-fk-vs-lillestrom"
           },
           "m2": {
-            "equipes": "Villarreal vs Levante",
-            "heure": "18h30",
-            "pari": "Villarreal (Gagne ou Mène 2b)",
-            "cote": 1.46,
-            "score_safe": 82,
-            "classement": "5e (11 pts, +4) vs 16e (4 pts, -5)",
-            "url": "https://www.unibet.fr/paris-football/espagne/laliga/3360734/villarreal-vs-levante"
+            "equipes": "Slavia Prague vs Viktoria Plzen",
+            "heure": "18h00",
+            "pari": "Slavia Prague (Gagne ou Mène 2b)",
+            "cote": 1.38,
+            "score_safe": 90,
+            "classement_verifie": "1er (20 pts, +18) vs 10e (10 pts) - +10 pts d'écart en 8m",
+            "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370201/slavia-prague-vs-viktoria-plzen"
           },
-          "cote_totale": 2.02,
+          "cote_totale": 1.84,
           "mise": 11.5,
-          "gain_estime": 23.23
+          "gain_estime": 21.16
         },
         {
           "id": "C2_DIM",
-          "nom": "Combiné 2 - Le Choc des Titans & Forteresse Polaire",
+          "nom": "Combiné 2 - Choc des Titans & Forteresse Polaire",
           "m1": {
             "equipes": "Shakhtar Donetsk vs LNZ Cherkasy",
             "heure": "17h00",
             "pari": "Shakhtar Donetsk (Gagne ou Mène 2b)",
             "cote": 1.45,
             "score_safe": 88,
-            "classement": "2e (15 pts, +12) vs 8e (7 pts, -2)",
+            "classement_verifie": "2e (15 pts en 6m, diff +12) vs 8e (8 pts)",
             "url": "https://www.unibet.fr/paris-football/ukraine/d1-ukraine/3376070/shakht-donetsk-vs-lnz-cherkasy"
           },
           "m2": {
@@ -262,8 +262,8 @@
             "heure": "17h00",
             "pari": "Tromsø (Gagne ou Mène 2b)",
             "cote": 1.4,
-            "score_safe": 85,
-            "classement": "10e (25 pts) vs 12e (21 pts)",
+            "score_safe": 86,
+            "classement_verifie": "4e (35 pts) vs 10e (23 pts) - +12 pts d'écart",
             "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370510/tromso-vs-hamkam"
           },
           "cote_totale": 2.03,
@@ -272,23 +272,23 @@
         },
         {
           "id": "C3_DIM",
-          "nom": "Combiné 3 - L'Axe Baltique & Bohème",
+          "nom": "Combiné 3 - L'Axe Baltique & Le Bourreau de Zlín",
           "m1": {
             "equipes": "FC Flora vs Pärnu JK Vaprus",
             "heure": "18h00",
             "pari": "FC Flora (Gagne ou Mène 2b)",
             "cote": 1.4,
             "score_safe": 87,
-            "classement": "3e (52 pts, +24) vs 9e (21 pts, -21)",
+            "classement_verifie": "3e (~42 pts) vs relégable",
             "url": "https://www.unibet.fr/paris-football/estonie/d1-estonie/3370525/fc-flora-vs-parnu-jk-vapru"
           },
           "m2": {
-            "equipes": "FK Jablonec vs FC Fastav Zlin",
+            "equipes": "FK Jablonec vs FC Zlín",
             "heure": "15h00",
             "pari": "FK Jablonec (Gagne ou Mène 2b)",
             "cote": 1.33,
-            "score_safe": 82,
-            "classement": "5e (14 pts, +5) vs 15e (5 pts, -9)",
+            "score_safe": 91,
+            "classement_verifie": "7e (13 pts) vs 16e dernier (0 pt, 8 défaites en 8 matchs !)",
             "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370198/fk-jablonec-vs-fc-fastav-zlin"
           },
           "cote_totale": 1.86,
