@@ -30548,5 +30548,74 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3370510",
+    "timestamp_utc": "2026-09-19T04:05:02.221657+00:00",
+    "match": "Tromsø vs HamKam",
+    "league": "Norvege • D1 Norvege",
+    "date_str": "Dim. 20/09 à 17h00",
+    "fav_team": "Tromsø",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 66,
+      "pct_fav_success": 65,
+      "pct_fav_lead2": 50
+    },
+    "odds": {
+      "fav_odds": 1.41,
+      "p2_fav_odds": 1.41
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3376070",
+    "timestamp_utc": "2026-09-19T04:05:02.221657+00:00",
+    "match": "Shakht.Donetsk vs LNZ Cherkasy",
+    "league": "Ukraine • D1 Ukraine",
+    "date_str": "Dim. 20/09 à 17h00",
+    "fav_team": "Shakht.Donetsk",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 58,
+      "pct_fav_success": 75,
+      "pct_fav_lead2": 55
+    },
+    "odds": {
+      "fav_odds": 1.46,
+      "p2_fav_odds": 1.42
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3378804",
+    "timestamp_utc": "2026-09-19T04:05:02.221657+00:00",
+    "match": "FC Flora vs Parnu JK Vapru",
+    "league": "Estonie • D1 Estonie",
+    "date_str": "Dim. 20/09 à 18h00",
+    "fav_team": "FC Flora",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 71,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 45
+    },
+    "odds": {
+      "fav_odds": 1.4,
+      "p2_fav_odds": 1.4
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]

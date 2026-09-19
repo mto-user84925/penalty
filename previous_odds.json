@@ -10,16 +10,6 @@
       "fav_score": 69,
       "fav_badge": "🥈 ARGENT"
     },
-    "3373779": {
-      "match": "FK Kosice - MFK Ruzomberok",
-      "league": "Slovaquie • D1 Slovaquie",
-      "date_str": "Sam. 19/09 à 18h00",
-      "fav_team": "FK Kosice",
-      "fav_odds": 1.41,
-      "p2_fav_odds": 1.41,
-      "fav_score": 62,
-      "fav_badge": "🥉 BRONZE+"
-    },
     "3370197": {
       "match": "Sion - FC Zurich",
       "league": "Suisse • D1 Suisse",
@@ -35,8 +25,8 @@
       "league": "Espagne • Laliga 2",
       "date_str": "Sam. 19/09 à 18h30",
       "fav_team": "Castellon",
-      "fav_odds": 1.43,
-      "p2_fav_odds": 1.4,
+      "fav_odds": 1.42,
+      "p2_fav_odds": 1.42,
       "fav_score": 64,
       "fav_badge": "🥉 BRONZE+"
     },
@@ -65,10 +55,40 @@
       "league": "Angleterre • Championship",
       "date_str": "Dim. 20/09 à 14h30",
       "fav_team": "Norwich",
-      "fav_odds": 1.4,
-      "p2_fav_odds": 1.4,
+      "fav_odds": 1.42,
+      "p2_fav_odds": 1.42,
       "fav_score": 56,
       "fav_badge": "🥉 BRONZE+"
+    },
+    "3370510": {
+      "match": "Tromsø - HamKam",
+      "league": "Norvege • D1 Norvege",
+      "date_str": "Dim. 20/09 à 17h00",
+      "fav_team": "Tromsø",
+      "fav_odds": 1.41,
+      "p2_fav_odds": 1.41,
+      "fav_score": 66,
+      "fav_badge": "🥈 ARGENT"
+    },
+    "3376070": {
+      "match": "Shakht.Donetsk - LNZ Cherkasy",
+      "league": "Ukraine • D1 Ukraine",
+      "date_str": "Dim. 20/09 à 17h00",
+      "fav_team": "Shakht.Donetsk",
+      "fav_odds": 1.46,
+      "p2_fav_odds": 1.42,
+      "fav_score": 58,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3378804": {
+      "match": "FC Flora - Parnu JK Vapru",
+      "league": "Estonie • D1 Estonie",
+      "date_str": "Dim. 20/09 à 18h00",
+      "fav_team": "FC Flora",
+      "fav_odds": 1.4,
+      "p2_fav_odds": 1.4,
+      "fav_score": 71,
+      "fav_badge": "🥈 ARGENT"
     }
   }
 }
