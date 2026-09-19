@@ -1,33 +1,13 @@
 {
   "favs": {
-    "3380232": {
-      "match": "FC Koper - Nafta Lendava",
-      "league": "Slovenie • D1 Slovenie",
-      "date_str": "Sam. 19/09 à 17h30",
-      "fav_team": "FC Koper",
-      "fav_odds": 1.44,
-      "p2_fav_odds": 1.4,
-      "fav_score": 65,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3373779": {
-      "match": "FK Kosice - MFK Ruzomberok",
-      "league": "Slovaquie • D1 Slovaquie",
-      "date_str": "Sam. 19/09 à 18h00",
-      "fav_team": "FK Kosice",
-      "fav_odds": 1.43,
-      "p2_fav_odds": 1.4,
-      "fav_score": 62,
-      "fav_badge": "🥉 BRONZE+"
-    },
-    "3370160": {
-      "match": "Uni.Craiova - FCSB",
-      "league": "Roumanie • D1 Roumanie",
-      "date_str": "Sam. 19/09 à 19h30",
-      "fav_team": "Uni.Craiova",
-      "fav_odds": 1.51,
-      "p2_fav_odds": 1.51,
-      "fav_score": 60,
+    "3380436": {
+      "match": "Cerro Porteno - Rubio Nu",
+      "league": "Paraguay • D1 Paraguay",
+      "date_str": "Sam. 19/09 à 23h30",
+      "fav_team": "Cerro Porteno",
+      "fav_odds": 1.54,
+      "p2_fav_odds": 1.5,
+      "fav_score": 64,
       "fav_badge": "🥉 BRONZE+"
     },
     "3370529": {
@@ -55,8 +35,8 @@
       "league": "Norvege • D1 Norvege",
       "date_str": "Dim. 20/09 à 17h00",
       "fav_team": "Tromsø",
-      "fav_odds": 1.41,
-      "p2_fav_odds": 1.41,
+      "fav_odds": 1.42,
+      "p2_fav_odds": 1.42,
       "fav_score": 66,
       "fav_badge": "🥈 ARGENT"
     },
@@ -65,7 +45,7 @@
       "league": "Ukraine • D1 Ukraine",
       "date_str": "Dim. 20/09 à 17h00",
       "fav_team": "Shakht.Donetsk",
-      "fav_odds": 1.49,
+      "fav_odds": 1.5,
       "p2_fav_odds": 1.46,
       "fav_score": 58,
       "fav_badge": "🥉 BRONZE+"
@@ -80,22 +60,22 @@
       "fav_score": 71,
       "fav_badge": "🥈 ARGENT"
     },
-    "3360734": {
-      "match": "Villarreal - Levante",
-      "league": "Espagne • Laliga",
-      "date_str": "Dim. 20/09 à 18h30",
-      "fav_team": "Villarreal",
-      "fav_odds": 1.46,
-      "p2_fav_odds": 1.42,
-      "fav_score": 65,
-      "fav_badge": "🥈 ARGENT"
-    },
     "3370523": {
       "match": "Club Bruges - RC Genk",
       "league": "Belgique • D1 Belgique",
       "date_str": "Dim. 20/09 à 18h30",
       "fav_team": "Club Bruges",
       "fav_odds": 1.42,
+      "p2_fav_odds": 1.42,
+      "fav_score": 65,
+      "fav_badge": "🥈 ARGENT"
+    },
+    "3360734": {
+      "match": "Villarreal - Levante",
+      "league": "Espagne • Laliga",
+      "date_str": "Dim. 20/09 à 18h30",
+      "fav_team": "Villarreal",
+      "fav_odds": 1.46,
       "p2_fav_odds": 1.42,
       "fav_score": 65,
       "fav_badge": "🥈 ARGENT"

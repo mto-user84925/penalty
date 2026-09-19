@@ -30753,5 +30753,28 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3380436",
+    "timestamp_utc": "2026-09-19T16:04:07.014083+00:00",
+    "match": "Cerro Porteno vs Rubio Nu",
+    "league": "Paraguay • D1 Paraguay",
+    "date_str": "Sam. 19/09 à 23h30",
+    "fav_team": "Cerro Porteno",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 64,
+      "pct_fav_success": 60,
+      "pct_fav_lead2": 35
+    },
+    "odds": {
+      "fav_odds": 1.54,
+      "p2_fav_odds": 1.5
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
