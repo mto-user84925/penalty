@@ -156,7 +156,9 @@
           },
           "cote_totale": 2.2,
           "mise": 8.0,
-          "gain_estime": 17.6
+          "gain_estime": 17.6,
+          "status": "GAGNE",
+          "gain_reel": 17.6
         },
         {
           "id": "T2_SAM",
@@ -177,7 +179,9 @@
           },
           "cote_totale": 2.24,
           "mise": 8.0,
-          "gain_estime": 17.92
+          "gain_estime": 17.92,
+          "status": "PERDU",
+          "gain_reel": 0.0
         },
         {
           "id": "T3_SAM",
@@ -198,12 +202,16 @@
           },
           "cote_totale": 2.25,
           "mise": 8.0,
-          "gain_estime": 18.0
+          "gain_estime": 18.0,
+          "status": "PERDU",
+          "gain_reel": 0.0
         }
       ],
       "nb_combines_actifs": 3,
       "mise_totale": 24.0,
-      "gain_potentiel_total": 53.52
+      "gain_potentiel_total": 53.52,
+      "combines_gagnes": 1,
+      "total_gains_reels": 17.6
     },
     "DIMANCHE_20_09": {
       "palier": 3,
@@ -323,6 +331,6 @@
     "C5"
   ],
   "progression_active": "4€ (Vendredi P1) ➔ 8€ (Samedi P2 Boosté) ➔ 12€ (Dimanche P3)",
-  "capital_actuel_liquide": 27.28,
+  "capital_actuel_liquide": 20.880000000000003,
   "cash_reserve_poche": 3.28
 }
