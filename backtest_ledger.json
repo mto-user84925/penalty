@@ -30502,5 +30502,28 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3370529",
+    "timestamp_utc": "2026-09-19T00:06:00.033972+00:00",
+    "match": "Djurgårdens vs Elfsborg",
+    "league": "Suede • D1 Suede",
+    "date_str": "Dim. 20/09 à 14h00",
+    "fav_team": "Djurgårdens",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 60,
+      "pct_fav_success": 55,
+      "pct_fav_lead2": 40
+    },
+    "odds": {
+      "fav_odds": 1.47,
+      "p2_fav_odds": 1.44
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]

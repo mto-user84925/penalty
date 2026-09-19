@@ -7,27 +7,37 @@
       "fav_team": "Palerme",
       "fav_odds": 1.41,
       "p2_fav_odds": 1.41,
-      "fav_score": 66,
+      "fav_score": 69,
       "fav_badge": "🥈 ARGENT"
     },
-    "3380238": {
-      "match": "Aris Salonique - POT Iraklis",
-      "league": "Grece • D1 Grece",
-      "date_str": "Sam. 19/09 à 18h30",
-      "fav_team": "Aris Salonique",
-      "fav_odds": 1.55,
-      "p2_fav_odds": 1.52,
-      "fav_score": 55,
+    "3373779": {
+      "match": "FK Kosice - MFK Ruzomberok",
+      "league": "Slovaquie • D1 Slovaquie",
+      "date_str": "Sam. 19/09 à 18h00",
+      "fav_team": "FK Kosice",
+      "fav_odds": 1.41,
+      "p2_fav_odds": 1.41,
+      "fav_score": 62,
       "fav_badge": "🥉 BRONZE+"
     },
-    "3363783": {
-      "match": "Basaksehir - Genclerbirligi",
-      "league": "Turquie • D1 Turquie",
-      "date_str": "Sam. 19/09 à 19h00",
-      "fav_team": "Basaksehir",
-      "fav_odds": 1.46,
-      "p2_fav_odds": 1.42,
-      "fav_score": 57,
+    "3370197": {
+      "match": "Sion - FC Zurich",
+      "league": "Suisse • D1 Suisse",
+      "date_str": "Sam. 19/09 à 18h00",
+      "fav_team": "Sion",
+      "fav_odds": 1.41,
+      "p2_fav_odds": 1.41,
+      "fav_score": 62,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3360639": {
+      "match": "Castellon - Tenerife",
+      "league": "Espagne • Laliga 2",
+      "date_str": "Sam. 19/09 à 18h30",
+      "fav_team": "Castellon",
+      "fav_odds": 1.43,
+      "p2_fav_odds": 1.4,
+      "fav_score": 64,
       "fav_badge": "🥉 BRONZE+"
     },
     "3380387": {
@@ -37,8 +47,18 @@
       "fav_team": "Beit.Jerusalem",
       "fav_odds": 1.53,
       "p2_fav_odds": 1.5,
-      "fav_score": 73,
-      "fav_badge": "🥈 ARGENT"
+      "fav_score": 58,
+      "fav_badge": "🥉 BRONZE+"
+    },
+    "3370529": {
+      "match": "Djurgårdens - Elfsborg",
+      "league": "Suede • D1 Suede",
+      "date_str": "Dim. 20/09 à 14h00",
+      "fav_team": "Djurgårdens",
+      "fav_odds": 1.47,
+      "p2_fav_odds": 1.44,
+      "fav_score": 60,
+      "fav_badge": "🥉 BRONZE+"
     }
   }
 }
