@@ -5,18 +5,18 @@
       "league": "Italie • Serie B",
       "date_str": "Sam. 19/09 à 15h00",
       "fav_team": "Palerme",
-      "fav_odds": 1.41,
-      "p2_fav_odds": 1.41,
+      "fav_odds": 1.4,
+      "p2_fav_odds": 1.4,
       "fav_score": 69,
       "fav_badge": "🥈 ARGENT"
     },
-    "3370197": {
-      "match": "Sion - FC Zurich",
-      "league": "Suisse • D1 Suisse",
+    "3373779": {
+      "match": "FK Kosice - MFK Ruzomberok",
+      "league": "Slovaquie • D1 Slovaquie",
       "date_str": "Sam. 19/09 à 18h00",
-      "fav_team": "Sion",
-      "fav_odds": 1.41,
-      "p2_fav_odds": 1.41,
+      "fav_team": "FK Kosice",
+      "fav_odds": 1.44,
+      "p2_fav_odds": 1.4,
       "fav_score": 62,
       "fav_badge": "🥉 BRONZE+"
     },
@@ -28,16 +28,6 @@
       "fav_odds": 1.42,
       "p2_fav_odds": 1.42,
       "fav_score": 64,
-      "fav_badge": "🥉 BRONZE+"
-    },
-    "3380387": {
-      "match": "Beit.Jerusalem - Hapoel Haifa",
-      "league": "Israel • D1 Israel",
-      "date_str": "Sam. 19/09 à 19h30",
-      "fav_team": "Beit.Jerusalem",
-      "fav_odds": 1.53,
-      "p2_fav_odds": 1.5,
-      "fav_score": 58,
       "fav_badge": "🥉 BRONZE+"
     },
     "3370529": {
@@ -89,6 +79,36 @@
       "p2_fav_odds": 1.4,
       "fav_score": 71,
       "fav_badge": "🥈 ARGENT"
+    },
+    "3360734": {
+      "match": "Villarreal - Levante",
+      "league": "Espagne • Laliga",
+      "date_str": "Dim. 20/09 à 18h30",
+      "fav_team": "Villarreal",
+      "fav_odds": 1.46,
+      "p2_fav_odds": 1.42,
+      "fav_score": 65,
+      "fav_badge": "🥈 ARGENT"
+    },
+    "3370523": {
+      "match": "Club Bruges - RC Genk",
+      "league": "Belgique • D1 Belgique",
+      "date_str": "Dim. 20/09 à 18h30",
+      "fav_team": "Club Bruges",
+      "fav_odds": 1.42,
+      "p2_fav_odds": 1.42,
+      "fav_score": 65,
+      "fav_badge": "🥈 ARGENT"
+    },
+    "3370159": {
+      "match": "DinamoBucarest - FC Constanta",
+      "league": "Roumanie • D1 Roumanie",
+      "date_str": "Dim. 20/09 à 19h30",
+      "fav_team": "DinamoBucarest",
+      "fav_odds": 1.54,
+      "p2_fav_odds": 1.5,
+      "fav_score": 58,
+      "fav_badge": "🥉 BRONZE+"
     }
   }
 }

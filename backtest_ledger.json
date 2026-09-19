@@ -30617,5 +30617,95 @@
     ],
     "result": null,
     "won_p2": null
+  },
+  {
+    "match_id": "3380878",
+    "timestamp_utc": "2026-09-19T06:05:04.835600+00:00",
+    "match": "Emelec vs Libertad Loja",
+    "league": "Equateur • D1 Equateur",
+    "date_str": "Dim. 20/09 à 02h00",
+    "fav_team": "Emelec",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 53,
+      "pct_fav_success": 55,
+      "pct_fav_lead2": 25
+    },
+    "odds": {
+      "fav_odds": 1.51,
+      "p2_fav_odds": 1.48
+    },
+    "selected_markets": [],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3360734",
+    "timestamp_utc": "2026-09-19T06:05:04.835600+00:00",
+    "match": "Villarreal vs Levante",
+    "league": "Espagne • Laliga",
+    "date_str": "Dim. 20/09 à 18h30",
+    "fav_team": "Villarreal",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 65,
+      "pct_fav_success": 70,
+      "pct_fav_lead2": 50
+    },
+    "odds": {
+      "fav_odds": 1.46,
+      "p2_fav_odds": 1.42
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3370523",
+    "timestamp_utc": "2026-09-19T06:05:04.835600+00:00",
+    "match": "Club Bruges vs RC Genk",
+    "league": "Belgique • D1 Belgique",
+    "date_str": "Dim. 20/09 à 18h30",
+    "fav_team": "Club Bruges",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 65,
+      "pct_fav_success": 85,
+      "pct_fav_lead2": 55
+    },
+    "odds": {
+      "fav_odds": 1.42,
+      "p2_fav_odds": 1.42
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
+  },
+  {
+    "match_id": "3370159",
+    "timestamp_utc": "2026-09-19T06:05:04.835600+00:00",
+    "match": "DinamoBucarest vs FC Constanta",
+    "league": "Roumanie • D1 Roumanie",
+    "date_str": "Dim. 20/09 à 19h30",
+    "fav_team": "DinamoBucarest",
+    "fav_side": "dom",
+    "scores": {
+      "fav_score": 58,
+      "pct_fav_success": 65,
+      "pct_fav_lead2": 25
+    },
+    "odds": {
+      "fav_odds": 1.54,
+      "p2_fav_odds": 1.5
+    },
+    "selected_markets": [
+      "FAV_1N2"
+    ],
+    "result": null,
+    "won_p2": null
   }
 ]
