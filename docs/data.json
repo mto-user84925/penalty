@@ -1,15 +1,15 @@
 {
   "summary": {
-    "total_matches": 511,
-    "decided_matches": 466,
-    "won": 272,
-    "lost": 194,
-    "live": 2,
-    "upcoming": 43,
-    "win_rate": 58.4,
-    "profit_units": -23.52,
-    "roi_pct": -5.05,
-    "last_updated": "2026-09-19T22:03:35.610742+00:00"
+    "total_matches": 512,
+    "decided_matches": 468,
+    "won": 273,
+    "lost": 195,
+    "live": 0,
+    "upcoming": 44,
+    "win_rate": 58.3,
+    "profit_units": -24.04,
+    "roi_pct": -5.14,
+    "last_updated": "2026-09-20T00:04:33.233157+00:00"
   },
   "matches_today": [
     {
@@ -11749,15 +11749,15 @@
       "domination_score": 71,
       "badge_tier": "🔥 M5",
       "win_pct_historical": 71,
-      "status": "LIVE",
-      "selection_status": "IN_PROGRESS",
-      "score_display": "0 - 0",
-      "home_score": 0,
-      "away_score": 0,
-      "minute": "1'",
-      "is_live": true,
-      "is_finished": false,
-      "profit": 0.0,
+      "status": "FINISHED",
+      "selection_status": "LOST",
+      "score_display": "1 - 2",
+      "home_score": 1,
+      "away_score": 2,
+      "minute": "Terminé",
+      "is_live": false,
+      "is_finished": true,
+      "profit": -1.0,
       "away_odds": 6.5
     },
     {
@@ -11777,15 +11777,15 @@
       "domination_score": 59,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 65,
-      "status": "LIVE",
-      "selection_status": "IN_PROGRESS",
+      "status": "FINISHED",
+      "selection_status": "WON_FINAL",
       "score_display": "1 - 0",
       "home_score": 1,
       "away_score": 0,
-      "minute": "33'",
-      "is_live": true,
-      "is_finished": false,
-      "profit": 0.0,
+      "minute": "Terminé",
+      "is_live": false,
+      "is_finished": true,
+      "profit": 0.48,
       "away_odds": 4.7
     },
     {
@@ -12062,7 +12062,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.4,
+      "odds": 1.38,
       "dog_odds": 5.8,
       "odds_diff": 4.4,
       "domination_score": 67,
@@ -12077,7 +12077,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 5.8
+      "away_odds": 6.1
     },
     {
       "id": "3360734",
@@ -12339,7 +12339,36 @@
       "minute": "Dim. 20/09 à 18h00",
       "is_live": false,
       "is_finished": false,
-      "profit": 0.0
+      "profit": 0.0,
+      "away_odds": 5.6
+    },
+    {
+      "id": "3372693",
+      "time": "Dim. 20/09 à 23h05",
+      "start_iso": "2026-09-20T21:05:00.000Z",
+      "league": "Colombie • D1 Colombie",
+      "home": "Bucaramanga",
+      "away": "Inter Bogota",
+      "fav_team": "Bucaramanga",
+      "fav_side": "dom",
+      "market": "FAV_1N2",
+      "market_label": "👑 Favori (+2b)",
+      "odds": 1.55,
+      "dog_odds": 4.85,
+      "odds_diff": 3.3,
+      "domination_score": 64,
+      "badge_tier": "🔥 M5",
+      "win_pct_historical": 64,
+      "status": "UPCOMING",
+      "selection_status": "PENDING",
+      "score_display": "VS",
+      "home_score": 0,
+      "away_score": 0,
+      "minute": "À venir",
+      "is_live": false,
+      "is_finished": false,
+      "profit": 0.0,
+      "away_odds": 4.85
     }
   ],
   "history": [],
@@ -12348,8 +12377,8 @@
     "decided_combos": 82,
     "won": 35,
     "lost": 47,
-    "live": 1,
-    "upcoming": 4,
+    "live": 0,
+    "upcoming": 6,
     "default_stake": 3.0,
     "win_rate": 42.7,
     "profit_units": -0.1,
@@ -16671,7 +16700,7 @@
       "email_ticket_num": 1,
       "odds": 1.99,
       "default_stake": 3.0,
-      "ticket_status": "EXPIRED",
+      "ticket_status": "PENDING",
       "profit_unit": 0.0,
       "gain_eur": 5.97,
       "profit_eur": 0.0,
@@ -16973,7 +17002,7 @@
     {
       "id": "combo_98",
       "ticket_num": 98,
-      "email_ticket_num": 1,
+      "email_ticket_num": 2,
       "odds": 2.02,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -17034,7 +17063,7 @@
     {
       "id": "combo_99",
       "ticket_num": 99,
-      "email_ticket_num": 2,
+      "email_ticket_num": 3,
       "odds": 1.97,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -17095,7 +17124,7 @@
     {
       "id": "combo_100",
       "ticket_num": 100,
-      "email_ticket_num": 3,
+      "email_ticket_num": 4,
       "odds": 2.02,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -17156,7 +17185,7 @@
     {
       "id": "combo_101",
       "ticket_num": 101,
-      "email_ticket_num": 4,
+      "email_ticket_num": 5,
       "odds": 2.13,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -17278,10 +17307,10 @@
     {
       "id": "combo_103",
       "ticket_num": 103,
-      "email_ticket_num": 5,
+      "email_ticket_num": 6,
       "odds": 2.1,
       "default_stake": 3.0,
-      "ticket_status": "LIVE",
+      "ticket_status": "PENDING",
       "profit_unit": 0.0,
       "gain_eur": 6.3,
       "profit_eur": 0.0,
@@ -17325,12 +17354,12 @@
         "domination_score": 58,
         "badge_tier": "🥉 BRONZE+",
         "win_pct_historical": 60,
-        "status": "LIVE",
-        "selection_status": "IN_PROGRESS",
+        "status": "FINISHED",
+        "selection_status": "WON_FINAL",
         "score_display": "1 - 0",
         "home_score": 0,
         "away_score": 0,
-        "minute": "33'",
+        "minute": "Terminé",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -20625,8 +20654,8 @@
       "email_ticket_num": 2,
       "odds": 2.16,
       "default_stake": 3.0,
-      "ticket_status": "LIVE",
-      "profit_unit": 0.0,
+      "ticket_status": "WON",
+      "profit_unit": 1.16,
       "profit_eur": 0.0,
       "gain_eur": 6.48,
       "m1": {
@@ -20673,12 +20702,12 @@
         "domination_score": 65,
         "badge_tier": "🔥 M5",
         "win_pct_historical": 65,
-        "status": "LIVE",
-        "selection_status": "IN_PROGRESS",
+        "status": "FINISHED",
+        "selection_status": "WON_FINAL",
         "score_display": "1 - 0",
         "home_score": 0,
         "away_score": 0,
-        "minute": "33'",
+        "minute": "Terminé",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0,
@@ -20883,7 +20912,7 @@
     {
       "id": "m5_combo_57",
       "ticket_num": 57,
-      "email_ticket_num": 3,
+      "email_ticket_num": 2,
       "odds": 2.17,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -20949,7 +20978,7 @@
     {
       "id": "m5_combo_58",
       "ticket_num": 58,
-      "email_ticket_num": 4,
+      "email_ticket_num": 3,
       "odds": 2.13,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -21014,7 +21043,7 @@
     {
       "id": "m5_combo_59",
       "ticket_num": 59,
-      "email_ticket_num": 5,
+      "email_ticket_num": 4,
       "odds": 1.97,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -21080,7 +21109,7 @@
     {
       "id": "m5_combo_60",
       "ticket_num": 60,
-      "email_ticket_num": 6,
+      "email_ticket_num": 5,
       "odds": 1.99,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -21210,7 +21239,7 @@
     {
       "id": "m5_combo_62",
       "ticket_num": 62,
-      "email_ticket_num": 7,
+      "email_ticket_num": 6,
       "odds": 2.13,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -21275,7 +21304,7 @@
     {
       "id": "m5_combo_63",
       "ticket_num": 63,
-      "email_ticket_num": 8,
+      "email_ticket_num": 7,
       "odds": 2.1,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -21538,7 +21567,7 @@
     {
       "id": "m5_combo_67",
       "ticket_num": 67,
-      "email_ticket_num": 9,
+      "email_ticket_num": 8,
       "odds": 2.17,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -21567,7 +21596,7 @@
         "score_display": "VS",
         "home_score": 0,
         "away_score": 0,
-        "minute": "À venir",
+        "minute": "Dim. 20/09 à 18h00",
         "is_live": false,
         "is_finished": false,
         "profit": 0.0
@@ -21597,14 +21626,15 @@
         "minute": "À venir",
         "is_live": false,
         "is_finished": false,
-        "profit": 0.0
+        "profit": 0.0,
+        "away_odds": 4.85
       }
     }
   ],
   "methode5_summary": {
     "total": 30,
-    "active": 9,
-    "won": 5,
+    "active": 8,
+    "won": 6,
     "lost": 16
   }
 }
