@@ -35,3 +35,16 @@ jobs:
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
           RECIPIENT_EMAILS: ${{ secrets.EMAIL_TO || 'gregory.langlet@sfr.fr, langlet.gregory@gmail.com' }}
         run: python scripts/safe_unibet_email.py
+
+      - name: 💾 Commit and Push Docs Page
+        if: always()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/email.html docs/mail.html
+          git diff --staged --quiet || git commit -m "Auto-update safe email docs [skip ci]"
+          for i in {1..5}; do
+            git fetch origin master
+            git rebase -X ours origin/master && git push origin master && exit 0
+            sleep 2
+          done

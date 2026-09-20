@@ -1,15 +1,6 @@
 """
 SAFE Method — Combinés Triples Domicile (48 Heures)
 Réutilise get_unibet_active_games() + scan_unibet_match_details() depuis auto_premium_unibet.py
-
-6 Piliers SAFE :
-1. Structure Triples (3 matchs par ticket)
-2. 100% Matchs à Domicile
-3. Même Jour Calendaire J uniquement au sein d'un ticket (partitionnement strict Aujourd'hui vs Demain)
-4. Brassage Croisé : 1 Cador (1.18-1.29) + 1 Médian (1.30-1.38) + 1 Solide (1.39-1.46)
-   (Cador ascendant croisé avec Solide descendant -> toutes les cotes entre 2.15 et 2.35)
-5. Marché officiel : "Gagne ou mène de 2 buts" (Early Payout +2b)
-6. Filtre Pièges : exclusion des derbies et matchs pièges à points égaux
 """
 
 import sys, os, json, datetime, smtplib, uuid, unicodedata, base64
@@ -22,8 +13,6 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from auto_premium_unibet import get_unibet_active_games, scan_unibet_match_details
 
 EXCLUDED_KEYWORDS = ["villarreal", "modène", "modena", "empoli", "sarajevo", "sloga"]
-
-# ─── Dates & Utilitaires ──────────────────────────────────────────────────────
 
 def get_paris_now():
     return datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=2)
@@ -68,27 +57,21 @@ def is_trap(m):
             return True
     return False
 
-# ─── Filtrage des Candidats par Jour ──────────────────────────────────────────
-
 def extract_candidates_for_day(all_scanned, target_date):
     candidates = []
     for m in all_scanned:
         if not m:
             continue
 
-        # 1. RÈGLE ABSOLUE : match du jour ciblé uniquement
         ev_date = parse_match_date(m)
         if ev_date != target_date:
             continue
 
-        # 2. Heures diurnes (entre 10h et 21h59 heure française)
         hour = parse_match_hour(m)
         if hour >= 22 or hour <= 9:
             continue
 
-        # 3. Élimination des pièges
         if is_trap(m):
-            print(f"[SAFE] ⚠️ Match piège exclu : {m.get('dom')} vs {m.get('ext')}")
             continue
 
         c1 = m.get("c1")
@@ -96,7 +79,6 @@ def extract_candidates_for_day(all_scanned, target_date):
         if not c1 or not c2:
             continue
 
-        # 4. Fourchette Cotes SAFE (1.18 à 1.46)
         if not (1.18 <= c1 <= 1.50 and c1 < c2):
             continue
 
@@ -116,8 +98,6 @@ def extract_candidates_for_day(all_scanned, target_date):
             "date": str(target_date),
         })
     return sorted(candidates, key=lambda x: x["c1"])
-
-# ─── Brassage Croisé & Construction des Tickets ───────────────────────────────
 
 def build_tickets(matches):
     heavy  = sorted([m for m in matches if 1.18 <= m["c1"] <= 1.29], key=lambda x: x["c1"])
@@ -139,13 +119,12 @@ def build_tickets(matches):
 
     return tickets
 
-# ─── HTML Premium (Aujourd'hui + Demain) ───────────────────────────────────────
-
 def render_day_tickets_html(tickets, day_label, mise=7.0, start_idx=1):
     if not tickets:
         return f"""
-        <div style="background:#0f172a;border:1px dashed #334155;border-radius:12px;padding:20px;margin-bottom:24px;text-align:center;color:#94a3b8;">
-          Aucun combiné triple qualifié pour <b>{day_label}</b> (programme plus calme ou manque de cadors).
+        <div style="background:#0f172a;border:1px dashed #334155;border-radius:12px;padding:24px;margin-bottom:24px;text-align:center;color:#94a3b8;font-size:14px;">
+          ⚠️ <b>Aucun combiné triple qualifié pour {day_label}</b><br>
+          <span style="font-size:12px;color:#64748b;">(Programme plus calme en journée, aucun favori à domicile sous 1.50 — rythme normal des lundis post-weekend)</span>
         </div>"""
 
     out = ""
@@ -192,17 +171,17 @@ def build_full_html(tickets_today, tickets_tomorrow, mise=7.0):
     sec_tomorrow = render_day_tickets_html(tickets_tomorrow, tomorrow_fmt, mise=mise, start_idx=len(tickets_today)+1)
 
     return f"""<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><title>SAFE Method — Unibet 48h</title></head>
+<html lang="fr"><head><meta charset="UTF-8"><title>STRATÉGIE OFFICIELLE UNIBET · SAFE 48H</title></head>
 <body style="margin:0;padding:0;background:#020617;font-family:'Segoe UI',Arial,sans-serif;color:#f1f5f9;">
 <div style="max-width:720px;margin:0 auto;padding:24px 16px;">
   <!-- Header -->
   <div style="background:linear-gradient(135deg,#1e3a5f,#0f2744);border-radius:14px;padding:22px 26px;margin-bottom:24px;border:1px solid #1e40af;">
-    <div style="font-size:26px;font-weight:800;color:#60a5fa;letter-spacing:-0.5px;">🔒 SAFE METHOD — SCAN UNIBET 48 HEURES</div>
-    <div style="font-size:13px;color:#94a3b8;margin-top:4px;">{today_fmt} &nbsp;·&nbsp; Partitionnement Strict par Jour &nbsp;·&nbsp; 100% Domicile &nbsp;·&nbsp; Zéro Mélange</div>
+    <div style="font-size:24px;font-weight:800;color:#60a5fa;letter-spacing:-0.5px;">⚽ STRATÉGIE OFFICIELLE UNIBET · +2 GAGNANT</div>
+    <div style="font-size:13px;color:#94a3b8;margin-top:4px;">{today_fmt} &nbsp;·&nbsp; Combinés Triples 100% Domicile &nbsp;·&nbsp; Scan 48h</div>
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
       <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">🎯 Marché : <b style="color:#f59e0b;">Gagne ou mène de 2 buts (+2b)</b></span>
-      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">💰 Mise totale : <b style="color:#f1f5f9;">{int(total_mise)}€</b> ({int(mise)}€/ticket)</span>
-      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">🎫 Total : <b style="color:#60a5fa;">{total_tickets} tickets ({len(tickets_today)} j. / {len(tickets_tomorrow)} j+1)</b></span>
+      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">💰 Mise : <b style="color:#f1f5f9;">{int(total_mise)}€</b> ({int(mise)}€/ticket)</span>
+      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">🎫 <b style="color:#60a5fa;">{total_tickets} tickets ({len(tickets_today)} j. / {len(tickets_tomorrow)} j+1)</b></span>
     </div>
   </div>
 
@@ -224,20 +203,25 @@ def build_full_html(tickets_today, tickets_tomorrow, mise=7.0):
     {sec_tomorrow}
   </div>
 
+  <div style="background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:16px 20px;font-size:13px;">
+    <b style="color:#60a5fa;font-size:14px;">📊 Règle mathématique du Standard SAFE</b><br><br>
+    • <b>Bénéfice net garanti dès 3 tickets gagnants</b> sur les 5.<br>
+    • <b>Option Early Payout</b> : Dès que votre équipe mène par 2 buts (2-0, 3-1), la sélection est payée immédiatement gagnante.
+  </div>
+
   <div style="text-align:center;margin-top:24px;font-size:11px;color:#475569;">
-    Méthode SAFE Standard Permanent — Unibet France — Scan continu 48h toutes les 2 heures<br>
+    Méthode SAFE Standard Permanent — Unibet France — Scan automatique 48h toutes les 2h<br>
+    Lien live : <a href="https://mto-user84925.github.io/penalty/email.html" style="color:#60a5fa;">mto-user84925.github.io/penalty/email.html</a><br>
     Joueurs problématiques : <a href="https://www.joueurs-info-service.fr" style="color:#64748b;">joueurs-info-service.fr</a>
   </div>
 </div></body></html>"""
-
-# ─── Envoi Email (Gmail prioritaire + Fallback SFR) ───────────────────────────
 
 def send_email(html_body, subject):
     gmail_email = os.environ.get("GMAIL_EMAIL", "langlet.gregory@gmail.com").strip()
     gmail_pass  = os.environ.get("GMAIL_APP_PASSWORD", "").strip().replace('\ufeff', '')
     smtp_host   = os.environ.get("SMTP_HOST", "smtp.sfr.fr").strip()
     smtp_port   = int(os.environ.get("SMTP_PORT", "465"))
-    smtp_user   = os.environ.get("SMTP_USER", "").strip()
+    smtp_user   = os.environ.get("SMTP_USER", "gregory.langlet@sfr.fr").strip()
     smtp_pass   = os.environ.get("SMTP_PASS", "").strip()
 
     raw_recipients = os.environ.get("EMAIL_TO") or os.environ.get("RECIPIENT_EMAILS") or "gregory.langlet@sfr.fr, langlet.gregory@gmail.com"
@@ -246,29 +230,34 @@ def send_email(html_body, subject):
     clean_subject = unicodedata.normalize('NFKD', subject).encode('ASCII', 'ignore').decode('ASCII')
     html_body = html_body.replace('\ufeff', '').replace('\ufffe', '')
 
-    msg = MIMEMultipart('alternative')
+    msg = MIMEMultipart('mixed')
     msg["Subject"] = clean_subject
     msg["From"] = f"Gregory LANGLET <{gmail_email}>"
     msg["To"] = ", ".join(recipients)
     msg["Date"] = formatdate(localtime=True)
     msg["Message-ID"] = make_msgid()
+    msg["X-Mailer"] = "Python/smtplib"
 
-    plain = "Combinés SAFE Method 48h du jour. Veuillez consulter la version HTML jointe."
-    msg.attach(MIMEText(plain, 'plain', 'utf-8'))
-    msg.attach(MIMEText(html_body, 'html', 'utf-8'))
+    plain = f"Combinés SAFE Method Unibet du jour. Consultez la version HTML en ligne : https://mto-user84925.github.io/penalty/email.html"
+    alt_part = MIMEMultipart('alternative')
+    alt_part.attach(MIMEText(plain, 'plain', 'utf-8'))
+    alt_part.attach(MIMEText(html_body, 'html', 'utf-8'))
+    msg.attach(alt_part)
 
+    # 1. Tentative Gmail SMTP prioritaire
     if gmail_pass:
         try:
             print(f"[SMTP] Envoi vers {recipients} via Gmail SMTP...")
             with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as server:
                 server.ehlo(); server.starttls(); server.ehlo()
                 server.login(gmail_email, gmail_pass)
-                server.sendmail(gmail_email, recipients, msg.as_string())
+                server.sendmail(gmail_email, recipients, msg.as_bytes())
             print("[SMTP] ✅ Email envoyé avec succès via Gmail SMTP !")
             return True
         except Exception as e:
             print(f"[SMTP] ⚠️ Échec Gmail SMTP : {e}")
 
+    # 2. Fallback SFR SMTP
     if smtp_user and smtp_pass:
         try:
             print(f"[SMTP] Tentative de secours via {smtp_host}:{smtp_port}...")
@@ -276,12 +265,12 @@ def send_email(html_body, subject):
             if smtp_port == 465:
                 with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=30) as server:
                     server.login(auth_user, smtp_pass)
-                    server.sendmail(smtp_user, recipients, msg.as_string())
+                    server.sendmail(smtp_user, recipients, msg.as_bytes())
             else:
                 with smtplib.SMTP(smtp_host, smtp_port, timeout=30) as server:
                     server.ehlo(); server.starttls(); server.ehlo()
                     server.login(auth_user, smtp_pass)
-                    server.sendmail(smtp_user, recipients, msg.as_string())
+                    server.sendmail(smtp_user, recipients, msg.as_bytes())
             print("[SMTP] ✅ Email envoyé avec succès via SFR SMTP !")
             return True
         except Exception as e:
@@ -289,8 +278,6 @@ def send_email(html_body, subject):
 
     print("[SMTP] ❌ Aucun mot de passe SMTP disponible — email non envoyé.")
     return False
-
-# ─── Main ─────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     today = today_date()
@@ -310,20 +297,12 @@ if __name__ == "__main__":
 
     print(f"[SAFE] {len(all_scanned)} matchs avec cotes récupérées au total")
 
-    # 1. Candidats Aujourd'hui
     cand_today = extract_candidates_for_day(all_scanned, today)
     print(f"[SAFE] Candidats Aujourd'hui ({today}) : {len(cand_today)}")
-    for m in cand_today:
-        print(f"  [J]  {m['time']} | {m['home']} vs {m['away']} | c1={m['c1']} (+2b={m['cote_jouee']}) | {m['league']}")
-
     tickets_today = build_tickets(cand_today)
 
-    # 2. Candidats Demain
     cand_tomorrow = extract_candidates_for_day(all_scanned, tomorrow)
     print(f"[SAFE] Candidats Demain ({tomorrow}) : {len(cand_tomorrow)}")
-    for m in cand_tomorrow:
-        print(f"  [J+1] {m['time']} | {m['home']} vs {m['away']} | c1={m['c1']} (+2b={m['cote_jouee']}) | {m['league']}")
-
     tickets_tomorrow = build_tickets(cand_tomorrow)
 
     if not tickets_today and not tickets_tomorrow:
@@ -341,7 +320,20 @@ if __name__ == "__main__":
         cote = round(t["matches"][0]["cote_jouee"] * t["matches"][1]["cote_jouee"] * t["matches"][2]["cote_jouee"], 2)
         print(f"  T{i}: {' + '.join(m['home'] for m in t['matches'])} → @{cote}")
 
-    today_fmt = today.strftime("%d/%m/%Y")
+    today_fmt = today.strftime("%d/%m")
+    now_hour = get_paris_now().strftime("%Hh%M")
+    subject = f"⚽ STRATÉGIE OFFICIELLE UNIBET · +2 GAGNANT · {today_fmt} à {now_hour}"
     html = build_full_html(tickets_today, tickets_tomorrow, mise=mise)
-    total_t = len(tickets_today) + len(tickets_tomorrow)
-    send_email(html, f"SAFE Method - {total_t} Combines Triples (48h du {today_fmt})")
+
+    # Sauvegarde locale / GitHub Pages
+    try:
+        os.makedirs("docs", exist_ok=True)
+        with open("docs/email.html", "w", encoding="utf-8") as f_out:
+            f_out.write(html)
+        with open("docs/mail.html", "w", encoding="utf-8") as f_out2:
+            f_out2.write(html)
+        print("[SAFE] docs/email.html et docs/mail.html mis à jour !")
+    except Exception as e:
+        print(f"[WARN] Erreur écriture docs/email.html : {e}")
+
+    send_email(html, subject)
