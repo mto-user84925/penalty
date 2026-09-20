@@ -1,10 +1,6 @@
 name: SAFE Method - Combines Triples Domicile
 
 on:
-  schedule:
-    # Tous les jours a 07h30 (05h30 UTC) et 10h30 (08h30 UTC) heure francaise
-    - cron: "30 5 * * *"
-    - cron: "30 8 * * *"
   workflow_dispatch:
 
 concurrency:
