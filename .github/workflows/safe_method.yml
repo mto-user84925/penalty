@@ -10,6 +10,7 @@ concurrency:
 jobs:
   safe-email:
     runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
       - name: Checkout repository
