@@ -21,7 +21,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from auto_premium_unibet import get_unibet_active_games, scan_unibet_match_details
 
-EXCLUDED_KEYWORDS = ["villarreal", "modène", "modena", "empoli"]
+EXCLUDED_KEYWORDS = ["villarreal", "modène", "modena", "empoli", "sarajevo", "sloga"]
 
 # ─── Dates & Utilitaires ──────────────────────────────────────────────────────
 
@@ -97,7 +97,7 @@ def extract_candidates_for_day(all_scanned, target_date):
             continue
 
         # 4. Fourchette Cotes SAFE (1.18 à 1.46)
-        if not (1.18 <= c1 <= 1.46 and c1 < c2):
+        if not (1.18 <= c1 <= 1.50 and c1 < c2):
             continue
 
         p2_c1 = m.get("p2_c1")
@@ -122,7 +122,7 @@ def extract_candidates_for_day(all_scanned, target_date):
 def build_tickets(matches):
     heavy  = sorted([m for m in matches if 1.18 <= m["c1"] <= 1.29], key=lambda x: x["c1"])
     median = sorted([m for m in matches if 1.30 <= m["c1"] <= 1.38], key=lambda x: x["c1"])
-    solid  = sorted([m for m in matches if 1.39 <= m["c1"] <= 1.46], key=lambda x: x["c1"])
+    solid  = sorted([m for m in matches if 1.39 <= m["c1"] <= 1.50], key=lambda x: x["c1"])
 
     n = min(len(heavy), len(median), len(solid), 5)
     print(f"[SAFE] Rangs qualifiés : Cador={len(heavy)} | Médian={len(median)} | Solide={len(solid)} → {n} ticket(s)")
