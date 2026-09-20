@@ -36,7 +36,7 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: |
-          python scripts/auto_premium_unibet.py
+          python scripts/safe_unibet_email.py
 
       - name: 📄 Upload Premium Report Artifact
         uses: actions/upload-artifact@v4

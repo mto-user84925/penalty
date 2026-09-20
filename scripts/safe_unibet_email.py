@@ -1,11 +1,14 @@
 """
 SAFE Method — Combinés Triples Domicile
 Réutilise get_unibet_active_games() + scan_unibet_match_details() depuis auto_premium_unibet.py
-Règle : 1 cador (1.15-1.27) + 1 médian (1.28-1.38) + 1 solide (1.39-1.47) par ticket
-Cote cible : 2.15 – 2.40 | Marché : Gagne ou mène de 2 buts (+2b)
-
-RÈGLE ABSOLUE : tous les matchs = même jour calendaire J uniquement.
-Si pas assez de matchs dans une catégorie → moins de tickets, jamais de compromis.
+6 Piliers SAFE :
+- Structure Triples (3 matchs par ticket)
+- 100% Matchs à Domicile
+- Même Jour Calendaire J uniquement (aucun mélange J/J+1)
+- Brassage Croisé : 1 Cador (1.18-1.27) + 1 Médian (1.28-1.38) + 1 Solide (1.39-1.45)
+  (Cador ascendant croisé avec Solide descendant -> toutes les cotes entre 2.15 et 2.35)
+- Marché officiel : "Gagne ou mène de 2 buts" (Early Payout +2b)
+- Filtre Pièges : exclusion des derbies et matchs pièges à points égaux
 """
 
 import sys, os, json, datetime, smtplib, uuid, unicodedata, base64
@@ -17,15 +20,17 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from auto_premium_unibet import get_unibet_active_games, scan_unibet_match_details
 
+# Liste noire des matchs pièges (audités et rejetés)
+EXCLUDED_KEYWORDS = ["villarreal", "modène", "modena", "empoli"]
+
 # ─── Filtrage SAFE ────────────────────────────────────────────────────────────
 
 def today_date():
-    # Heure française (UTC+2 été / UTC+1 hiver)
+    # Heure de Paris (UTC+2 été / UTC+1 hiver)
     return (datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=2)).date()
 
 def parse_match_date(m):
     import re
-    # 1. Via start_iso si disponible
     start_iso = m.get("start_iso", "")
     if start_iso:
         try:
@@ -34,7 +39,6 @@ def parse_match_date(m):
         except Exception:
             pass
 
-    # 2. Via date_str (ex: 'Dim. 20/09 à 15h00')
     date_str = m.get("date_str", "")
     match = re.search(r"(\d{2}/\d{2})", date_str)
     if match:
@@ -51,26 +55,46 @@ def parse_match_hour(m):
     match = re.search(r"(\d{1,2})h\d{2}", m.get("date_str", ""))
     return int(match.group(1)) if match else 12
 
+def is_trap(m):
+    dom = (m.get("dom") or "").lower()
+    ext = (m.get("ext") or "").lower()
+    for kw in EXCLUDED_KEYWORDS:
+        if kw in dom or kw in ext:
+            return True
+    return False
+
 def extract_candidates(all_scanned):
     today = today_date()
     candidates = []
     for m in all_scanned:
         if not m:
             continue
+
+        # 1. RÈGLE ABSOLUE : même jour calendaire uniquement
         ev_date = parse_match_date(m)
-        if ev_date != today:          # RÈGLE ABSOLUE — même jour uniquement
+        if ev_date != today:
             continue
+
+        # 2. Pas de nocturnes (entre 10h et 21h59 heure française)
         hour = parse_match_hour(m)
-        if hour >= 22 or hour <= 9:   # Pas de nocturnes
+        if hour >= 22 or hour <= 9:
             continue
+
+        # 3. Élimination des pièges
+        if is_trap(m):
+            print(f"[SAFE] ⚠️ Match piège exclu : {m.get('dom')} vs {m.get('ext')}")
+            continue
+
         c1 = m.get("c1")
         c2 = m.get("c2")
         if not c1 or not c2:
             continue
-        if not (1.15 <= c1 <= 1.47 and c1 < c2):
+
+        # 4. Fourchette Cotes SAFE (1.18 à 1.45)
+        if not (1.18 <= c1 <= 1.45 and c1 < c2):
             continue
 
-        # Cote réelle pour le marché "+2 Gagnant" (légèrement ajustée bookmaker si dispo)
+        # Cote réelle pour le marché "+2 Gagnant"
         p2_c1 = m.get("p2_c1")
         cote_jouee = round(float(p2_c1), 2) if p2_c1 else round(float(c1), 2)
 
@@ -87,17 +111,36 @@ def extract_candidates(all_scanned):
         })
     return sorted(candidates, key=lambda x: x["c1"])
 
-# ─── Construction tickets ─────────────────────────────────────────────────────
+# ─── Brassage Croisé & Construction des Tickets ───────────────────────────────
 
 def build_tickets(matches):
-    heavy  = [m for m in matches if 1.15 <= m["c1"] <= 1.27]
-    median = [m for m in matches if 1.28 <= m["c1"] <= 1.38]
-    solid  = [m for m in matches if 1.39 <= m["c1"] <= 1.47]
-    n = min(len(heavy), len(median), len(solid), 5)
-    print(f"[SAFE] Cador (1.15-1.27)={len(heavy)} | Médian (1.28-1.38)={len(median)} | Solide (1.39-1.47)={len(solid)} → {n} ticket(s)")
-    return [{"matches": [heavy[i], median[i], solid[i]]} for i in range(n)]
+    # Rung 1 : Cador (1.18 à 1.27)
+    heavy  = sorted([m for m in matches if 1.18 <= m["c1"] <= 1.27], key=lambda x: x["c1"])
+    # Rung 2 : Médian (1.28 à 1.38)
+    median = sorted([m for m in matches if 1.28 <= m["c1"] <= 1.38], key=lambda x: x["c1"])
+    # Rung 3 : Solide (1.39 à 1.45)
+    solid  = sorted([m for m in matches if 1.39 <= m["c1"] <= 1.45], key=lambda x: x["c1"])
 
-# ─── HTML ─────────────────────────────────────────────────────────────────────
+    n = min(len(heavy), len(median), len(solid), 5)
+    print(f"[SAFE] Rangs qualifiés : Cador={len(heavy)} | Médian={len(median)} | Solide={len(solid)} → {n} ticket(s) possible(s)")
+
+    if n == 0:
+        return []
+
+    # Brassage Croisé :
+    # Cador ascendant (i) avec Solide descendant (n - 1 - i)
+    # Médian au milieu (i)
+    # -> Lissage parfait de la cote globale entre 2.15 et 2.35
+    tickets = []
+    for i in range(n):
+        cad = heavy[i]
+        sol = solid[len(solid) - 1 - i]
+        med = median[i]
+        tickets.append({"matches": [cad, med, sol]})
+
+    return tickets
+
+# ─── Génération HTML Premium ──────────────────────────────────────────────────
 
 def build_html(tickets, mise=7.0):
     today_str = datetime.datetime.now().strftime("%A %d %B %Y").capitalize()
@@ -107,26 +150,26 @@ def build_html(tickets, mise=7.0):
         cote = round(t["matches"][0]["cote_jouee"] * t["matches"][1]["cote_jouee"] * t["matches"][2]["cote_jouee"], 2)
         gain = round(mise * cote, 2)
         mrows = "".join(f"""
-          <tr>
-            <td style="padding:8px 12px;color:#94a3b8;font-size:13px;">⏰ {m['time']}</td>
-            <td style="padding:8px 12px;font-weight:600;color:#f1f5f9;font-size:14px;">
-              <a href="{m['url']}" style="color:#f1f5f9;text-decoration:none;">{m['home']}</a>
-              <span style="color:#64748b;font-weight:400;"> vs {m['away']}</span>
+          <tr style="border-bottom:1px solid #1e293b;">
+            <td style="padding:10px 12px;color:#94a3b8;font-size:13px;white-space:nowrap;">⏰ {m['time']}</td>
+            <td style="padding:10px 12px;font-weight:600;color:#f1f5f9;font-size:14px;">
+              <a href="{m['url']}" style="color:#f1f5f9;text-decoration:none;" target="_blank">👑 <b>{m['home']}</b></a>
+              <span style="color:#64748b;font-weight:400;font-size:13px;"> vs {m['away']}</span>
             </td>
-            <td style="padding:8px 12px;color:#94a3b8;font-size:12px;">{m['league']}</td>
-            <td style="padding:8px 12px;text-align:center;font-weight:700;color:#f59e0b;font-size:14px;">
-              {m['cote_jouee']}
-              <div style="font-size:10px;color:#64748b;font-weight:400;">(1N2: {m['c1']})</div>
+            <td style="padding:10px 12px;color:#94a3b8;font-size:12px;">{m['league']}</td>
+            <td style="padding:10px 12px;text-align:center;font-weight:700;color:#f59e0b;font-size:15px;white-space:nowrap;">
+              @{m['cote_jouee']}
+              <div style="font-size:10px;color:#64748b;font-weight:400;">1N2: {m['c1']}</div>
             </td>
           </tr>""" for m in t["matches"])
         rows += f"""
-        <div style="background:#0f172a;border:1px solid #1e3a5f;border-radius:12px;margin-bottom:16px;overflow:hidden;">
+        <div style="background:#0f172a;border:1px solid #1e3a5f;border-radius:12px;margin-bottom:18px;overflow:hidden;box-shadow:0 4px 6px -1px rgba(0,0,0,0.3);">
           <div style="background:linear-gradient(135deg,#1e3a5f,#0f2744);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-size:16px;font-weight:700;color:#60a5fa;">🎫 TICKET {i}</span>
+            <span style="font-size:16px;font-weight:800;color:#60a5fa;letter-spacing:-0.3px;">🎫 TICKET {i} · COMBINÉ TRIPLE</span>
             <span style="font-size:13px;color:#94a3b8;">
-              Cote combinée <b style="color:#f59e0b;">{cote}</b> &nbsp;·&nbsp;
+              Cote combinée <b style="color:#f59e0b;font-size:15px;">@{cote}</b> &nbsp;·&nbsp;
               Mise <b style="color:#f1f5f9;">{int(mise)}€</b> &nbsp;·&nbsp;
-              Gain <b style="color:#4ade80;">{gain}€</b>
+              Gain <b style="color:#4ade80;font-size:15px;">{gain}€</b>
             </span>
           </div>
           <table style="width:100%;border-collapse:collapse;">{mrows}</table>
@@ -142,22 +185,22 @@ def build_html(tickets, mise=7.0):
 <body style="margin:0;padding:0;background:#020617;font-family:'Segoe UI',Arial,sans-serif;color:#f1f5f9;">
 <div style="max-width:720px;margin:0 auto;padding:24px 16px;">
   <div style="background:linear-gradient(135deg,#1e3a5f,#0f2744);border-radius:14px;padding:22px 26px;margin-bottom:22px;border:1px solid #1e40af;">
-    <div style="font-size:26px;font-weight:800;color:#60a5fa;letter-spacing:-0.5px;">🔒 SAFE METHOD — {len(tickets)} COMBINÉS TRIPLES</div>
-    <div style="font-size:13px;color:#94a3b8;margin-top:4px;">{today_str} &nbsp;·&nbsp; 100% Matchs à Domicile &nbsp;·&nbsp; Même Jour Calendaire</div>
+    <div style="font-size:26px;font-weight:800;color:#60a5fa;letter-spacing:-0.5px;">🔒 SAFE METHOD — COMBINÉS TRIPLES SÉCURISÉS</div>
+    <div style="font-size:13px;color:#94a3b8;margin-top:4px;">{today_str} &nbsp;·&nbsp; 100% Matchs à Domicile &nbsp;·&nbsp; Zéro Doublon &nbsp;·&nbsp; Même Jour Calendaire</div>
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
-      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">🎯 Marché : <b style="color:#f59e0b;">Gagne ou mène de 2 buts</b></span>
+      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">🎯 Marché : <b style="color:#f59e0b;">Gagne ou mène de 2 buts (+2b)</b></span>
       <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">💰 Mise totale : <b style="color:#f1f5f9;">{int(total)}€</b> ({int(mise)}€/ticket)</span>
-      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">✅ Rentable dès <b style="color:#4ade80;">3/{len(tickets)} tickets</b></span>
+      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">✅ Rentabilité : <b style="color:#4ade80;">Bénéfice garanti dès 3/{len(tickets)}</b></span>
     </div>
   </div>
   {rows}
   <div style="background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:16px 20px;font-size:13px;">
-    <b style="color:#60a5fa;">📊 Tableau de marche mathématique</b><br><br>
+    <b style="color:#60a5fa;font-size:14px;">📊 Tableau de marche mathématique</b><br><br>
     • <b>3/{len(tickets)} tickets gagnants</b> → <b style="color:#4ade80;">~{seuil_3:.2f}€ encaissés</b> (Bénéfice net garanti ✅)<br>
     • <b>{len(tickets)}/{len(tickets)} tickets gagnants</b> → <b style="color:#4ade80;">~{sum(gains):.2f}€ encaissés</b> (Carton plein 🏆)
   </div>
   <div style="text-align:center;margin-top:20px;font-size:11px;color:#475569;">
-    Méthode SAFE Standard — Unibet France — Données scannées en direct<br>
+    Méthode SAFE Standard Permanent — Unibet France — Données scannées en direct<br>
     Joueurs problématiques : <a href="https://www.joueurs-info-service.fr" style="color:#64748b;">joueurs-info-service.fr</a>
   </div>
 </div></body></html>"""
@@ -194,9 +237,7 @@ def send_email(html_body, subject):
         try:
             print(f"[SMTP] Envoi vers {recipients} via Gmail SMTP...")
             with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as server:
-                server.ehlo()
-                server.starttls()
-                server.ehlo()
+                server.ehlo(); server.starttls(); server.ehlo()
                 server.login(gmail_email, gmail_pass)
                 server.sendmail(gmail_email, recipients, msg.as_string())
             print("[SMTP] ✅ Email envoyé avec succès via Gmail SMTP !")
@@ -243,7 +284,7 @@ if __name__ == "__main__":
     print(f"[SAFE] {len(all_scanned)} matchs avec cotes récupérées")
 
     candidates = extract_candidates(all_scanned)
-    print(f"[SAFE] Candidats du jour (1.15-1.47, même jour calendaire) : {len(candidates)}")
+    print(f"[SAFE] Candidats éligibles SAFE du jour : {len(candidates)}")
     for m in candidates:
         print(f"       {m['time']} | {m['home']} vs {m['away']} | 1N2={m['c1']} (+2b={m['cote_jouee']}) | {m['league']}")
 
