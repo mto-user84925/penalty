@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-20T10:39:45",
+  "last_updated": "2026-09-20T10:47:30",
   "strategy": "MULTI_MONTANTES_5_COMBINES_10_MATCHS_UNIQUES",
   "rule_zero_doublons": "10 matchs distincts par jour, aucun match répété, indépendance totale",
   "rule_cote_min_combo": 2.13,
@@ -304,10 +304,10 @@
         },
         {
           "id": "T4",
-          "nom": "Ticket 4 - Guimarães / Flora / Almeria",
+          "nom": "Ticket 4 - Guimarães / Milan AC / Almeria",
           "mise": 7.0,
-          "cote": 2.54,
-          "gain_potentiel": 17.81,
+          "cote": 2.22,
+          "gain_potentiel": 15.52,
           "matchs": [
             {
               "equipes": "Vitória Guimarães vs Moreirense",
@@ -316,10 +316,10 @@
               "pays": "Portugal"
             },
             {
-              "equipes": "FC Flora vs Pärnu Vaprus",
-              "heure": "18h00",
-              "cote": 1.4,
-              "pays": "Estonie"
+              "equipes": "Milan AC vs Lecce",
+              "heure": "20h45",
+              "cote": 1.22,
+              "pays": "Italie"
             },
             {
               "equipes": "Almeria vs Celta Fortuna",
@@ -331,10 +331,10 @@
         },
         {
           "id": "T5",
-          "nom": "Ticket 5 - Lech Poznań / Milan AC / Flamengo",
+          "nom": "Ticket 5 - Lech Poznań / FC Flora / Flamengo",
           "mise": 7.0,
-          "cote": 1.92,
-          "gain_potentiel": 13.45,
+          "cote": 2.2,
+          "gain_potentiel": 15.43,
           "matchs": [
             {
               "equipes": "Lech Poznań vs Radomiak Radom",
@@ -343,10 +343,10 @@
               "pays": "Pologne"
             },
             {
-              "equipes": "Milan AC vs Lecce",
-              "heure": "20h45",
-              "cote": 1.22,
-              "pays": "Italie"
+              "equipes": "FC Flora vs Pärnu Vaprus",
+              "heure": "18h00",
+              "cote": 1.4,
+              "pays": "Estonie"
             },
             {
               "equipes": "Flamengo vs Bragantino",
