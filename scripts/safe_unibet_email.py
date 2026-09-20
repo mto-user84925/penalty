@@ -90,8 +90,8 @@ def extract_candidates(all_scanned):
         if not c1 or not c2:
             continue
 
-        # 4. Fourchette Cotes SAFE (1.18 à 1.45)
-        if not (1.18 <= c1 <= 1.45 and c1 < c2):
+        # 4. Fourchette Cotes SAFE (1.18 à 1.46)
+        if not (1.18 <= c1 <= 1.46 and c1 < c2):
             continue
 
         # Cote réelle pour le marché "+2 Gagnant"
@@ -114,12 +114,12 @@ def extract_candidates(all_scanned):
 # ─── Brassage Croisé & Construction des Tickets ───────────────────────────────
 
 def build_tickets(matches):
-    # Rung 1 : Cador (1.18 à 1.27)
-    heavy  = sorted([m for m in matches if 1.18 <= m["c1"] <= 1.27], key=lambda x: x["c1"])
-    # Rung 2 : Médian (1.28 à 1.38)
-    median = sorted([m for m in matches if 1.28 <= m["c1"] <= 1.38], key=lambda x: x["c1"])
-    # Rung 3 : Solide (1.39 à 1.45)
-    solid  = sorted([m for m in matches if 1.39 <= m["c1"] <= 1.45], key=lambda x: x["c1"])
+    # Rung 1 : Cador (1.18 à 1.29)
+    heavy  = sorted([m for m in matches if 1.18 <= m["c1"] <= 1.29], key=lambda x: x["c1"])
+    # Rung 2 : Médian (1.30 à 1.38)
+    median = sorted([m for m in matches if 1.30 <= m["c1"] <= 1.38], key=lambda x: x["c1"])
+    # Rung 3 : Solide (1.39 à 1.46)
+    solid  = sorted([m for m in matches if 1.39 <= m["c1"] <= 1.46], key=lambda x: x["c1"])
 
     n = min(len(heavy), len(median), len(solid), 5)
     print(f"[SAFE] Rangs qualifiés : Cador={len(heavy)} | Médian={len(median)} | Solide={len(solid)} → {n} ticket(s) possible(s)")
