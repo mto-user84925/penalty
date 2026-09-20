@@ -1,165 +1,130 @@
 """
-SAFE Method — Combinés Triples Domicile (GitHub Actions)
-Marché : "Gagne ou mène de 2 buts" (Early Payout +2b)
+SAFE Method — Combinés Triples Domicile
+Réutilise get_unibet_active_games() + scan_unibet_match_details() depuis auto_premium_unibet.py
 Règle : 1 cador (1.15-1.27) + 1 médian (1.28-1.38) + 1 solide (1.39-1.47) par ticket
-Cote cible : 2.15 – 2.40 par ticket
+Cote cible : 2.15 – 2.40 | Marché : Gagne ou mène de 2 buts (+2b)
 
-RÈGLE ABSOLUE : tous les matchs d'un ticket = même jour calendaire.
-Si pas assez de matchs dans une catégorie → on réduit le nombre de tickets.
+RÈGLE ABSOLUE : tous les matchs = même jour calendaire J uniquement.
+Si pas assez de matchs dans une catégorie → moins de tickets, jamais de compromis.
 """
 
-import json, os, re, smtplib, uuid, datetime, unicodedata, base64, time, sys
-from email.utils import formatdate
-import urllib.request
+import sys, os, json, datetime, smtplib, uuid, unicodedata, base64
+from email.utils import formatdate, make_msgid
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from auto_premium_unibet import get_unibet_active_games, scan_unibet_match_details
 
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36",
-    "Accept": "application/json, text/plain, */*",
-    "Accept-Language": "fr-FR,fr;q=0.9",
-    "Referer": "https://www.unibet.fr/paris-football",
-}
-
-# ─── Unibet scan (no selenium needed — JSON API) ─────────────────────────────
-
-def fetch_json(url, retries=3):
-    for attempt in range(retries):
-        try:
-            req = urllib.request.Request(url, headers=HEADERS)
-            with urllib.request.urlopen(req, timeout=20) as r:
-                return json.loads(r.read().decode("utf-8"))
-        except Exception as e:
-            print(f"[WARN] fetch attempt {attempt+1} failed: {e}")
-            time.sleep(2)
-    return None
-
+# ─── Filtrage SAFE ────────────────────────────────────────────────────────────
 
 def today_date():
-    """Return today's date as datetime.date (local time)."""
-    return datetime.datetime.now().date()
+    # Heure française (UTC+2 été / UTC+1 hiver)
+    return (datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=2)).date()
 
+def parse_match_date(m):
+    import re
+    # 1. Via start_iso si disponible
+    start_iso = m.get("start_iso", "")
+    if start_iso:
+        try:
+            dt = datetime.datetime.fromisoformat(start_iso.replace("Z", "+00:00")) + datetime.timedelta(hours=2)
+            return dt.date()
+        except Exception:
+            pass
 
-def parse_event_date(ev):
-    """Return datetime.date for a Unibet event dict, or None."""
-    epoch = ev.get("startTimestamp") or ev.get("start_timestamp")
-    if epoch:
-        return datetime.datetime.fromtimestamp(int(epoch) / 1000).date()
-    start = ev.get("start", "")
-    # Try ISO format
-    try:
-        return datetime.datetime.fromisoformat(start[:10]).date()
-    except Exception:
-        pass
+    # 2. Via date_str (ex: 'Dim. 20/09 à 15h00')
+    date_str = m.get("date_str", "")
+    match = re.search(r"(\d{2}/\d{2})", date_str)
+    if match:
+        day, month = match.group(1).split("/")
+        year = datetime.datetime.now().year
+        try:
+            return datetime.date(year, int(month), int(day))
+        except ValueError:
+            pass
     return None
 
+def parse_match_hour(m):
+    import re
+    match = re.search(r"(\d{1,2})h\d{2}", m.get("date_str", ""))
+    return int(match.group(1)) if match else 12
 
-def scan_unibet():
-    """Return today-only home-favourite matches from Unibet, sorted by c1 asc."""
+def extract_candidates(all_scanned):
     today = today_date()
-    print(f"[SAFE] Scanning Unibet — today = {today}")
-
-    url = (
-        "https://www.unibet.fr/api/offerings/v2/list/events/sport/FOOTBALL"
-        "/region/fr/offerings.json?alt=json&lang=fr"
-    )
-    data = fetch_json(url)
-    if not data:
-        return []
-
-    events = data.get("liveEvents", []) + data.get("upcomingEvents", [])
-    print(f"[SAFE] Total events from API: {len(events)}")
-
-    matches = []
-    for ev in events:
-        ev_date = parse_event_date(ev)
-        if ev_date != today:          # ← RÈGLE ABSOLUE : même jour uniquement
+    candidates = []
+    for m in all_scanned:
+        if not m:
             continue
-
-        epoch = ev.get("startTimestamp", 0)
-        dt = datetime.datetime.fromtimestamp(int(epoch) / 1000) if epoch else None
-        if dt and (dt.hour >= 22 or dt.hour <= 9):
-            continue                  # Pas de matchs nocturnes / très matinaux
-
-        time_str = dt.strftime("%Hh%M") if dt else "?h??"
-        home  = (ev.get("homeTeam") or {}).get("name") or ev.get("home", "?")
-        away  = (ev.get("awayTeam") or {}).get("name") or ev.get("away", "?")
-        league = (ev.get("league") or {}).get("name") or ev.get("competition", "")
-        ev_id  = ev.get("id", "")
-        link   = f"https://www.unibet.fr/paris-football/{ev_id}" if ev_id else "https://www.unibet.fr/paris-football"
-
-        c1 = c2 = None
-        for mkt in ev.get("markets", []) or []:
-            if mkt.get("name", "").lower() in ("1x2", "match result", "résultat du match"):
-                for sel in mkt.get("selections", []) or []:
-                    label = sel.get("name", "").lower()
-                    odds  = sel.get("odds") or sel.get("price")
-                    if label in ("1", "domicile", "home") and odds:
-                        c1 = round(float(odds), 2)
-                    elif label in ("2", "extérieur", "away") and odds:
-                        c2 = round(float(odds), 2)
-                break
-
+        ev_date = parse_match_date(m)
+        if ev_date != today:          # RÈGLE ABSOLUE — même jour uniquement
+            continue
+        hour = parse_match_hour(m)
+        if hour >= 22 or hour <= 9:   # Pas de nocturnes
+            continue
+        c1 = m.get("c1")
+        c2 = m.get("c2")
         if not c1 or not c2:
             continue
         if not (1.15 <= c1 <= 1.47 and c1 < c2):
             continue
 
-        matches.append({"time": time_str, "home": home.strip(), "away": away.strip(),
-                         "league": league, "c1": c1, "c2": c2, "url": link,
-                         "date": str(ev_date)})
+        # Cote réelle pour le marché "+2 Gagnant" (légèrement ajustée bookmaker si dispo)
+        p2_c1 = m.get("p2_c1")
+        cote_jouee = round(float(p2_c1), 2) if p2_c1 else round(float(c1), 2)
 
-    print(f"[SAFE] Home favs (1.15-1.47) today: {len(matches)}")
-    return sorted(matches, key=lambda x: x["c1"])
+        candidates.append({
+            "time": m.get("date_str", "").split("à ")[-1].strip() if "à " in m.get("date_str","") else "?h??",
+            "home": m.get("dom", "?").strip(),
+            "away": m.get("ext", "?").strip(),
+            "league": m.get("league", ""),
+            "c1": round(float(c1), 2),
+            "c2": round(float(c2), 2),
+            "p2_c1": round(float(p2_c1), 2) if p2_c1 else None,
+            "cote_jouee": cote_jouee,
+            "url": m.get("url", "https://www.unibet.fr/paris-football"),
+        })
+    return sorted(candidates, key=lambda x: x["c1"])
 
-
-# ─── Build tickets ────────────────────────────────────────────────────────────
+# ─── Construction tickets ─────────────────────────────────────────────────────
 
 def build_tickets(matches):
-    """
-    Cross-blend into N tickets (N = min available per category, max 5).
-    Categories:
-      heavy  : 1.15 – 1.27
-      median : 1.28 – 1.38
-      solid  : 1.39 – 1.47
-    If a category is short, we cap N accordingly — NEVER mix dates.
-    """
     heavy  = [m for m in matches if 1.15 <= m["c1"] <= 1.27]
     median = [m for m in matches if 1.28 <= m["c1"] <= 1.38]
     solid  = [m for m in matches if 1.39 <= m["c1"] <= 1.47]
-
     n = min(len(heavy), len(median), len(solid), 5)
-    print(f"[SAFE] heavy={len(heavy)} median={len(median)} solid={len(solid)} → {n} ticket(s)")
+    print(f"[SAFE] Cador (1.15-1.27)={len(heavy)} | Médian (1.28-1.38)={len(median)} | Solide (1.39-1.47)={len(solid)} → {n} ticket(s)")
+    return [{"matches": [heavy[i], median[i], solid[i]]} for i in range(n)]
 
-    tickets = []
-    for i in range(n):
-        tickets.append({"matches": [heavy[i], median[i], solid[i]]})
-    return tickets
-
-
-# ─── HTML email ───────────────────────────────────────────────────────────────
+# ─── HTML ─────────────────────────────────────────────────────────────────────
 
 def build_html(tickets, mise=7.0):
     today_str = datetime.datetime.now().strftime("%A %d %B %Y").capitalize()
     total = len(tickets) * mise
-
     rows = ""
     for i, t in enumerate(tickets, 1):
-        cote = round(t["matches"][0]["c1"] * t["matches"][1]["c1"] * t["matches"][2]["c1"], 2)
+        cote = round(t["matches"][0]["cote_jouee"] * t["matches"][1]["cote_jouee"] * t["matches"][2]["cote_jouee"], 2)
         gain = round(mise * cote, 2)
         mrows = "".join(f"""
           <tr>
-            <td style="padding:6px 10px;color:#94a3b8;">⏰ {m['time']}</td>
-            <td style="padding:6px 10px;font-weight:600;color:#f1f5f9;">{m['home']}
-              <span style="color:#64748b;font-weight:400;"> vs {m['away']}</span></td>
-            <td style="padding:6px 10px;color:#94a3b8;font-size:12px;">{m['league']}</td>
-            <td style="padding:6px 10px;text-align:center;font-weight:700;color:#f59e0b;">{m['c1']}</td>
+            <td style="padding:8px 12px;color:#94a3b8;font-size:13px;">⏰ {m['time']}</td>
+            <td style="padding:8px 12px;font-weight:600;color:#f1f5f9;font-size:14px;">
+              <a href="{m['url']}" style="color:#f1f5f9;text-decoration:none;">{m['home']}</a>
+              <span style="color:#64748b;font-weight:400;"> vs {m['away']}</span>
+            </td>
+            <td style="padding:8px 12px;color:#94a3b8;font-size:12px;">{m['league']}</td>
+            <td style="padding:8px 12px;text-align:center;font-weight:700;color:#f59e0b;font-size:14px;">
+              {m['cote_jouee']}
+              <div style="font-size:10px;color:#64748b;font-weight:400;">(1N2: {m['c1']})</div>
+            </td>
           </tr>""" for m in t["matches"])
         rows += f"""
         <div style="background:#0f172a;border:1px solid #1e3a5f;border-radius:12px;margin-bottom:16px;overflow:hidden;">
-          <div style="background:linear-gradient(135deg,#1e3a5f,#0f2744);padding:12px 18px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="background:linear-gradient(135deg,#1e3a5f,#0f2744);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;">
             <span style="font-size:16px;font-weight:700;color:#60a5fa;">🎫 TICKET {i}</span>
             <span style="font-size:13px;color:#94a3b8;">
-              Cote <b style="color:#f59e0b;">{cote}</b> &nbsp;·&nbsp;
+              Cote combinée <b style="color:#f59e0b;">{cote}</b> &nbsp;·&nbsp;
               Mise <b style="color:#f1f5f9;">{int(mise)}€</b> &nbsp;·&nbsp;
               Gain <b style="color:#4ade80;">{gain}€</b>
             </span>
@@ -168,99 +133,130 @@ def build_html(tickets, mise=7.0):
         </div>"""
 
     gains = sorted([round(mise * round(
-        t["matches"][0]["c1"]*t["matches"][1]["c1"]*t["matches"][2]["c1"],2
-    ),2) for t in tickets], reverse=True)
+        t["matches"][0]["cote_jouee"] * t["matches"][1]["cote_jouee"] * t["matches"][2]["cote_jouee"], 2), 2)
+        for t in tickets], reverse=True)
     seuil_3 = sum(gains[:3]) if len(gains) >= 3 else sum(gains)
 
     return f"""<!DOCTYPE html>
-<html lang="fr">
-<head><meta charset="UTF-8"><title>SAFE Method</title></head>
+<html lang="fr"><head><meta charset="UTF-8"><title>SAFE Method — Unibet</title></head>
 <body style="margin:0;padding:0;background:#020617;font-family:'Segoe UI',Arial,sans-serif;color:#f1f5f9;">
-<div style="max-width:700px;margin:0 auto;padding:24px 16px;">
-
+<div style="max-width:720px;margin:0 auto;padding:24px 16px;">
   <div style="background:linear-gradient(135deg,#1e3a5f,#0f2744);border-radius:14px;padding:22px 26px;margin-bottom:22px;border:1px solid #1e40af;">
-    <div style="font-size:26px;font-weight:800;color:#60a5fa;">🔒 SAFE METHOD</div>
-    <div style="font-size:13px;color:#94a3b8;margin-top:4px;">{today_str} &nbsp;·&nbsp; Combinés Triples Domicile</div>
+    <div style="font-size:26px;font-weight:800;color:#60a5fa;letter-spacing:-0.5px;">🔒 SAFE METHOD — {len(tickets)} COMBINÉS TRIPLES</div>
+    <div style="font-size:13px;color:#94a3b8;margin-top:4px;">{today_str} &nbsp;·&nbsp; 100% Matchs à Domicile &nbsp;·&nbsp; Même Jour Calendaire</div>
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
       <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">🎯 Marché : <b style="color:#f59e0b;">Gagne ou mène de 2 buts</b></span>
-      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">💰 Mise totale : <b>{int(total)}€</b></span>
-      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">✅ Rentable dès <b style="color:#4ade80;">3/{len(tickets)}</b></span>
+      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">💰 Mise totale : <b style="color:#f1f5f9;">{int(total)}€</b> ({int(mise)}€/ticket)</span>
+      <span style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:7px 12px;font-size:12px;">✅ Rentable dès <b style="color:#4ade80;">3/{len(tickets)} tickets</b></span>
     </div>
   </div>
-
   {rows}
-
   <div style="background:#0f172a;border:1px solid #1e293b;border-radius:10px;padding:16px 20px;font-size:13px;">
-    <b style="color:#60a5fa;">📊 Tableau de marche</b><br><br>
-    3/{len(tickets)} gagnants → <b style="color:#4ade80;">~{seuil_3:.2f}€ encaissés ✅</b><br>
-    {len(tickets)}/{len(tickets)} gagnants → <b style="color:#4ade80;">~{sum(gains):.2f}€ encaissés 🏆</b>
+    <b style="color:#60a5fa;">📊 Tableau de marche mathématique</b><br><br>
+    • <b>3/{len(tickets)} tickets gagnants</b> → <b style="color:#4ade80;">~{seuil_3:.2f}€ encaissés</b> (Bénéfice net garanti ✅)<br>
+    • <b>{len(tickets)}/{len(tickets)} tickets gagnants</b> → <b style="color:#4ade80;">~{sum(gains):.2f}€ encaissés</b> (Carton plein 🏆)
   </div>
-
-  <div style="text-align:center;margin-top:18px;font-size:11px;color:#334155;">
-    SAFE Method v1 — Unibet France — Uniquement des matchs du {today_str}<br>
-    Joueurs problématiques : <a href="https://www.joueurs-info-service.fr" style="color:#475569;">joueurs-info-service.fr</a>
+  <div style="text-align:center;margin-top:20px;font-size:11px;color:#475569;">
+    Méthode SAFE Standard — Unibet France — Données scannées en direct<br>
+    Joueurs problématiques : <a href="https://www.joueurs-info-service.fr" style="color:#64748b;">joueurs-info-service.fr</a>
   </div>
-</div>
-</body>
-</html>"""
+</div></body></html>"""
 
-
-# ─── Send email ───────────────────────────────────────────────────────────────
+# ─── Envoi Email (Gmail prioritaire + Fallback SFR) ───────────────────────────
 
 def send_email(html_body, subject):
-    gmail   = os.environ.get("GMAIL_EMAIL", "langlet.gregory@gmail.com").strip()
-    passwd  = os.environ.get("GMAIL_APP_PASSWORD", "").strip().replace('\ufeff', '')
-    if not passwd:
-        print("[SMTP] GMAIL_APP_PASSWORD manquant")
-        return False
-    raw_to  = os.environ.get("RECIPIENT_EMAILS", gmail)
-    recipients = [r.strip() for r in raw_to.split(",") if r.strip()]
+    gmail_email = os.environ.get("GMAIL_EMAIL", "langlet.gregory@gmail.com").strip()
+    gmail_pass  = os.environ.get("GMAIL_APP_PASSWORD", "").strip().replace('\ufeff', '')
+    smtp_host   = os.environ.get("SMTP_HOST", "smtp.sfr.fr").strip()
+    smtp_port   = int(os.environ.get("SMTP_PORT", "465"))
+    smtp_user   = os.environ.get("SMTP_USER", "").strip()
+    smtp_pass   = os.environ.get("SMTP_PASS", "").strip()
 
-    subj = unicodedata.normalize('NFKD', subject).encode('ASCII','ignore').decode('ASCII')
-    html_body = html_body.replace('\ufeff','').replace('\ufffe','')
-    bnd  = uuid.uuid4().hex
-    fname = f"safe_{datetime.datetime.now().strftime('%Y_%m_%d')}.html"
-    h64  = base64.b64encode(html_body.encode('utf-8')).decode('ascii')
-    t64  = base64.b64encode("Combinés SAFE en pièce jointe.".encode('utf-8')).decode('ascii')
+    raw_recipients = os.environ.get("EMAIL_TO") or os.environ.get("RECIPIENT_EMAILS") or "gregory.langlet@sfr.fr, langlet.gregory@gmail.com"
+    recipients = [r.strip() for r in raw_recipients.split(",") if r.strip()]
 
-    raw = (
-        f'From: Gregory LANGLET <{gmail}>\r\n'
-        f'To: {", ".join(recipients)}\r\n'
-        f'Subject: {subj}\r\n'
-        f'Date: {formatdate(localtime=True)}\r\n'
-        f'MIME-Version: 1.0\r\n'
-        f'Content-Type: multipart/mixed; boundary="{bnd}"\r\n\r\n'
-        f'--{bnd}\r\nContent-Type: text/plain; charset=utf-8\r\n'
-        f'Content-Transfer-Encoding: base64\r\n\r\n{t64}\r\n\r\n'
-        f'--{bnd}\r\nContent-Type: text/html; charset=utf-8; name="{fname}"\r\n'
-        f'Content-Disposition: attachment; filename="{fname}"\r\n'
-        f'Content-Transfer-Encoding: base64\r\n\r\n{h64}\r\n\r\n'
-        f'--{bnd}--\r\n'
-    )
-    with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as s:
-        s.ehlo(); s.starttls(); s.ehlo()
-        s.login(gmail, passwd)
-        s.sendmail(gmail, recipients, raw.encode('ascii'))
-    print(f"[SMTP] Email envoyé → {recipients}")
-    return True
+    clean_subject = unicodedata.normalize('NFKD', subject).encode('ASCII', 'ignore').decode('ASCII')
+    html_body = html_body.replace('\ufeff', '').replace('\ufffe', '')
 
+    msg = MIMEMultipart('alternative')
+    msg["Subject"] = clean_subject
+    msg["From"] = f"Gregory LANGLET <{gmail_email}>"
+    msg["To"] = ", ".join(recipients)
+    msg["Date"] = formatdate(localtime=True)
+    msg["Message-ID"] = make_msgid()
+
+    plain = f"Combinés SAFE Method du jour. Veuillez consulter la version HTML jointe."
+    msg.attach(MIMEText(plain, 'plain', 'utf-8'))
+    msg.attach(MIMEText(html_body, 'html', 'utf-8'))
+
+    # 1. Tentative Gmail SMTP
+    if gmail_pass:
+        try:
+            print(f"[SMTP] Envoi vers {recipients} via Gmail SMTP...")
+            with smtplib.SMTP("smtp.gmail.com", 587, timeout=30) as server:
+                server.ehlo()
+                server.starttls()
+                server.ehlo()
+                server.login(gmail_email, gmail_pass)
+                server.sendmail(gmail_email, recipients, msg.as_string())
+            print("[SMTP] ✅ Email envoyé avec succès via Gmail SMTP !")
+            return True
+        except Exception as e:
+            print(f"[SMTP] ⚠️ Échec Gmail SMTP : {e}")
+
+    # 2. Fallback SFR SMTP
+    if smtp_user and smtp_pass:
+        try:
+            print(f"[SMTP] Tentative de secours via {smtp_host}:{smtp_port}...")
+            auth_user = smtp_user.split("@")[0] if "@" in smtp_user else smtp_user
+            if smtp_port == 465:
+                with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=30) as server:
+                    server.login(auth_user, smtp_pass)
+                    server.sendmail(smtp_user, recipients, msg.as_string())
+            else:
+                with smtplib.SMTP(smtp_host, smtp_port, timeout=30) as server:
+                    server.ehlo(); server.starttls(); server.ehlo()
+                    server.login(auth_user, smtp_pass)
+                    server.sendmail(smtp_user, recipients, msg.as_string())
+            print("[SMTP] ✅ Email envoyé avec succès via SFR SMTP !")
+            return True
+        except Exception as e:
+            print(f"[SMTP] ❌ Échec SFR SMTP : {e}")
+
+    print("[SMTP] ❌ Aucun mot de passe SMTP disponible — email non envoyé.")
+    return False
 
 # ─── Main ─────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    matches = scan_unibet()
+    games = get_unibet_active_games()
+    print(f"[SAFE] {len(games)} fixtures trouvées, scan des détails...")
 
-    tickets = build_tickets(matches)
+    all_scanned = []
+    with ThreadPoolExecutor(max_workers=20) as ex:
+        futures = {ex.submit(scan_unibet_match_details, g): g for g in games}
+        for fut in as_completed(futures):
+            res = fut.result()
+            if res:
+                all_scanned.append(res)
 
+    print(f"[SAFE] {len(all_scanned)} matchs avec cotes récupérées")
+
+    candidates = extract_candidates(all_scanned)
+    print(f"[SAFE] Candidats du jour (1.15-1.47, même jour calendaire) : {len(candidates)}")
+    for m in candidates:
+        print(f"       {m['time']} | {m['home']} vs {m['away']} | 1N2={m['c1']} (+2b={m['cote_jouee']}) | {m['league']}")
+
+    tickets = build_tickets(candidates)
     if not tickets:
-        print("[SAFE] 0 ticket buildable aujourd'hui — pas d'email envoyé.")
+        print("[SAFE] 0 ticket buildable aujourd'hui selon la règle SAFE — pas d'email envoyé.")
         sys.exit(0)
 
     mise = 7.0
     for i, t in enumerate(tickets, 1):
-        cote = round(t["matches"][0]["c1"]*t["matches"][1]["c1"]*t["matches"][2]["c1"],2)
+        cote = round(t["matches"][0]["cote_jouee"] * t["matches"][1]["cote_jouee"] * t["matches"][2]["cote_jouee"], 2)
         noms = " + ".join(m["home"] for m in t["matches"])
-        print(f"  T{i}: {noms} → cote {cote} → gain {round(mise*cote,2)}€")
+        print(f"  T{i}: {noms} → cote {cote} → gain potentiel {round(mise*cote,2)}€")
 
     today_fmt = datetime.datetime.now().strftime("%d/%m/%Y")
     html = build_html(tickets, mise)
