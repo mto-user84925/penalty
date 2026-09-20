@@ -1,0 +1,36 @@
+name: SAFE Method - Combines Triples Domicile
+
+on:
+  schedule:
+    # Tous les jours a 07h30 (05h30 UTC) et 10h30 (08h30 UTC) heure francaise
+    - cron: "30 5 * * *"
+    - cron: "30 8 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: safe-method
+  cancel-in-progress: true
+
+jobs:
+  safe-email:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run SAFE Method scan and send email
+        env:
+          PYTHONUNBUFFERED: "1"
+          GMAIL_EMAIL: "langlet.gregory@gmail.com"
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          RECIPIENT_EMAILS: "gregory.langlet@sfr.fr, langlet.gregory@gmail.com"
+        run: python scripts/safe_unibet_email.py
