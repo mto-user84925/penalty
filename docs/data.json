@@ -9,7 +9,7 @@
     "win_rate": 58.3,
     "profit_units": -24.04,
     "roi_pct": -5.14,
-    "last_updated": "2026-09-20T02:03:51.647526+00:00"
+    "last_updated": "2026-09-20T04:02:56.429305+00:00"
   },
   "matches_today": [
     {
@@ -11981,7 +11981,7 @@
       "fav_side": "dom",
       "market": "FAV_1N2",
       "market_label": "👑 Favori (+2b)",
-      "odds": 1.46,
+      "odds": 1.48,
       "domination_score": 58,
       "badge_tier": "🥉 BRONZE+",
       "win_pct_historical": 75,
@@ -11994,7 +11994,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.95
+      "away_odds": 5.0
     },
     {
       "id": "3378804",
@@ -12049,7 +12049,7 @@
       "is_live": false,
       "is_finished": false,
       "profit": 0.0,
-      "away_odds": 4.25
+      "away_odds": 4.3
     },
     {
       "id": "3379862",
@@ -12378,7 +12378,7 @@
     "won": 35,
     "lost": 47,
     "live": 0,
-    "upcoming": 5,
+    "upcoming": 6,
     "default_stake": 3.0,
     "win_rate": 42.7,
     "profit_units": -0.1,
@@ -16700,7 +16700,7 @@
       "email_ticket_num": 1,
       "odds": 1.99,
       "default_stake": 3.0,
-      "ticket_status": "EXPIRED",
+      "ticket_status": "PENDING",
       "profit_unit": 0.0,
       "gain_eur": 5.97,
       "profit_eur": 0.0,
@@ -17002,7 +17002,7 @@
     {
       "id": "combo_98",
       "ticket_num": 98,
-      "email_ticket_num": 1,
+      "email_ticket_num": 2,
       "odds": 2.02,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -17063,7 +17063,7 @@
     {
       "id": "combo_99",
       "ticket_num": 99,
-      "email_ticket_num": 2,
+      "email_ticket_num": 3,
       "odds": 1.97,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -17124,7 +17124,7 @@
     {
       "id": "combo_100",
       "ticket_num": 100,
-      "email_ticket_num": 3,
+      "email_ticket_num": 4,
       "odds": 2.02,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -17185,7 +17185,7 @@
     {
       "id": "combo_101",
       "ticket_num": 101,
-      "email_ticket_num": 4,
+      "email_ticket_num": 5,
       "odds": 2.13,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
@@ -17307,7 +17307,7 @@
     {
       "id": "combo_103",
       "ticket_num": 103,
-      "email_ticket_num": 5,
+      "email_ticket_num": 6,
       "odds": 2.1,
       "default_stake": 3.0,
       "ticket_status": "PENDING",
