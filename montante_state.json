@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-19T18:56:24.278423",
+  "last_updated": "2026-09-20T09:53:59.257521",
   "strategy": "MULTI_MONTANTES_5_COMBINES_10_MATCHS_UNIQUES",
   "rule_zero_doublons": "10 matchs distincts par jour, aucun match répété, indépendance totale",
   "rule_cote_min_combo": 2.13,
@@ -215,87 +215,91 @@
     },
     "DIMANCHE_20_09": {
       "palier": 3,
-      "format": "3_COMBINES_ELITE_SAFE",
-      "mise_unitaire": 11.5,
-      "mise_totale": 34.5,
-      "strategie_safe": "SAFE_3_COMBINES_6_EQUIPES_WEB_VERIFIEES",
-      "combines": [
-        {
-          "id": "C1_DIM",
-          "nom": "Combiné 1 - Les Cadors Scandinave & Tchèque",
-          "m1": {
-            "equipes": "Viking FK vs Lillestrøm",
-            "heure": "17h00",
-            "pari": "Viking FK (Gagne ou Mène 2b)",
-            "cote": 1.33,
-            "score_safe": 92,
-            "classement_verifie": "2e (47 pts) vs 5e (32 pts) - +15 pts d'écart",
-            "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370516/viking-fk-vs-lillestrom"
+      "strategie": "COFFRE_FORT_30E_PLUS_CARTOUCHE_FUN_4E",
+      "budget_total": 34.0,
+      "coffre_fort": {
+        "budget": 30.0,
+        "tickets": [
+          {
+            "id": "C1_DIM",
+            "nom": "Ticket 1 - Axe Scandinave & Tchèque",
+            "mise": 10.0,
+            "cote_totale": 1.84,
+            "gain_estime": 18.4,
+            "m1": {
+              "equipes": "Viking FK vs Lillestrøm",
+              "heure": "17h00",
+              "pari": "Viking FK (Gagne ou Mène 2b)",
+              "cote": 1.33,
+              "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370516/viking-fk-vs-lillestrom"
+            },
+            "m2": {
+              "equipes": "Slavia Prague vs Viktoria Plzen",
+              "heure": "18h00",
+              "pari": "Slavia Prague (Gagne ou Mène 2b)",
+              "cote": 1.38,
+              "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370204/slavia-prague-vs-viktoria-plzen"
+            }
           },
-          "m2": {
-            "equipes": "Slavia Prague vs Viktoria Plzen",
-            "heure": "18h00",
-            "pari": "Slavia Prague (Gagne ou Mène 2b)",
-            "cote": 1.38,
-            "score_safe": 90,
-            "classement_verifie": "1er (20 pts, +18) vs 10e (10 pts) - +10 pts d'écart en 8m",
-            "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370204/slavia-prague-vs-viktoria-plzen"
+          {
+            "id": "C2_DIM",
+            "nom": "Ticket 2 - Choc des Titans & Forteresse Polaire",
+            "mise": 10.0,
+            "cote_totale": 2.03,
+            "gain_estime": 20.3,
+            "m1": {
+              "equipes": "Shakhtar Donetsk vs LNZ Cherkasy",
+              "heure": "17h00",
+              "pari": "Shakhtar Donetsk (Gagne ou Mène 2b)",
+              "cote": 1.45,
+              "url": "https://www.unibet.fr/paris-football/ukraine/d1-ukraine/3376070/shakht-donetsk-vs-lnz-cherkasy"
+            },
+            "m2": {
+              "equipes": "Tromsø vs HamKam",
+              "heure": "17h00",
+              "pari": "Tromsø (Gagne ou Mène 2b)",
+              "cote": 1.4,
+              "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370510/tromso-vs-hamkam"
+            }
           },
-          "cote_totale": 1.84,
-          "mise": 11.5,
-          "gain_estime": 21.16
-        },
-        {
-          "id": "C2_DIM",
-          "nom": "Combiné 2 - Choc des Titans & Forteresse Polaire",
-          "m1": {
-            "equipes": "Shakhtar Donetsk vs LNZ Cherkasy",
-            "heure": "17h00",
-            "pari": "Shakhtar Donetsk (Gagne ou Mène 2b)",
-            "cote": 1.45,
-            "score_safe": 88,
-            "classement_verifie": "2e (15 pts en 6m, diff +12) vs 8e (8 pts)",
-            "url": "https://www.unibet.fr/paris-football/ukraine/d1-ukraine/3376070/shakht-donetsk-vs-lnz-cherkasy"
-          },
-          "m2": {
-            "equipes": "Tromsø vs HamKam",
-            "heure": "17h00",
-            "pari": "Tromsø (Gagne ou Mène 2b)",
-            "cote": 1.4,
-            "score_safe": 86,
-            "classement_verifie": "4e (35 pts) vs 10e (23 pts) - +12 pts d'écart",
-            "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370510/tromso-vs-hamkam"
-          },
-          "cote_totale": 2.03,
-          "mise": 11.5,
-          "gain_estime": 23.35
-        },
-        {
-          "id": "C3_DIM",
-          "nom": "Combiné 3 - L'Axe Baltique & Le Bourreau de Zlín",
-          "m1": {
-            "equipes": "FC Flora vs Pärnu JK Vaprus",
-            "heure": "18h00",
-            "pari": "FC Flora (Gagne ou Mène 2b)",
-            "cote": 1.4,
-            "score_safe": 87,
-            "classement_verifie": "3e (~42 pts) vs relégable",
-            "url": "https://www.unibet.fr/paris-football/estonie/d1-estonie/3370525/fc-flora-vs-parnu-jk-vapru"
-          },
-          "m2": {
-            "equipes": "FK Jablonec vs FC Zlín",
-            "heure": "15h00",
-            "pari": "FK Jablonec (Gagne ou Mène 2b)",
-            "cote": 1.33,
-            "score_safe": 91,
-            "classement_verifie": "7e (13 pts) vs 16e dernier (0 pt, 8 défaites en 8 matchs !)",
-            "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370203/fk-jablonec-vs-fc-fastav-zlin"
-          },
-          "cote_totale": 1.86,
-          "mise": 11.5,
-          "gain_estime": 21.39
-        }
-      ]
+          {
+            "id": "C3_DIM",
+            "nom": "Ticket 3 - Le Bourreau de Zlín & Baltique",
+            "mise": 10.0,
+            "cote_totale": 1.86,
+            "gain_estime": 18.6,
+            "m1": {
+              "equipes": "FK Jablonec vs FC Zlín",
+              "heure": "15h00",
+              "pari": "FK Jablonec (Gagne ou Mène 2b)",
+              "cote": 1.33,
+              "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370203/fk-jablonec-vs-fc-fastav-zlin"
+            },
+            "m2": {
+              "equipes": "FC Flora vs Pärnu JK Vaprus",
+              "heure": "18h00",
+              "pari": "FC Flora (Gagne ou Mène 2b)",
+              "cote": 1.4,
+              "url": "https://www.unibet.fr/paris-football/estonie/d1-estonie/3378804/fc-flora-vs-parnu-jk-vapru"
+            }
+          }
+        ]
+      },
+      "cartouche_fun": {
+        "budget": 4.0,
+        "nom": "Ticket 4 - LE GRAND CHELEM (6 Matchs)",
+        "mise": 4.0,
+        "cote_totale": 6.94,
+        "gain_estime": 27.76,
+        "matchs": [
+          "FK Jablonec (1.33)",
+          "Viking FK (1.33)",
+          "Slavia Prague (1.38)",
+          "FC Flora (1.40)",
+          "Tromsø IL (1.40)",
+          "Shakhtar Donetsk (1.45)"
+        ]
+      }
     }
   },
   "qualifies_samedi": [
