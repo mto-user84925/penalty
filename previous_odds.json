@@ -10,24 +10,24 @@
       "fav_score": 60,
       "fav_badge": "🥉 BRONZE+"
     },
+    "3376070": {
+      "match": "Shakht.Donetsk - LNZ Cherkasy",
+      "league": "Ukraine • D1 Ukraine",
+      "date_str": "Dim. 20/09 à 17h00",
+      "fav_team": "Shakht.Donetsk",
+      "fav_odds": 1.53,
+      "p2_fav_odds": 1.5,
+      "fav_score": 57,
+      "fav_badge": "🥉 BRONZE+"
+    },
     "3370204": {
       "match": "Slavia Prague - Viktoria Plzen",
       "league": "Rep Tcheque • D1 Rep Tcheque",
       "date_str": "Dim. 20/09 à 18h00",
       "fav_team": "Slavia Prague",
-      "fav_odds": 1.43,
-      "p2_fav_odds": 1.4,
+      "fav_odds": 1.46,
+      "p2_fav_odds": 1.42,
       "fav_score": 66,
-      "fav_badge": "🥈 ARGENT"
-    },
-    "3370523": {
-      "match": "Club Bruges - RC Genk",
-      "league": "Belgique • D1 Belgique",
-      "date_str": "Dim. 20/09 à 18h30",
-      "fav_team": "Club Bruges",
-      "fav_odds": 1.44,
-      "p2_fav_odds": 1.4,
-      "fav_score": 65,
       "fav_badge": "🥈 ARGENT"
     },
     "3360734": {
@@ -37,6 +37,16 @@
       "fav_team": "Villarreal",
       "fav_odds": 1.45,
       "p2_fav_odds": 1.42,
+      "fav_score": 65,
+      "fav_badge": "🥈 ARGENT"
+    },
+    "3370523": {
+      "match": "Club Bruges - RC Genk",
+      "league": "Belgique • D1 Belgique",
+      "date_str": "Dim. 20/09 à 18h30",
+      "fav_team": "Club Bruges",
+      "fav_odds": 1.49,
+      "p2_fav_odds": 1.46,
       "fav_score": 65,
       "fav_badge": "🥈 ARGENT"
     }
