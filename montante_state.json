@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-20T10:03:46.280565",
+  "last_updated": "2026-09-20T10:20:45",
   "strategy": "MULTI_MONTANTES_5_COMBINES_10_MATCHS_UNIQUES",
   "rule_zero_doublons": "10 matchs distincts par jour, aucun match répété, indépendance totale",
   "rule_cote_min_combo": 2.13,
@@ -215,63 +215,70 @@
     },
     "DIMANCHE_20_09": {
       "palier": 3,
-      "strategie": "DOUBLE_BLINDE_18E_COUVRE_MISE",
+      "strategie": "DUO_COFFRE_FORT_70PCT_REEL",
+      "regle_quant": "100% sélections avec proba réelle dé-margée >= 70% (cotes <= 1.33), 0 doublon",
       "capital_engage": 36.0,
       "reserve_cash": 1.0,
       "tickets": [
         {
           "id": "TICKET_A",
-          "nom": "Ticket A - Le Choc des Mismatches",
+          "nom": "Ticket A - L'Axe Manchester / Jablonec",
           "mise": 18.0,
-          "cote_totale": 1.93,
-          "gain_estime": 34.74,
+          "cote_totale": 1.62,
+          "gain_estime": 29.16,
+          "proba_reelle_ticket": "54.4%",
           "m1": {
+            "equipes": "Manchester City vs Sunderland",
+            "heure": "15h00",
+            "pari": "Manchester City (Gagne ou Mène 2b)",
+            "cote": 1.22,
+            "proba_reelle": "77.0%",
+            "url": "https://www.unibet.fr/paris-football/angleterre/premier-league/3378335/man-city-vs-sunderland"
+          },
+          "m2": {
             "equipes": "FK Jablonec vs FC Zlín",
             "heure": "15h00",
             "pari": "FK Jablonec (Gagne ou Mène 2b)",
             "cote": 1.33,
+            "proba_reelle": "70.6%",
             "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370203/fk-jablonec-vs-fc-fastav-zlin"
-          },
-          "m2": {
-            "equipes": "Shakhtar Donetsk vs LNZ Cherkasy",
-            "heure": "17h00",
-            "pari": "Shakhtar Donetsk (Gagne ou Mène 2b)",
-            "cote": 1.45,
-            "url": "https://www.unibet.fr/paris-football/ukraine/d1-ukraine/3376070/shakht-donetsk-vs-lnz-cherkasy"
           }
         },
         {
           "id": "TICKET_B",
-          "nom": "Ticket B - L'Axe Scandinave & Tchèque",
+          "nom": "Ticket B - L'Axe Scandinave & Lombard",
           "mise": 18.0,
-          "cote_totale": 1.84,
-          "gain_estime": 33.12,
+          "cote_totale": 1.62,
+          "gain_estime": 29.16,
+          "proba_reelle_ticket": "54.4%",
           "m1": {
             "equipes": "Viking FK vs Lillestrøm",
             "heure": "17h00",
             "pari": "Viking FK (Gagne ou Mène 2b)",
             "cote": 1.33,
+            "proba_reelle": "70.6%",
             "url": "https://www.unibet.fr/paris-football/norvege/d1-norvege/3370516/viking-fk-vs-lillestrom"
           },
           "m2": {
-            "equipes": "Slavia Prague vs Viktoria Plzen",
-            "heure": "18h00",
-            "pari": "Slavia Prague (Gagne ou Mène 2b)",
-            "cote": 1.38,
-            "url": "https://www.unibet.fr/paris-football/rep-tcheque/d1-rep-tcheque/3370204/slavia-prague-vs-viktoria-plzen"
+            "equipes": "Milan AC vs Lecce",
+            "heure": "20h45",
+            "pari": "Milan AC (Gagne ou Mène 2b)",
+            "cote": 1.22,
+            "proba_reelle": "77.0%",
+            "url": "https://www.unibet.fr/paris-football/italie/serie-a/3369083/milan-ac-vs-lecce"
           }
         }
       ],
       "ticket_bonus_1e": {
         "mise": 1.0,
-        "nom": "Ticket Bonus 1€ - Le Quatuor Royal",
-        "cote_totale": 3.55,
-        "gain_estime": 3.55,
+        "nom": "Ticket Bonus 1€ - Le Carré Magique >= 70%",
+        "cote_totale": 2.63,
+        "gain_estime": 2.63,
         "matchs": [
-          "FK Jablonec (1.33)",
-          "Shakhtar Donetsk (1.45)",
-          "Viking FK (1.33)",
-          "Slavia Prague (1.38)"
+          "Manchester City @ 1.22 (77.0%)",
+          "FK Jablonec @ 1.33 (70.6%)",
+          "Viking FK @ 1.33 (70.6%)",
+          "Milan AC @ 1.22 (77.0%)"
         ]
       }
     }
